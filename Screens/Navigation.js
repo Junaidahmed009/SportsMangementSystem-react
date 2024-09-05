@@ -20,7 +20,7 @@ export default function Navigation() {
         <Stack.Screen name='Login' component={Login} />
         <Stack.Screen name='Signup' component={Signup} />
         <Stack.Screen name='Chairperson' component={Cahirpersonnav} />
-        <Stack.Screen name='Forgetpassowrd' component={ForgetPassword} />
+        <Stack.Screen name='Forgetpassword' component={ForgetPassword} />
         <Stack.Screen name='Home' component={Home}/>
         <Stack.Screen name='Addgames' component={AddGames}/>
         <Stack.Screen name='Addsession' component={AddSession}/>

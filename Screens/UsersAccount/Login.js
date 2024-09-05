@@ -1,20 +1,21 @@
-import { View, Text, StyleSheet, Alert } from 'react-native'
-import { SafeAreaView } from 'react-native'
+import { View, Text, StyleSheet, Alert } from 'react-native';
+import { SafeAreaView } from 'react-native';
 import * as React from 'react';
-import { TextInput, Button, Appbar } from 'react-native-paper';
+import { TextInput, Button, Appbar, ActivityIndicator } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import Api from '../Api';
 
 export default function Login() {
 
   const [regno, setRegno] = React.useState("");
-  const [pass, setpass] = React.useState("");
+  const [pass, setPass] = React.useState("");
+  const [loading, setLoading] = React.useState(false); // Added loading state
   const navigation = useNavigation();
 
-const navchairperson=()=>{
-  navigation.navigate('Chairperson')
-}
-  
+  const navChairperson = () => {
+    navigation.navigate('Chairperson');
+  }
+
   const handleLogin = async () => {
     if (!regno || !pass) {
       Alert.alert("Please fill both fields.");
@@ -25,6 +26,8 @@ const navchairperson=()=>{
       registration_no: regno,
       password: pass,
     };
+    
+    setLoading(true); // Start loading
 
     try {
       const response = await Api.login(loginUser);
@@ -32,29 +35,19 @@ const navchairperson=()=>{
       if (response.status === 200) {
         const receivedUser = response.data;
 
-        // Compare the received object with the sent object
         if (receivedUser.role === 'Chairperson') {
           setRegno('');
-          setpass('');
-          navchairperson();
-          // navigation.navigate('Chairperson')
-          // Alert.alert('Welcome, Chairperson.');
+          setPass('');
+          navChairperson();
         } else if (receivedUser.role === 'Event manager') {
           setRegno('');
-          setpass('');
-          Alert.alert('Welcome,Event manager');
-          
-        }
-        else if (receivedUser.role === 'user') {
-          // Alert.alert('Welcome,User');
-          navigation.navigate('Home')
+          setPass('');
+          Alert.alert('Welcome, Event manager');
+        } else if (receivedUser.role === 'user') {
+          navigation.navigate('Home');
         } else {
           Alert.alert('Welcome');
         }
-
-
-        // Pass the received object to another screen
-        // navigation.navigate('NextScreen', { user: receivedUser });
 
       } else {
         Alert.alert('Login failed. Please try again.');
@@ -67,31 +60,25 @@ const navchairperson=()=>{
       } else {
         Alert.alert('An error occurred during login. Please try again.');
       }
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
-  const handleforget = () => {
-    navigation.navigate('Forgetpassowrd')
+
+  const handleForget = () => {
+    navigation.navigate('Forgetpassword');
   }
+
   const handleSignup = () => {
-    navigation.navigate('Signup')
+    navigation.navigate('Signup');
   }
-  // const handlechairperson=()=>{
-  //   navigation.navigate('Chairperson')
-  // }
-
-
 
   return (
-
     <SafeAreaView style={styles.container}>
-      <Appbar.Header style={styles.appbarsetting} >
-        <Appbar.Content title="Login"
-          titleStyle={styles.appbarTitle}
-        />
-
+      <Appbar.Header style={styles.appbarsetting}>
+        <Appbar.Content title="Login" titleStyle={styles.appbarTitle} />
       </Appbar.Header>
-      <View style={styles.content} >
-
+      <View style={styles.content}>
         <TextInput
           style={styles.textbox1}
           label="Regno(2021-Arid-0123)"
@@ -99,60 +86,55 @@ const navchairperson=()=>{
           onChangeText={regno => setRegno(regno)}
         />
         <TextInput
-
           style={styles.textbox2}
           label="Password"
           value={pass}
-          onChangeText={pass => setpass(pass)}
+          onChangeText={pass => setPass(pass)}
           secureTextEntry
         />
+        
         <View style={styles.buttonContainer}>
-          <Button
-            style={styles.buttonlogin}
-            mode="contained" onPress={handleLogin}
-            labelStyle={{ fontSize: 17, color: '#ffffff' }}
-          >
-            LOGIN
-          </Button>
+          {loading ? (
+            <ActivityIndicator size="large" color="#6200ee" /> // Show loading indicator
+          ) : (
+            <Button
+              style={styles.buttonlogin}
+              mode="contained"
+              onPress={handleLogin}
+              labelStyle={{ fontSize: 17, color: '#ffffff' }}
+            >
+              LOGIN
+            </Button>
+          )}
         </View>
 
-        <Button onPress={handleforget}
-          labelStyle={{ fontSize: 14, color: '#6200ee' }}
-        >
+        <Button onPress={handleForget} labelStyle={{ fontSize: 14, color: '#6200ee' }}>
           Forget Password?
         </Button>
-        <Button onPress={handleSignup}
-          labelStyle={{ fontSize: 14, color: '#6200ee' }}
-        >
+        <Button onPress={handleSignup} labelStyle={{ fontSize: 14, color: '#6200ee' }}>
           Create New Account
         </Button>
-        <Button onPress={() => console.log('Pressed')}
-          labelStyle={{ fontSize: 14, color: '#6200ee' }}
-        >
+        <Button onPress={() => console.log('Pressed')} labelStyle={{ fontSize: 14, color: '#6200ee' }}>
           Guest
         </Button>
       </View>
     </SafeAreaView>
-
-
-
-  )
+  );
 };
+
 const styles = StyleSheet.create({
-  container: {// for contrlling whole screen.
+  container: {
     flex: 1,
     backgroundColor: 'aliceblue',
   },
   appbarsetting: {
     backgroundColor: '#6200ee',
-    fontSize: 456,
   },
   appbarTitle: {
-    fontSize: 26, // Set the font size of the app bar title
+    fontSize: 26,
     color: '#ffffff',
-
   },
-  content: {//for controlling view of textboxes and bttons
+  content: {
     flex: 1,
     justifyContent: 'center',
     paddingHorizontal: 20,
@@ -164,21 +146,15 @@ const styles = StyleSheet.create({
   textbox2: {
     backgroundColor: '#ffffff',
     marginBottom: 8,
-    // fontSize: 23,
-
   },
   buttonContainer: {
-    alignItems: 'center', // Center horizontally
-    marginTop: 40, // Optional: adjust spacing as needed
-    fontSize: 400,
+    alignItems: 'center',
+    marginTop: 40,
     marginBottom: 7,
-
   },
   buttonlogin: {
     backgroundColor: '#6200ee',
     width: 200,
     height: 40,
   },
-
-
-})
+});

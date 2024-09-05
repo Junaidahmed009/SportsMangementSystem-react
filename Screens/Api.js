@@ -12,12 +12,18 @@ class Api {
       },
     });
   }
-//UsersAccount table Apis
+//UsersAccount
   signup(user) {
     return this.apiClient.post('Users/SignupUser', user);
   }
   login(loginUser) {
     return this.apiClient.post('Users/LoginUser', loginUser);
+  }
+  forgetpassword(userdetails){
+    return this.apiClient.post('Users/Forgetpasswordverification',userdetails)
+  }
+  resetPassword(passwordDetails){
+    return this.apiClient.post('Users/Submitnewpassword',passwordDetails)
   }
 
 
