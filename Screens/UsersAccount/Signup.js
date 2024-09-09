@@ -16,12 +16,12 @@ export default function Signup() {
   const handleSignup = async () => {
     if (!name || !regno || !pass || !repass) {
       Alert.alert('Fill all the given fields.');
-      return; // Exit if any field is empty
+      return;
     }
 
     if (pass !== repass) {
       Alert.alert('Passwords do not match.');
-      return; // Exit the function if passwords don't match
+      return;
     }
 
     const user = {
@@ -35,7 +35,7 @@ export default function Signup() {
     try {
       const response = await Api.signup(user);
 
-      if (response.status === 201) { // Check for a successful response status
+      if (response.status === 201) { 
         setName('');
         setRegno('');
         setPass('');
@@ -47,22 +47,23 @@ export default function Signup() {
             {
               text: 'OK',
               onPress: () => {
-                navigation.navigate('Login'); // Navigate to the login screen after user presses OK
+                navigation.navigate('Login');
               },
             },
           ],
           { cancelable: false }
         );
-        // Navigate to the login screen or other relevant screen
       } else {
-        // Handle unexpected status codes or errors
+       
         Alert.alert('Signup failed', 'In response status 201 field.');
       }
     } catch (error) {
       if (error.response && error.response.status === 409) {
-        // Handle the specific 409 Conflict error
         Alert.alert('Registration number already exists.');
-      } else {
+      }else if(error.response && error.response.status===400){
+        Alert.alert('Name already exists.');
+      }
+       else {
         // Handle other errors
         console.error('Signup error:', error);
         Alert.alert('Signup failed', 'An error occurred during signup. Please try again.');

@@ -31,7 +31,7 @@ export default function ForgetPassword() {
 
       if (response.status === 200) {
         Alert.alert('Now enter the password in both fields.');
-        setShowPasswordFields(true); n
+        setShowPasswordFields(true); 
       } else {
         Alert.alert('Unexpected status code received.');
       }
@@ -72,7 +72,7 @@ export default function ForgetPassword() {
       }
     } catch (error) {
       if (error.response && error.response.status === 404) {
-        Alert.alert('Error', 'Registration number is incorrect or changed. Please correct it.');
+        Alert.alert('Error', 'Registration number or name is incorrect or changed. Please correct it.');
       } else {
         console.error('Network or server error:', error);
         Alert.alert('Error', 'Something went wrong. Please try again.');
