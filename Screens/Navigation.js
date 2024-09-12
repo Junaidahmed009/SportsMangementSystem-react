@@ -8,7 +8,9 @@ import ForgetPassword from './UsersAccount/ForgetPassword';
 import Home from './Home/Home';
 import AddGames from './ChairpersonScreens/AddGames';
 import AddSession from './ChairpersonScreens/AddSession';
-
+import Eventmanagerhome from './EventmangerScreens/EventmanagerHome';
+import Eventmanagerselection from './ChairpersonScreens/EventManagerSelection'
+import RuleofGames from './ChairpersonScreens/RuleofGames';
 
 const Stack = createNativeStackNavigator();
 export default function Navigation() {
@@ -24,6 +26,9 @@ export default function Navigation() {
         <Stack.Screen name='Home' component={Home}/>
         <Stack.Screen name='Addgames' component={AddGames}/>
         <Stack.Screen name='Addsession' component={AddSession}/>
+        <Stack.Screen name='EventmanagerHome' component={Eventmanagerhome}/>
+        <Stack.Screen name='Eventmanagerselection' component={Eventmanagerselection}/>
+        <Stack.Screen name='Ruleofgames' component={RuleofGames}/>
       </Stack.Navigator>
     </NavigationContainer>
     

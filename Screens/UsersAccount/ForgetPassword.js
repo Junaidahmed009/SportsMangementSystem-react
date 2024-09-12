@@ -56,6 +56,7 @@ export default function ForgetPassword() {
     }
 
     const passwordDetails = {
+      name,
       registration_no: regno,
       password: pass,
     };

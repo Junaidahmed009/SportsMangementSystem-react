@@ -20,6 +20,12 @@ function Chairperson() {
   const handleAddsessions = () => {
     navigation.navigate('Addsession')
   }
+  const handleEventmanagerselection = () => {
+    navigation.navigate('Eventmanagerselection')
+  }
+  const handleRules = () => {
+    navigation.navigate('Ruleofgames')
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -44,7 +50,7 @@ function Chairperson() {
           <Button
             style={styles.buttonlogin}
             mode="contained"
-            onPress={handleAddgames}
+            onPress={handleEventmanagerselection}
           >
             <Text style={styles.buttontext}>Add Sports</Text>
           </Button>
@@ -54,7 +60,7 @@ function Chairperson() {
           <Button
             style={styles.buttonlogin}
             mode="contained"
-            onPress={() => console.log('Pressed')}
+            onPress={handleRules}
           >
             <Text style={styles.buttontext}>Rule of Game</Text>
           </Button>

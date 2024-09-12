@@ -12,15 +12,15 @@ export default function AddGames() {
     const [badmintonchecked, setbadmintonChecked] = React.useState(false);
     const navigation = useNavigation();
 
-    const handleGames=()=>{
-      const gamedetail={
-        game:cricchecked,
-        game:cricchecked,
-        game:cricchecked,
-        game:cricchecked,
-        game:cricchecked,
-      }
-    }
+    // const handleGames=()=>{
+    //   const gamedetail={
+    //     game:cricchecked,
+    //     game:cricchecked,
+    //     game:cricchecked,
+    //     game:cricchecked,
+    //     game:cricchecked,
+    //   }
+    // }
 
 
 

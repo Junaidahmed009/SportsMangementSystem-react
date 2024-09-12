@@ -38,7 +38,7 @@ export default function AddSession() {
             }
         } catch (error) {
             if (error.response && error.response.status === 409) {
-                Alert.alert('Name already exists.');
+                Alert.alert('Session Name already exists.');
             } else {
                 Alert.alert('An error occurred. Please try again.');
             }
