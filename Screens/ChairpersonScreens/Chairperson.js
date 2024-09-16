@@ -44,7 +44,7 @@ function Chairperson() {
             mode="contained"
             onPress={handleAddsessions}
           >
-            <Text style={styles.buttontext}>Add session</Text>
+            <Text style={styles.buttontext}>Add Session</Text>
           </Button>
 
           <Button
@@ -52,7 +52,7 @@ function Chairperson() {
             mode="contained"
             onPress={handleEventmanagerselection}
           >
-            <Text style={styles.buttontext}>Add Sports</Text>
+            <Text style={styles.buttontext}>Managers</Text>
           </Button>
         </View>
 
@@ -62,7 +62,7 @@ function Chairperson() {
             mode="contained"
             onPress={handleRules}
           >
-            <Text style={styles.buttontext}>Rule of Game</Text>
+            <Text style={styles.buttontext}>Rules</Text>
           </Button>
 
           <Button
@@ -70,7 +70,7 @@ function Chairperson() {
             mode="contained"
             onPress={() => console.log('Pressed')}
           >
-            <Text style={styles.buttontext}>See Fixtures</Text>
+            <Text style={styles.buttontext}>Fixtures</Text>
           </Button>
         </View>
 
@@ -80,7 +80,7 @@ function Chairperson() {
             mode="contained"
             onPress={() => console.log('Pressed')}
           >
-            <Text style={styles.buttontext}>View Sports</Text>
+            <Text style={styles.buttontext}>Games</Text>
           </Button>
 
           <Button
@@ -88,7 +88,7 @@ function Chairperson() {
             mode="contained"
             onPress={() => console.log('Pressed')}
           >
-            <Text style={styles.buttontext}>View Teams</Text>
+            <Text style={styles.buttontext}>Teams</Text>
           </Button>
         </View>
 

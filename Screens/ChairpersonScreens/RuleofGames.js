@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, SafeAreaView, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, Button, SafeAreaView, StyleSheet, TextInput, TouchableOpacity, View, Text } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Api from '../Api';
 import { useNavigation } from '@react-navigation/native';
@@ -11,28 +11,122 @@ export default function RuleofGames() {
   const [value1, setValue1] = useState(null);
   const [items1, setItems1] = useState([]);
   const [text, setText] = useState('');
+  const [showTextBox, setShowTextBox] = useState(false);
+  const [showSecondButton, setShowSecondButton] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchDropDownData = async () => {
       try {
         const response = await Api.fetchSports();
-        // Check if the data exists and is an array
-        if (Array.isArray(response.data)) {
-          const sportOptions = response.data.map(sport => ({
-            label: sport.games, // Make sure 'games' matches the actual field name in the response
-            value: sport.id,    // Make sure 'id' matches the actual field name in the response
-          }));
-          setItems1(sportOptions);
+        if (response.status === 200) {
+          if (Array.isArray(response.data)) {
+            const sportOptions = response.data.map(sport => ({
+              label: sport.games,
+              value: sport.id,
+            }));
+            setItems1(sportOptions);
+          } else {
+            console.error('Expected an array but got:', response.data);
+          }
         } else {
-          console.error('Expected an array but got:', response.data);
+          console.error('Unexpected response status:', response.status);
         }
       } catch (error) {
-        console.error('Error fetching dropdown data:', error);
+        if (error.response && error.response.status === 404) {
+          console.error('Error 404: No sports found for Drop down.');
+        } else {
+          console.error('Error fetching dropdown data:', error);
+        }
       }
     };
 
-    fetchData();
+    fetchDropDownData();
   }, []);
+
+  const fetchRules = async () => {
+    if (!value1) {
+      Alert.alert('Please select one game from DropDown.');
+      return;
+    }
+
+    try {
+      const data = {
+        sportrs_id: value1
+      };
+      const response = await Api.fetchrules(data);
+      if (response.status === 200) {
+        if (Array.isArray(response.data)) {
+          const rulesText = response.data.map(rule => rule.rules_of_game).join(', ');
+          setShowTextBox(true);
+          setShowSecondButton(true);
+          setText(rulesText);
+        } else {
+          console.error('Expected an array but got:', response.data);
+          Alert.alert('Error', 'No rules found.');
+        }
+      } else {
+        console.error('Unexpected status code:', response.status);
+        Alert.alert('Error', `Unexpected status code: ${response.status}`);
+      }
+
+    } catch (error) {
+      if (error.response) {
+        if (error.response.status === 404) {
+          Alert.alert('Error', 'No rules found for the given sport (404).');
+        } else {
+          Alert.alert('Error', `Error code: ${error.response.status}`);
+          console.error('Error status:', error.response.status);
+        }
+      } else {
+        Alert.alert('Error', 'Failed to connect to server.');
+      }
+
+      setText('Error fetching rules.');
+    }
+  };
+
+
+  const UpdateData = async () => {
+    if (!text) {
+      Alert.alert('Please write something in the TextBox.');
+      return;
+    }
+    const saverules = {
+      sportrs_id: value1,
+      rules_of_game: text,
+    };
+
+    try {
+      const response = await Api.rulesofgames(saverules);
+      if (response.status === 201) {
+        Alert.alert('Data saved successfully.');
+        Alert.alert(
+          'Rules Updated.',
+          [
+            {
+              text: 'OK',
+              onPress: () => {
+                navigation.navigate('Chairperson');
+              },
+            },
+          ],
+          { cancelable: false }
+        );
+      } else {
+        Alert.alert('Unexpected response status: ' + response.status);
+      }
+    } catch (error) {
+      if (error.response) {
+        Alert.alert('An error occurred while saving the data. Please try again.');
+        console.error('Error response:', error.response);
+      } else {
+        Alert.alert('Failed to connect to server.');
+      }
+    } finally {
+      // Any cleanup actions can go here
+    }
+  };
+
 
   const handleBackPress = () => {
     navigation.navigate('Chairperson');
@@ -58,21 +152,28 @@ export default function RuleofGames() {
           dropDownContainerStyle={styles.dropdownContainer}
         />
 
-        <TextInput
-          style={styles.textInput}
-          multiline
-          placeholder="Type your text here..."
-          onChangeText={setText}
-          value={text}
-        />
-
-        <TouchableOpacity style={styles.buttonContainer}>
-          <Button title="Submit" onPress={() => console.log('Submit button pressed')} />
+        <TouchableOpacity style={styles.button} onPress={fetchRules}>
+          <Text style={styles.buttonText}>Get Rules</Text>
         </TouchableOpacity>
+
+        {showTextBox && (
+          <TextInput
+            style={styles.textInput}
+            multiline
+            onChangeText={setText}
+            value={text}
+          />
+        )}
+
+        {showSecondButton && (
+          <TouchableOpacity style={styles.button} onPress={UpdateData}>
+            <Text style={styles.buttonText}>Save</Text>
+          </TouchableOpacity>
+        )}
       </View>
     </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -89,31 +190,41 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     padding: 20,
-    justifyContent: 'space-between', // Space between dropdown, text input, and button
+    justifyContent: 'space-between',
   },
   dropdown: {
     borderColor: '#ccc',
     borderWidth: 1,
-    borderRadius: 5,
+    borderRadius: 10,  // Rounded corners
     paddingHorizontal: 10,
-    marginBottom: 20, // Space between dropdown and text input
+    marginBottom: 20,
   },
   dropdownContainer: {
     borderColor: '#ccc',
     borderWidth: 1,
-    borderRadius: 5,
+    borderRadius: 10,
   },
   textInput: {
-    flex: 1,  // Takes up remaining space
+    flex: 1,
     borderColor: '#ccc',
     borderWidth: 1,
-    borderRadius: 5,
+    borderRadius: 10,
     padding: 10,
-    marginBottom: 20, // Space between text input and button
-    textAlignVertical: 'top',  // Ensures the text aligns to the top in multiline mode
+    marginBottom: 20,
+    backgroundColor: 'white',
+    color: 'black',
+    textAlignVertical: 'top',
   },
-  buttonContainer: {
-    marginTop: 10, // Space above the button
-    alignSelf: 'center'
+  button: {
+    backgroundColor: '#6200ee',
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+    marginVertical: 10,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
   },
 });

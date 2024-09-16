@@ -5,7 +5,7 @@ class Api {
   //baseURL: 'http://192.168.1.51/SportsManagementSystemBE/api/',
   constructor() {
     this.apiClient = axios.create({
-      baseURL: 'http://192.168.1.47/SportsManagementSystemBE/api/',
+      baseURL: 'http://192.168.20.94/SportsManagementSystemBE/api/',
       timeout: 10000,
       headers: {
         'Content-type': 'application/json',
@@ -33,7 +33,14 @@ class Api {
   }
   //Rule of game Screen.
   fetchSports() {
-    return this.apiClient.get('Chairperson/GetSports'); // Adjust the endpoint as needed
+    return this.apiClient.get('Rules/GetSports'); 
+  }
+  fetchrules(data) {
+    return this.apiClient.post('Rules/FetchRules',data); 
+  }
+
+  rulesofgames(saverules) {
+    return this.apiClient.post('Rules/UpdateRules',saverules);
   }
 }
 
