@@ -19,20 +19,20 @@ export default function AddSession() {
             Alert.alert('Name field is empty.');
             return;
         }
-    
+
         const sessiondetail = {
             name,
             startDate: startdate,
             endDate: enddate
         };
-    
+
         try {
             const response = await Api.addsession(sessiondetail);
-    
+
             if (response.status === 201) {
                 Alert.alert('Session Saved SucessFully.');
                 navigation.navigate('Chairperson')
-                    
+
             } else {
                 Alert.alert('Failed to save session.');
             }
@@ -65,9 +65,10 @@ export default function AddSession() {
             <View style={styles.content}>
                 <TextInput
                     style={styles.textbox1}
-                    label="Name"
+                    placeholder="Name"
                     value={name}
                     onChangeText={setName}
+                    // placeholderTextColor="#000000" // Optional: Set placeholder text color
                 />
                 <Button onPress={() => setOpenStart(true)} mode="contained" style={styles.dateButton}>
                     <Text style={styles.textstyling}>Start Date: {formatDate(startdate)}</Text>

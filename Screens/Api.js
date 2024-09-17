@@ -38,10 +38,17 @@ class Api {
   fetchrules(data) {
     return this.apiClient.post('Rules/FetchRules',data); 
   }
-
   rulesofgames(saverules) {
     return this.apiClient.post('Rules/UpdateRules',saverules);
   }
+  //EventManagerSelection screen.
+  getsportsandmanger() {
+    return this.apiClient.get('EventManSelection/GetSportsandManagers'); 
+  }
+  savedata(data) {
+    return this.apiClient.post('EventManSelection/SaveManagersdata',data);
+  }
+
 }
 
 export default new Api();

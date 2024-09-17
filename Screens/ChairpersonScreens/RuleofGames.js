@@ -32,10 +32,10 @@ export default function RuleofGames() {
           console.error('Unexpected response status:', response.status);
         }
       } catch (error) {
-        if (error.response && error.response.status === 404) {
-          console.error('Error 404: No sports found for Drop down.');
+        if (error.response) {
+          Alert.alert('Error fetching dropdown data', `Status: ${error.response.status}`);
         } else {
-          console.error('Error fetching dropdown data:', error);
+          Alert.alert('Network error', 'Failed to connect to server.');
         }
       }
     };
@@ -45,89 +45,77 @@ export default function RuleofGames() {
 
   const fetchRules = async () => {
     if (!value1) {
-      Alert.alert('Please select one game from DropDown.');
+      Alert.alert('Please select a game from the dropdown.');
       return;
     }
 
     try {
-      const data = {
-        sportrs_id: value1
-      };
+      const data = { sportrs_id: value1 };
       const response = await Api.fetchrules(data);
       if (response.status === 200) {
-        if (Array.isArray(response.data)) {
+        if (Array.isArray(response.data) && response.data.length > 0) {
           const rulesText = response.data.map(rule => rule.rules_of_game).join(', ');
           setShowTextBox(true);
           setShowSecondButton(true);
           setText(rulesText);
         } else {
-          console.error('Expected an array but got:', response.data);
-          Alert.alert('Error', 'No rules found.');
+          Alert.alert('No rules found.');
+          setText('');
         }
       } else {
-        console.error('Unexpected status code:', response.status);
-        Alert.alert('Error', `Unexpected status code: ${response.status}`);
+        Alert.alert(`Unexpected response status: ${response.status}`);
       }
-
     } catch (error) {
       if (error.response) {
-        if (error.response.status === 404) {
-          Alert.alert('Error', 'No rules found for the given sport (404).');
-        } else {
-          Alert.alert('Error', `Error code: ${error.response.status}`);
-          console.error('Error status:', error.response.status);
-        }
+        Alert.alert('Error fetching rules', `Status: ${error.response.status}`);
       } else {
-        Alert.alert('Error', 'Failed to connect to server.');
+        Alert.alert('Network error', 'Failed to connect to server.');
       }
-
       setText('Error fetching rules.');
     }
   };
-
-
   const UpdateData = async () => {
-    if (!text) {
-      Alert.alert('Please write something in the TextBox.');
+    if (!text.trim()) {
+      Alert.alert('Please write something in the text box.');
       return;
     }
+  
     const saverules = {
       sportrs_id: value1,
       rules_of_game: text,
     };
-
+  
     try {
       const response = await Api.rulesofgames(saverules);
       if (response.status === 201) {
-        Alert.alert('Data saved successfully.');
         Alert.alert(
-          'Rules Updated.',
+          'Sucess',
+          'Rules have been updated.',
           [
             {
               text: 'OK',
-              onPress: () => {
-                navigation.navigate('Chairperson');
-              },
+              onPress: () => navigation.navigate('Chairperson'),
             },
           ],
           { cancelable: false }
         );
       } else {
-        Alert.alert('Unexpected response status: ' + response.status);
+        Alert.alert(`Unexpected response status: ${response.status}`);
       }
     } catch (error) {
       if (error.response) {
-        Alert.alert('An error occurred while saving the data. Please try again.');
+        // Handle server error
+        Alert.alert('Error saving data', `Status: ${error.response.status}`);
         console.error('Error response:', error.response);
-      } else {
-        Alert.alert('Failed to connect to server.');
+      } else if (error.request) {
+        // Handle network error
+        Alert.alert('Network error', 'Failed to connect to server.');
+        console.error('Error request:', error.request);
       }
-    } finally {
-      // Any cleanup actions can go here
     }
   };
-
-
+  
+  
   const handleBackPress = () => {
     navigation.navigate('Chairperson');
   };
