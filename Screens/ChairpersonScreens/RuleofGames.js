@@ -48,10 +48,9 @@ export default function RuleofGames() {
       Alert.alert('Please select a game from the dropdown.');
       return;
     }
-
     try {
-      const data = { sportrs_id: value1 };
-      const response = await Api.fetchrules(data);
+       const Sportsid=value1;
+      const response = await Api.fetchrules(Sportsid);
       if (response.status === 200) {
         if (Array.isArray(response.data) && response.data.length > 0) {
           const rulesText = response.data.map(rule => rule.rules_of_game).join(', ');
@@ -63,17 +62,22 @@ export default function RuleofGames() {
           setText('');
         }
       } else {
+        
         Alert.alert(`Unexpected response status: ${response.status}`);
       }
     } catch (error) {
-      if (error.response) {
+      if (error.response && error.response.status===404) {
+        Alert.alert('No Rules found for given Sport.') 
+      }else if(error.response){
         Alert.alert('Error fetching rules', `Status: ${error.response.status}`);
-      } else {
+      }
+       else {
         Alert.alert('Network error', 'Failed to connect to server.');
       }
       setText('Error fetching rules.');
     }
   };
+  
   const UpdateData = async () => {
     if (!text.trim()) {
       Alert.alert('Please write something in the text box.');

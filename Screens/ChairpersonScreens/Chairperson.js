@@ -50,7 +50,7 @@ function Chairperson() {
             style={styles.buttonlogin}
             onPress={handleEventmanagerselection}
           >
-            <Text style={styles.buttontext}>Add EventManagers</Text>
+            <Text style={styles.buttontext}>Add  EventManagers</Text>
           </TouchableOpacity>
         </View>
 
