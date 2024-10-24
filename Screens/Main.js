@@ -6,7 +6,7 @@ import * as React from 'react'
 
 import { PaperProvider } from 'react-native-paper'
 import Signup from './UsersAccount/Signup'
-import Cahirpersonnav from './ChairpersonScreens/Chairperson'
+import Cahirpersonnav from './ChairpersonScreens/ChairpersonHome'
 import Navigation from './Navigation'
 import ForgetPassword from './UsersAccount/ForgetPassword'
 import Home from './Home/Home'

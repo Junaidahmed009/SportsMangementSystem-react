@@ -1,44 +1,44 @@
+// HomeScreen.js
 import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
-import DropDownPicker from 'react-native-dropdown-picker';
+import { View, Text, SafeAreaView } from 'react-native';
+import { TextInputComponent,ButtonComponent } from '../MyComponents';
 
-export default function DropdownExample() {
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(null);
-  const [items, setItems] = useState([
-    { label: 'Option 1', value: 'option1' },
-    { label: 'Option 2', value: 'option2' },
-    { label: 'Option 3', value: 'option3' }
-  ]);
+const Home = () => {
+  const [inputText, setInputText] = useState('');  // State for TextInput
+
+  const handlePress = () => {
+    alert('Button pressed! Text input: ' + inputText);
+  };
 
   return (
-    <View style={styles.container}>
-      <DropDownPicker
-        open={open}
-        value={value}
-        items={items}
-        setOpen={setOpen}
-        setValue={setValue}
-        setItems={setItems}
-        style={styles.picker}
-        dropDownContainerStyle={styles.dropdown}
+  
+    <View>
+      <Text>Welcome to Home Screen</Text>
+
+      {/* Use TextInputComponent */}
+      <TextInputComponent   
+        placeholder="Enter your name"  // Placeholder for TextInput
+        textValue={inputText}          // State value for TextInput
+        onChangeText={setInputText}    // onChangeText handler to update state
+        CustomStyle={{
+          // paddingLeft: 10,
+          //  marginBottom: 20,
+          //  width: '100%',
+        }}
+      />
+
+      {/* Use ButtonComponent */}
+      <ButtonComponent
+        buttonTitle="Submit"           // Button text
+        onPress={handlePress} 
+        CustomStyle={{
+          // paddingLeft: 10,
+          //  marginBottom: 20,
+          //  width: '100%',
+        }}         // onPress event handler
       />
     </View>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    justifyContent: 'center',
-  },
-  picker: {
-    backgroundColor: '#fafafa',
-    borderColor: '#ddd',
-  },
-  dropdown: {
-    backgroundColor: '#ffffff',
-    borderColor: '#ddd',
-  },
-});
+export default Home;

@@ -35,14 +35,14 @@ export default function Login() {
       if (response.status === 200) {
         const receivedUser = response.data;
 
-        if (receivedUser.role === 'Chairperson') {
+        if (receivedUser.role === 'Admin') {
           setRegno('');
           setPass('');
           navChairperson();
-        } else if (receivedUser.role === 'Event manager') {
+        } else if (receivedUser.role === 'Mod') {
           setRegno('');
           setPass('');
-          Alert.alert('Welcome, Event manager');
+          Alert.alert('Welcome, Moderator');
         } else if (receivedUser.role === 'user') {
           navigation.navigate('Home');
         } else {

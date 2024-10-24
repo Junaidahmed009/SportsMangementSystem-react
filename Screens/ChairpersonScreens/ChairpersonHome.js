@@ -6,7 +6,7 @@ import { Appbar } from 'react-native-paper';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons'; // Import Ionicons
 import Account from '../UsersAccount/Account';
-import { useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 const Tab = createBottomTabNavigator();
 
@@ -14,8 +14,8 @@ const Tab = createBottomTabNavigator();
 function Chairperson() {
 
   const navigation = useNavigation();
-  const handleAddgames = () => {
-    navigation.navigate('Addgames');
+  const handleAddEventmanager = () => {
+    navigation.navigate('AddEventmanager');
   };
   const handleAddsessions = () => {
     navigation.navigate('Addsession');
@@ -25,6 +25,9 @@ function Chairperson() {
   };
   const handleRules = () => {
     navigation.navigate('Ruleofgames');
+  };
+  const handletest = () => {
+    navigation.navigate('Home');
   };
 
   return (
@@ -50,30 +53,31 @@ function Chairperson() {
             style={styles.buttonlogin}
             onPress={handleEventmanagerselection}
           >
-            <Text style={styles.buttontext}>Add  EventManagers</Text>
+            <Text style={styles.buttontext}>Add Games&EMs</Text>
           </TouchableOpacity>
+
         </View>
 
         <View style={styles.buttonContainer}>
-          <TouchableOpacity
+        <TouchableOpacity
             style={styles.buttonlogin}
             onPress={handleRules}
           >
-            <Text style={styles.buttontext}>Rules of games</Text>
+            <Text style={styles.buttontext}>Rules of game</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={styles.buttonlogin}
-            onPress={() => console.log('Pressed')}
+            onPress={handleAddEventmanager}
           >
-            <Text style={styles.buttontext}>See Fixtures</Text>
+            <Text style={styles.buttontext}>Add EventManager</Text>
           </TouchableOpacity>
         </View>
 
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.buttonlogin}
-            onPress={() => console.log('Pressed')}
+            onPress={handletest}
           >
             <Text style={styles.buttontext}>Session Games</Text>
           </TouchableOpacity>
@@ -154,7 +158,7 @@ export default function ChairpersonNav() {
       <Tab.Screen name="Account" component={Account} />
       <Tab.Screen
         name="Logout"
-        component={TabLogoutHandler} 
+        component={TabLogoutHandler}
         options={{ tabBarStyle: { display: 'none' } }}
       />
     </Tab.Navigator>

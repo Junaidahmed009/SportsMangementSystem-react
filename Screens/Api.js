@@ -6,7 +6,7 @@ class Api {
   constructor() {
     this.apiClient = axios.create({
      
-      baseURL: 'http://192.168.1.76/SportsManagementSystemBE/api/',
+      baseURL: 'http://192.168.76.74/SportsManagementSystemBE/api/',
       timeout: 10000,
       headers: {
         'Content-type': 'application/json',
@@ -31,6 +31,10 @@ class Api {
   //ChairpersonScreens
   addsession(sessiondetail) {
     return this.apiClient.post('Session/PostSession', sessiondetail);
+  }
+
+  eventmanagerdata(data) {
+    return this.apiClient.post('Sports/PostEventManagers', data);
   }
   //Rule of game Screen.
   fetchSports() {
