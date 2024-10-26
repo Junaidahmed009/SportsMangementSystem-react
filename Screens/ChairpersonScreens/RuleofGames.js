@@ -80,45 +80,45 @@ export default function RuleofGames() {
   
   const UpdateData = async () => {
     if (!text.trim()) {
-      Alert.alert('Please write something in the text box.');
-      return;
+        Alert.alert('Please write something in the text box.');
+        return;
     }
-  
+
     const saverules = {
-      sportrs_id: value1,
-      rules_of_game: text,
+        sports_id: value1,  // Make sure the property matches the backend expectation
+        rules_of_game: text,
     };
-  
+
     try {
-      const response = await Api.rulesofgames(saverules);
-      if (response.status === 201) {
-        Alert.alert(
-          'Sucess',
-          'Rules have been updated.',
-          [
-            {
-              text: 'OK',
-              onPress: () => navigation.navigate('Chairperson'),
-            },
-          ],
-          { cancelable: false }
-        );
-      } else {
-        Alert.alert(`Unexpected response status: ${response.status}`);
-      }
+        const response = await Api.rulesofgames(saverules);
+        if (response.status === 200) {  // Check for 200 OK instead of 201 Created
+            Alert.alert(
+                'Success',
+                'Rules have been updated.',
+                [
+                    {
+                        text: 'OK',
+                        onPress: () => navigation.navigate('Chairperson'),
+                    },
+                ],
+                { cancelable: false }
+            );
+        } else {
+            Alert.alert(`Unexpected response status: ${response.status}`);
+        }
     } catch (error) {
-      if (error.response) {
-        // Handle server error
-        Alert.alert('Error saving data', `Status: ${error.response.status}`);
-        console.error('Error response:', error.response);
-      } else if (error.request) {
-        // Handle network error
-        Alert.alert('Network error', 'Failed to connect to server.');
-        console.error('Error request:', error.request);
-      }
+        if (error.response) {
+            // Handle server error
+            Alert.alert('Error saving data', `Status: ${error.response.status}`);
+            console.error('Error response:', error.response);
+        } else if (error.request) {
+            // Handle network error
+            Alert.alert('Network error', 'Failed to connect to server.');
+            console.error('Error request:', error.request);
+        }
     }
-  };
-  
+};
+
   
   const handleBackPress = () => {
     navigation.navigate('Chairperson');

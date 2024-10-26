@@ -11,6 +11,7 @@ import Eventmanagerhome from './EventmangerScreens/EventmanagerHome';
 import addgamesandmanagers from './ChairpersonScreens/AddGames&Managers'
 import RuleofGames from './ChairpersonScreens/RuleofGames';
 import AddEventmanager from './ChairpersonScreens/AddEventmanager';
+import CricketManager from './EventmangerScreens/CricketManager';
 const Stack = createNativeStackNavigator();
 export default function Navigation() {
   
@@ -28,6 +29,7 @@ export default function Navigation() {
         <Stack.Screen name='Eventmanagerselection' component={addgamesandmanagers}/>
         <Stack.Screen name='Ruleofgames' component={RuleofGames}/>
         <Stack.Screen name='AddEventmanager' component={AddEventmanager}/>
+        <Stack.Screen name='CricketManager' component={CricketManager}/>
       </Stack.Navigator>
     </NavigationContainer>
     

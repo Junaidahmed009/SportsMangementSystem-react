@@ -6,7 +6,7 @@ class Api {
   constructor() {
     this.apiClient = axios.create({
      
-      baseURL: 'http://192.168.76.74/SportsManagementSystemBE/api/',
+      baseURL: 'http://192.168.93.132/SportsManagementSystemBE/api/',
       timeout: 10000,
       headers: {
         'Content-type': 'application/json',
@@ -24,7 +24,7 @@ class Api {
     return this.apiClient.post('Users/Forgetpasswordverification',userdetails)
   }
   resetPassword(passwordDetails){
-    return this.apiClient.post('Users/Submitnewpassword',passwordDetails)
+    return this.apiClient.put('Users/Submitnewpassword',passwordDetails)
   }
 
 

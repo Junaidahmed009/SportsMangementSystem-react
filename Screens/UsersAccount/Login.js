@@ -15,6 +15,9 @@ export default function Login() {
   const navChairperson = () => {
     navigation.navigate('Chairperson');
   }
+  const handleCricketManager = () => {
+    navigation.navigate('CricketManager');
+  }
 
   const handleLogin = async () => {
     if (!regno || !pass) {
@@ -34,15 +37,16 @@ export default function Login() {
 
       if (response.status === 200) {
         const receivedUser = response.data;
+        console.log(receivedUser);
 
         if (receivedUser.role === 'Admin') {
           setRegno('');
           setPass('');
           navChairperson();
-        } else if (receivedUser.role === 'Mod') {
+        } else if (receivedUser.role === 'EventManager' && receivedUser.SportId===1) {
           setRegno('');
           setPass('');
-          Alert.alert('Welcome, Moderator');
+          handleCricketManager();
         } else if (receivedUser.role === 'user') {
           navigation.navigate('Home');
         } else {
@@ -54,10 +58,11 @@ export default function Login() {
       }
     } catch (error) {
       if (error.response && error.response.status === 404) {
-        Alert.alert('Registration number is incorrect.');
-      } else if (error.response && error.response.status === 401) {
-        Alert.alert('Password is incorrect.');
-      } else {
+        Alert.alert('Registration number or password is incorrect.');
+      } else if (error.response && error.response.status === 409) {
+        Alert.alert('You are no longer event manager please login.');
+      }
+      else {
         Alert.alert('An error occurred during login. Please try again.');
       }
     } finally {

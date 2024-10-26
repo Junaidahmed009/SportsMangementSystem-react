@@ -60,8 +60,6 @@ export default function Signup() {
     } catch (error) {
       if (error.response && error.response.status === 409) {
         Alert.alert('Registration number already exists.');
-      }else if(error.response && error.response.status===400){
-        Alert.alert('Name already exists.');
       }
        else {
         // Handle other errors
