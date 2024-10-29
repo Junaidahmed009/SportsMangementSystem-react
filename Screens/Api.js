@@ -6,7 +6,7 @@ class Api {
   constructor() {
     this.apiClient = axios.create({
      
-      baseURL: 'http://192.168.93.132/SportsManagementSystemBE/api/',
+      baseURL: 'http://192.168.1.15/SportsManagementSystemBE/api/',
       timeout: 10000,
       headers: {
         'Content-type': 'application/json',
@@ -53,6 +53,18 @@ class Api {
   savedata(data) {
     return this.apiClient.post('Sports/SaveManagersdata',data);
   }
+  //Session Screens
+  fetchSessions(){
+    return this.apiClient.get('Session/Getsessions'); 
+  }
+
+  // Cricket registration Screens
+  getteamstatus(tname) {
+    return this.apiClient.get('Team/CheckTeamNames', { params: { tname } }); 
+}
+fetchstudents(course,sections,semno) {
+  return this.apiClient.get('Students/GetStudents', { params: { course,sections,semno } }); 
+}
 
 }
 

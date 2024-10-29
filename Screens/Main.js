@@ -9,7 +9,7 @@ import Signup from './UsersAccount/Signup'
 import Cahirpersonnav from './ChairpersonScreens/ChairpersonHome'
 import Navigation from './Navigation'
 import ForgetPassword from './UsersAccount/ForgetPassword'
-import Home from './Home/Home'
+import Home from './Home/UserHome'
 
 
 

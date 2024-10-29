@@ -1,10 +1,10 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 
-export default function CricketManager() {
+export default function SelectSport() {
   return (
     <View>
-      <Text>CricketManager</Text>
+      <Text>SelectSport</Text>
     </View>
   )
 }

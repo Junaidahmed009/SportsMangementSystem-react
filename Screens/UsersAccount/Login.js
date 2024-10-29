@@ -4,7 +4,7 @@ import * as React from 'react';
 import { TextInput, Button, Appbar, ActivityIndicator } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import Api from '../Api';
-
+import { setUserData } from './UserData';
 export default function Login() {
 
   const [regno, setRegno] = React.useState("");
@@ -16,7 +16,10 @@ export default function Login() {
     navigation.navigate('Chairperson');
   }
   const handleCricketManager = () => {
-    navigation.navigate('CricketManager');
+    navigation.navigate('CricketManagerhome');
+  }
+  const handleUserhome =()=>{
+    navigation.navigate('UserHome')
   }
 
   const handleLogin = async () => {
@@ -38,6 +41,8 @@ export default function Login() {
       if (response.status === 200) {
         const receivedUser = response.data;
         console.log(receivedUser);
+        setUserData(receivedUser); // Store user data
+
 
         if (receivedUser.role === 'Admin') {
           setRegno('');
@@ -48,7 +53,7 @@ export default function Login() {
           setPass('');
           handleCricketManager();
         } else if (receivedUser.role === 'user') {
-          navigation.navigate('Home');
+          handleUserhome();
         } else {
           Alert.alert('Welcome');
         }
@@ -60,7 +65,11 @@ export default function Login() {
       if (error.response && error.response.status === 404) {
         Alert.alert('Registration number or password is incorrect.');
       } else if (error.response && error.response.status === 409) {
-        Alert.alert('You are no longer event manager please login.');
+        Alert.alert('You are no longer Event manager.');
+        setRegno('');
+          setPass('');
+          handleUserhome();
+
       }
       else {
         Alert.alert('An error occurred during login. Please try again.');
@@ -119,7 +128,7 @@ export default function Login() {
         <Button onPress={handleSignup} labelStyle={{ fontSize: 14, color: '#6200ee' }}>
           Create New Account
         </Button>
-        <Button onPress={() => console.log('Pressed')} labelStyle={{ fontSize: 14, color: '#6200ee' }}>
+        <Button onPress={handleUserhome} labelStyle={{ fontSize: 14, color: '#6200ee' }}>
           Guest
         </Button>
       </View>

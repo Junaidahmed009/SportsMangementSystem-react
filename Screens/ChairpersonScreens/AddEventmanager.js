@@ -55,7 +55,7 @@ export default function AddEventmanager() {
   // The return statement needs to be inside the function
   return (
     <SafeAreaViewComponent>
-      <AppBarComponent title={'Add Moderators'} handleBackPress={handlechairperson} />
+      <AppBarComponent title={'Add Moderators'} handleBackPress={handlechairperson}/>
       <View>
         <TextInputComponent
           placeholder="Reg-no(2000-arid-111)"
@@ -66,7 +66,6 @@ export default function AddEventmanager() {
             // width:'90%',
             marginTop: 30,
             marginHorizontal: 10,
-
           }}
         />
       </View>
@@ -77,9 +76,7 @@ export default function AddEventmanager() {
           CustomStyle={{
             width: '50%',
             marginHorizontal: 5,
-          }
-
-          }
+          }}
         />
         <ButtonComponent
           buttonTitle='Cancel'

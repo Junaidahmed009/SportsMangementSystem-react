@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#6200ee',
   },
   appbarTitle: {
-    fontSize: 26,
+    fontSize: 26,   
     color: '#ffffff',
   },
   contentContainer: {
