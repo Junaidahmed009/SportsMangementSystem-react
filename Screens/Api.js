@@ -6,7 +6,7 @@ class Api {
   constructor() {
     this.apiClient = axios.create({
      
-      baseURL: 'http://192.168.1.15/SportsManagementSystemBE/api/',
+      baseURL: 'http://192.168.107.202/SportsManagementSystemBE/api/',
       timeout: 10000,
       headers: {
         'Content-type': 'application/json',

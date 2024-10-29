@@ -3,6 +3,7 @@ import { View, TextInput, TouchableOpacity, Text, StyleSheet,SafeAreaView,FlatLi
 import { Appbar } from 'react-native-paper';
 import DropDownPicker from 'react-native-dropdown-picker';
 
+
 //TextBox
 export const TextInputComponent = ({placeholder, textValue, onChangeText,CustomStyle}) => (
     <TextInput
@@ -67,17 +68,12 @@ export const DropdownComponent = ({ items, placeholder, CustomStyle, dropDownCon
       style={[styles.dropdown, CustomStyle]}
       dropDownContainerStyle={[styles.dropDownContainer, dropDownContainerStyle]}
     />
+    // to check the setting go to CricketRegistration of dropdowns
     //Ststes
   //   const [open1, setOpen1] = useState(false);
   // const [value1, setValue1] = useState(null);
   // const [items1, setItems1] = useState([]);
     
-    //used <View Style={style.contentContainer}><DropDownPicker> tag and in tag i write this design 
-    // contentContainer: {
-    //   // flex: 1,
-    //   padding: 15,
-    //   justifyContent: 'space-between',
-    // },
     //Components used when to import the drop down in other Screens.
     //  // CustomStyle={}         // Optional custom styles
     // // dropDownContainerStyle={styles.dropDownContainerCustom}
