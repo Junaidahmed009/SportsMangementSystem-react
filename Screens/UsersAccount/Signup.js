@@ -1,15 +1,15 @@
-import { View, Text, StyleSheet, Alert } from 'react-native';
-import { SafeAreaView } from 'react-native';
+import {View, Text, StyleSheet, Alert} from 'react-native';
+import {SafeAreaView} from 'react-native';
 import * as React from 'react';
-import { TextInput, Button, Appbar } from 'react-native-paper';
+import {TextInput, Button, Appbar} from 'react-native-paper';
 import Api from '../Api';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 
 export default function Signup() {
-  const [name, setName] = React.useState("");
-  const [regno, setRegno] = React.useState("");
-  const [pass, setPass] = React.useState("");
-  const [repass, setRepass] = React.useState("");
+  const [name, setName] = React.useState('');
+  const [regno, setRegno] = React.useState('');
+  const [pass, setPass] = React.useState('');
+  const [repass, setRepass] = React.useState('');
   const [loading, setLoading] = React.useState(false);
   const navigation = useNavigation();
 
@@ -35,7 +35,7 @@ export default function Signup() {
     try {
       const response = await Api.signup(user);
 
-      if (response.status === 201) { 
+      if (response.status === 201) {
         setName('');
         setRegno('');
         setPass('');
@@ -51,26 +51,26 @@ export default function Signup() {
               },
             },
           ],
-          { cancelable: false }
+          {cancelable: false},
         );
       } else {
-       
         Alert.alert('Signup failed', 'In response status 201 field.');
       }
     } catch (error) {
       if (error.response && error.response.status === 409) {
         Alert.alert('Registration number already exists.');
-      }
-       else {
+      } else {
         // Handle other errors
-        console.error('Signup error:', error);
-        Alert.alert('Signup failed', 'An error occurred during signup. Please try again.');
+        // console.error('Signup error:', error);
+        Alert.alert(
+          'Signup failed',
+          'An error occurred during signup. Please try again.',
+        );
       }
     } finally {
       setLoading(false);
     }
   };
-
 
   const handleBackPress = () => {
     navigation.navigate('Login');
@@ -115,8 +115,7 @@ export default function Signup() {
             disabled={loading}
             style={styles.buttonlogin}
             mode="contained"
-            labelStyle={{ fontSize: 17, color: '#ffffff' }}
-          >
+            labelStyle={{fontSize: 17, color: '#ffffff'}}>
             SIGNUP
           </Button>
         </View>
@@ -156,7 +155,3 @@ const styles = StyleSheet.create({
     height: 40,
   },
 });
-
-
-
-

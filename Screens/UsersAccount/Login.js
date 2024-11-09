@@ -1,30 +1,34 @@
-import { View, Text, StyleSheet, Alert } from 'react-native';
-import { SafeAreaView } from 'react-native';
+import {View, Text, StyleSheet, Alert} from 'react-native';
+import {SafeAreaView} from 'react-native';
 import * as React from 'react';
-import { TextInput, Button, Appbar, ActivityIndicator } from 'react-native-paper';
-import { useNavigation } from '@react-navigation/native';
+import {TextInput, Button, Appbar, ActivityIndicator} from 'react-native-paper';
+import {useNavigation} from '@react-navigation/native';
 import Api from '../Api';
-import { setUserData } from './UserData';
-export default function Login() {
+import {storeUserData} from './UserData';
 
-  const [regno, setRegno] = React.useState("");
-  const [pass, setPass] = React.useState("");
+export default function Login() {
+  const [regno, setRegno] = React.useState('');
+  const [pass, setPass] = React.useState('');
   const [loading, setLoading] = React.useState(false); // Added loading state
   const navigation = useNavigation();
 
   const navChairperson = () => {
     navigation.navigate('Chairperson');
-  }
+  };
   const handleCricketManager = () => {
     navigation.navigate('CricketManagerhome');
-  }
-  const handleUserhome =()=>{
-    navigation.navigate('UserHome')
-  }
+  };
+  const handleUserhome = () => {
+    navigation.navigate('UserHome');
+  };
+  const handleGuest = () => {
+    const responseMessage = 'Guest';
+    navigation.navigate('UserHome', {message: responseMessage});
+  };
 
   const handleLogin = async () => {
     if (!regno || !pass) {
-      Alert.alert("Please fill both fields.");
+      Alert.alert('Please fill both fields.');
       return;
     }
 
@@ -32,7 +36,7 @@ export default function Login() {
       registration_no: regno,
       password: pass,
     };
-    
+
     setLoading(true); // Start loading
 
     try {
@@ -41,23 +45,26 @@ export default function Login() {
       if (response.status === 200) {
         const receivedUser = response.data;
         console.log(receivedUser);
-        setUserData(receivedUser); // Store user data
-
+        storeUserData(receivedUser); // Store user data
 
         if (receivedUser.role === 'Admin') {
           setRegno('');
           setPass('');
           navChairperson();
-        } else if (receivedUser.role === 'EventManager' && receivedUser.SportId===1) {
+        } else if (
+          receivedUser.role === 'EventManager' &&
+          receivedUser.SportId === 1
+        ) {
           setRegno('');
           setPass('');
           handleCricketManager();
         } else if (receivedUser.role === 'user') {
+          setRegno('');
+          setPass('');
           handleUserhome();
         } else {
           Alert.alert('Welcome');
         }
-
       } else {
         Alert.alert('Login failed. Please try again.');
       }
@@ -67,11 +74,9 @@ export default function Login() {
       } else if (error.response && error.response.status === 409) {
         Alert.alert('You are no longer Event manager.');
         setRegno('');
-          setPass('');
-          handleUserhome();
-
-      }
-      else {
+        setPass('');
+        handleUserhome();
+      } else {
         Alert.alert('An error occurred during login. Please try again.');
       }
     } finally {
@@ -81,11 +86,11 @@ export default function Login() {
 
   const handleForget = () => {
     navigation.navigate('Forgetpassword');
-  }
+  };
 
   const handleSignup = () => {
     navigation.navigate('Signup');
-  }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -106,7 +111,7 @@ export default function Login() {
           onChangeText={pass => setPass(pass)}
           secureTextEntry
         />
-        
+
         <View style={styles.buttonContainer}>
           {loading ? (
             <ActivityIndicator size="large" color="#6200ee" /> // Show loading indicator
@@ -115,26 +120,31 @@ export default function Login() {
               style={styles.buttonlogin}
               mode="contained"
               onPress={handleLogin}
-              labelStyle={{ fontSize: 17, color: '#ffffff' }}
-            >
+              labelStyle={{fontSize: 17, color: '#ffffff'}}>
               LOGIN
             </Button>
           )}
         </View>
 
-        <Button onPress={handleForget} labelStyle={{ fontSize: 14, color: '#6200ee' }}>
+        <Button
+          onPress={handleForget}
+          labelStyle={{fontSize: 14, color: '#6200ee'}}>
           Forget Password?
         </Button>
-        <Button onPress={handleSignup} labelStyle={{ fontSize: 14, color: '#6200ee' }}>
+        <Button
+          onPress={handleSignup}
+          labelStyle={{fontSize: 14, color: '#6200ee'}}>
           Create New Account
         </Button>
-        <Button onPress={handleUserhome} labelStyle={{ fontSize: 14, color: '#6200ee' }}>
+        <Button
+          onPress={handleGuest}
+          labelStyle={{fontSize: 14, color: '#6200ee'}}>
           Guest
         </Button>
       </View>
     </SafeAreaView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {

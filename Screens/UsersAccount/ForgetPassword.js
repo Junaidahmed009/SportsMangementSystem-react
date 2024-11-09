@@ -1,15 +1,15 @@
-import { View, StyleSheet, Alert } from 'react-native';
-import { SafeAreaView } from 'react-native';
+import {View, StyleSheet, Alert} from 'react-native';
+import {SafeAreaView} from 'react-native';
 import * as React from 'react';
-import { TextInput, Button, Appbar, ActivityIndicator } from 'react-native-paper';
-import { useNavigation } from '@react-navigation/native';
+import {TextInput, Button, Appbar, ActivityIndicator} from 'react-native-paper';
+import {useNavigation} from '@react-navigation/native';
 import Api from '../Api';
 
 export default function ForgetPassword() {
-  const [name, setName] = React.useState("");
-  const [regno, setRegno] = React.useState("");
-  const [pass, setPass] = React.useState("");
-  const [repass, setRepass] = React.useState("");
+  const [name, setName] = React.useState('');
+  const [regno, setRegno] = React.useState('');
+  const [pass, setPass] = React.useState('');
+  const [repass, setRepass] = React.useState('');
   const [loading, setLoading] = React.useState(false);
   const [showPasswordFields, setShowPasswordFields] = React.useState(false);
   const navigation = useNavigation();
@@ -31,23 +31,21 @@ export default function ForgetPassword() {
 
       if (response.status === 200) {
         Alert.alert('Now enter the password in both fields.');
-        setShowPasswordFields(true); 
+        setShowPasswordFields(true);
       } else {
         Alert.alert('Unexpected status code received.');
       }
     } catch (error) {
-
       if (error.response && error.response.status === 404) {
         Alert.alert('Error', 'Invalid username or registration number.');
       } else {
-        console.error('Network or server error:', error);
+        // console.error('Network or server error:', error);
         Alert.alert('Error', 'Something went wrong. Please try again.');
       }
     } finally {
       setLoading(false);
     }
   };
-
 
   const handleSubmitNewPassword = async () => {
     if (pass !== repass) {
@@ -73,9 +71,12 @@ export default function ForgetPassword() {
       }
     } catch (error) {
       if (error.response && error.response.status === 404) {
-        Alert.alert('Error', 'Registration number or name is incorrect or changed. Please correct it.');
+        Alert.alert(
+          'Error',
+          'Registration number or name is incorrect or changed. Please correct it.',
+        );
       } else {
-        console.error('Network or server error:', error);
+        // console.error('Network or server error:', error);
         Alert.alert('Error', 'Something went wrong. Please try again.');
       }
     } finally {
@@ -84,14 +85,17 @@ export default function ForgetPassword() {
   };
 
   const handlelogin = () => {
-    navigation.navigate('Login')
-  }
+    navigation.navigate('Login');
+  };
 
   return (
     <SafeAreaView style={styles.container}>
       <Appbar.Header style={styles.appbarsetting}>
         <Appbar.BackAction onPress={handlelogin} color="#ffffff" />
-        <Appbar.Content title="Forget Password" titleStyle={styles.appbarTitle} />
+        <Appbar.Content
+          title="Forget Password"
+          titleStyle={styles.appbarTitle}
+        />
       </Appbar.Header>
       <View style={styles.content}>
         <TextInput
@@ -129,8 +133,7 @@ export default function ForgetPassword() {
                 disabled={loading}
                 style={styles.buttonlogin}
                 mode="contained"
-                labelStyle={{ fontSize: 17, color: '#ffffff' }}
-              >
+                labelStyle={{fontSize: 17, color: '#ffffff'}}>
                 SAVE
               </Button>
             </View>
@@ -144,8 +147,7 @@ export default function ForgetPassword() {
               disabled={loading}
               style={styles.buttonlogin}
               mode="contained"
-              labelStyle={{ fontSize: 17, color: '#ffffff' }}
-            >
+              labelStyle={{fontSize: 17, color: '#ffffff'}}>
               VERIFY
             </Button>
           </View>

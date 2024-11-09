@@ -75,7 +75,7 @@ export default function EventManagerSelection() {
         } else if (error.response.status === 400) {
           Alert.alert('Error', 'The game is already managed by Event manager.');
         } else if (error.response.status === 409) {
-          Alert.alert('Error', 'The game is already added in the latest session.');
+          Alert.alert('Error', 'The game is already added in the latest session and managed by someone.');
         } else {
           Alert.alert('An error occurred while saving the data. Please try again.');
         }

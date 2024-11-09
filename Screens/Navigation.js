@@ -14,7 +14,8 @@ import CricketManagerNav from './Cricket/CricketManagerHome';
 import CricketFixtures from './Cricket/CricketFixtures';
 import CricketScore from './Cricket/CricketScore';
 import RuleofCricket from './Cricket/RuleofCricket';
-import CricketRegistration from './Home/CricketRegistration';
+import PlayersRegistration from './Home/TeamPlayersRegistration';
+import TeamRegistration from './Home/TeamRegistration';
 const Stack = createNativeStackNavigator();
 export default function Navigation() {
   
@@ -35,7 +36,8 @@ export default function Navigation() {
         <Stack.Screen name='CricketFixtures' component={CricketFixtures}/>
         <Stack.Screen name='CricketScore' component={CricketScore}/>
         <Stack.Screen name='RuleofCricket' component={RuleofCricket}/>
-        <Stack.Screen name='CricketRegistration' component={CricketRegistration}/>
+        <Stack.Screen name='PlayersRegistration' component={PlayersRegistration}/>
+        <Stack.Screen name='TeamRegistration' component={TeamRegistration}/>
 
       </Stack.Navigator>
     </NavigationContainer>

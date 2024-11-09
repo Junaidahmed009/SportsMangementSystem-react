@@ -1,22 +1,18 @@
-import { View, Text } from 'react-native'
-import React from 'react'
-import { getUserData } from '../UsersAccount/UserData';
+import {View, Text} from 'react-native';
+import React from 'react';
+import {getUserData} from '../UsersAccount/UserData';
 
 export default function CricketFixtures() {
   const userData = getUserData(); // Access the user data
   return (
     <>
-    <Text>{userData.id}</Text>
-    <Text>{userData.name}</Text>
-    <Text>{userData.registration_no}</Text>
-    <Text>{userData.role}</Text>
-    
+      <Text>{userData.id}</Text>
+      <Text>{userData.name}</Text>
+      <Text>{userData.registration_no}</Text>
+      <Text>{userData.role}</Text>
     </>
-  )
+  );
 }
-
-
-
 
 // const Screen1 = () => {
 //   const userData = getUserData(); // Access the user data
