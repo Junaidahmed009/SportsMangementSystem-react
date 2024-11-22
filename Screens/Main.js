@@ -1,19 +1,15 @@
-import { View, Text } from 'react-native'
+import {View, Text} from 'react-native';
 
-import * as React from 'react'
+import * as React from 'react';
 //npx react-native run-android
 // npx react-native start --reset-cache
 
-import { PaperProvider } from 'react-native-paper'
-import Signup from './UsersAccount/Signup'
-import Cahirpersonnav from './ChairpersonScreens/ChairpersonHome'
-import Navigation from './Navigation'
-import ForgetPassword from './UsersAccount/ForgetPassword'
-import Home from './Home/UserHome'
-
-
-
-
+import {PaperProvider} from 'react-native-paper';
+import Signup from './UsersAccount/Signup';
+import Cahirpersonnav from './ChairpersonScreens/ChairpersonHome';
+import Navigation from './Navigation';
+import ForgetPassword from './UsersAccount/ForgetPassword';
+import Home from './Home/UserHome';
 
 export default function Main() {
   return (
@@ -24,5 +20,5 @@ export default function Main() {
       <Navigation></Navigation>
       {/* <ForgetPassword></ForgetPassword> */}
     </PaperProvider>
-  )
+  );
 }

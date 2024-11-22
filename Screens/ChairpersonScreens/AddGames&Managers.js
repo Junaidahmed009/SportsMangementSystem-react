@@ -1,9 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { Alert, Button, SafeAreaView, StyleSheet, TextInput, TouchableOpacity, View, Text } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {
+  Alert,
+  Button,
+  SafeAreaView,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  View,
+  Text,
+} from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Api from '../Api';
-import { useNavigation } from '@react-navigation/native';
-import { Appbar } from 'react-native-paper';
+import {useNavigation} from '@react-navigation/native';
+import {Appbar} from 'react-native-paper';
 
 export default function EventManagerSelection() {
   const navigation = useNavigation();
@@ -22,14 +31,14 @@ export default function EventManagerSelection() {
   const fetchDropdownData = async () => {
     try {
       const response = await Api.getsportsandmanger();
-      const { Sports, EventManagers } = response.data;
-      const sportsList = Sports.map((sport) => ({
+      const {Sports, EventManagers} = response.data;
+      const sportsList = Sports.map(sport => ({
         label: sport.games,
-        value: sport.id
+        value: sport.id,
       }));
-      const eventManagersList = EventManagers.map((manager) => ({
+      const eventManagersList = EventManagers.map(manager => ({
         label: `${manager.name} (${manager.registration_no})`,
-        value: manager.id
+        value: manager.id,
       }));
       setItems1(sportsList);
       setItems2(eventManagersList);
@@ -39,7 +48,6 @@ export default function EventManagerSelection() {
   };
 
   const SaveData = async () => {
-
     if (!value1 || !value2) {
       Alert.alert('Please select values from both dropdowns.');
       return;
@@ -75,9 +83,14 @@ export default function EventManagerSelection() {
         } else if (error.response.status === 400) {
           Alert.alert('Error', 'The game is already managed by Event manager.');
         } else if (error.response.status === 409) {
-          Alert.alert('Error', 'The game is already added in the latest session and managed by someone.');
+          Alert.alert(
+            'Error',
+            'The game is already added in the latest session and managed by someone.',
+          );
         } else {
-          Alert.alert('An error occurred while saving the data. Please try again.');
+          Alert.alert(
+            'An error occurred while saving the data. Please try again.',
+          );
         }
       } else {
         // Handle network or other unexpected errors
@@ -85,12 +98,6 @@ export default function EventManagerSelection() {
       }
     }
   };
-
-
-
-
-
-
 
   const handleBackPress = () => {
     navigation.navigate('Chairperson');
@@ -100,10 +107,13 @@ export default function EventManagerSelection() {
     <SafeAreaView style={styles.container}>
       <Appbar.Header style={styles.appbarsetting}>
         <Appbar.BackAction onPress={handleBackPress} color="#ffffff" />
-        <Appbar.Content title="Manager Selection" titleStyle={styles.appbarTitle} />
+        <Appbar.Content
+          title="Manager Selection"
+          titleStyle={styles.appbarTitle}
+        />
       </Appbar.Header>
       <View style={styles.viewContainer}>
-        <View style={{ zIndex: 2000 }}>
+        <View>
           <DropDownPicker
             open={open1}
             value={value1}
@@ -113,10 +123,13 @@ export default function EventManagerSelection() {
             setItems={setItems1}
             placeholder="Select Game"
             style={styles.dropdown}
-            dropDownContainerStyle={styles.dropdownContainer}
+            dropDownContainerStyle={[
+              styles.dropdownContainer,
+              {position: 'absolute', zIndex: 10000},
+            ]}
           />
         </View>
-        <View style={{ zIndex: 1000, marginTop: 10 }}>
+        <View>
           <DropDownPicker
             open={open2}
             value={value2}
@@ -126,7 +139,10 @@ export default function EventManagerSelection() {
             setItems={setItems2}
             placeholder="Event Managers"
             style={styles.dropdown}
-            dropDownContainerStyle={styles.dropdownContainer}
+            dropDownContainerStyle={[
+              styles.dropdownContainer,
+              {position: 'absolute', zIndex: 10000},
+            ]}
           />
         </View>
         <TextInput
@@ -134,15 +150,15 @@ export default function EventManagerSelection() {
           onChangeText={setText}
           value={text}
           placeholder="Number of Teams"
-          placeholderTextColor="#999"  // Placeholder color
-          keyboardType="numeric"  // Show numeric keyboard
+          placeholderTextColor="#999" // Placeholder color
+          keyboardType="numeric" // Show numeric keyboard
         />
         <TouchableOpacity style={styles.button} onPress={SaveData}>
           <Text style={styles.buttonText}>Save</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -159,8 +175,8 @@ const styles = StyleSheet.create({
   },
   viewContainer: {
     flex: 1,
-    justifyContent: 'center',  // Center elements vertically
-    alignItems: 'center',  // Center elements horizontally
+    justifyContent: 'center', // Center elements vertically
+    alignItems: 'center', // Center elements horizontally
     padding: 20,
   },
   dropdown: {
@@ -191,9 +207,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#6200ee',
     paddingVertical: 12,
     paddingHorizontal: 20,
-    borderRadius: 50,  // More rounded button
+    borderRadius: 50, // More rounded button
     alignItems: 'center',
-    width: '50%',  // Smaller width for button
+    width: '50%', // Smaller width for button
   },
   buttonText: {
     color: 'white',

@@ -1,18 +1,16 @@
-import { Alert, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { useEffect } from 'react';
+import {Alert, View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {useEffect} from 'react';
 import * as React from 'react';
-import { SafeAreaView } from 'react-native';
-import { Appbar } from 'react-native-paper';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import {SafeAreaView} from 'react-native';
+import {Appbar} from 'react-native-paper';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons'; // Import Ionicons
 import Account from '../UsersAccount/Account';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 
 const Tab = createBottomTabNavigator();
 
-
 function Chairperson() {
-
   const navigation = useNavigation();
   const handleAddEventmanager = () => {
     navigation.navigate('AddEventmanager');
@@ -26,8 +24,8 @@ function Chairperson() {
   const handleRules = () => {
     navigation.navigate('Ruleofgames');
   };
-  const handletest = () => {
-    navigation.navigate('Home');
+  const handleViewManagers = () => {
+    navigation.navigate('ViewManagers');
   };
 
   return (
@@ -44,58 +42,48 @@ function Chairperson() {
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.buttonlogin}
-            onPress={handleAddsessions}
-          >
+            onPress={handleAddsessions}>
             <Text style={styles.buttontext}>Add Session</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={styles.buttonlogin}
-            onPress={handleEventmanagerselection}
-          >
+            onPress={handleEventmanagerselection}>
             <Text style={styles.buttontext}>Add Games&EMs</Text>
           </TouchableOpacity>
-
         </View>
 
         <View style={styles.buttonContainer}>
-        <TouchableOpacity
-            style={styles.buttonlogin}
-            onPress={handleRules}
-          >
-            <Text style={styles.buttontext}>Rules of game</Text>
+          <TouchableOpacity style={styles.buttonlogin} onPress={handleRules}>
+            <Text style={styles.buttontext}>Edit Rules</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={styles.buttonlogin}
-            onPress={handleAddEventmanager}
-          >
-            <Text style={styles.buttontext}>Add EventManager</Text>
+            onPress={handleAddEventmanager}>
+            <Text style={styles.buttontext}>Edit User Role</Text>
           </TouchableOpacity>
         </View>
 
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.buttonlogin}
-            onPress={handletest}
-          >
-            <Text style={styles.buttontext}>Session Games</Text>
+            onPress={() => console.log('Pressed')}>
+            <Text style={styles.buttontext}>Sessions</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={styles.buttonlogin}
-            onPress={() => console.log('Pressed')}
-          >
-            <Text style={styles.buttontext}>View Teams</Text>
+            onPress={() => console.log('Pressed')}>
+            <Text style={styles.buttontext}>View Games</Text>
           </TouchableOpacity>
         </View>
 
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.buttonlogin}
-            onPress={() => console.log('Pressed')}
-          >
-            <Text style={styles.buttontext}>Create EventManager</Text>
+            onPress={handleViewManagers}>
+            <Text style={styles.buttontext}>View Managers</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -110,26 +98,25 @@ function TabLogoutHandler() {
     const handleLogout = () => {
       navigation.reset({
         index: 0,
-        routes: [{ name: 'Login' }],
+        routes: [{name: 'Login'}],
       });
     };
 
     const handleCancel = () => {
       navigation.reset({
         index: 0,
-        routes: [{ name: 'Chairperson' }],
+        routes: [{name: 'Chairperson'}],
       });
-
     };
 
     Alert.alert(
-      "Logout",
-      "Are you sure you want to logout?",
+      'Logout',
+      'Are you sure you want to logout?',
       [
-        { text: "Cancel", onPress: handleCancel, style: "cancel" },
-        { text: "OK", onPress: handleLogout },
+        {text: 'Cancel', onPress: handleCancel, style: 'cancel'},
+        {text: 'OK', onPress: handleLogout},
       ],
-      { cancelable: true }
+      {cancelable: true},
     );
   }, [navigation]);
   return null;
@@ -138,8 +125,8 @@ function TabLogoutHandler() {
 export default function ChairpersonNav() {
   return (
     <Tab.Navigator
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ color, size }) => {
+      screenOptions={({route}) => ({
+        tabBarIcon: ({color, size}) => {
           let iconName;
 
           if (route.name === 'Admin') {
@@ -152,14 +139,13 @@ export default function ChairpersonNav() {
           return <Ionicons name={iconName} size={size} color={color} />;
         },
         headerShown: false,
-      })}
-    >
+      })}>
       <Tab.Screen name="Admin" component={Chairperson} />
       <Tab.Screen name="Account" component={Account} />
       <Tab.Screen
         name="Logout"
         component={TabLogoutHandler}
-        options={{ tabBarStyle: { display: 'none' } }}
+        options={{tabBarStyle: {display: 'none'}}}
       />
     </Tab.Navigator>
   );
@@ -206,9 +192,3 @@ const styles = StyleSheet.create({
     color: '#ffffff',
   },
 });
-
-
-
-
-
-

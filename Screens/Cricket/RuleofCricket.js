@@ -1,10 +1,7 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import {View, Text} from 'react-native';
+import React from 'react';
+import {SafeAreaViewComponent} from '../MyComponents';
 
 export default function RuleofCricket() {
-  return (
-    <View>
-      <Text>RuleofCricket</Text>
-    </View>
-  )
+  return <SafeAreaViewComponent></SafeAreaViewComponent>;
 }

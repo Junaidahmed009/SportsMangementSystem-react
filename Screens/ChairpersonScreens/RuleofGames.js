@@ -1,9 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { Alert, Button, SafeAreaView, StyleSheet, TextInput, TouchableOpacity, View, Text } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {
+  Alert,
+  Button,
+  SafeAreaView,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  View,
+  Text,
+} from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Api from '../Api';
-import { useNavigation } from '@react-navigation/native';
-import { Appbar } from 'react-native-paper';
+import {useNavigation} from '@react-navigation/native';
+import {Appbar} from 'react-native-paper';
 
 export default function RuleofGames() {
   const navigation = useNavigation();
@@ -33,7 +42,10 @@ export default function RuleofGames() {
         }
       } catch (error) {
         if (error.response) {
-          Alert.alert('Error fetching dropdown data', `Status: ${error.response.status}`);
+          Alert.alert(
+            'Error fetching dropdown data',
+            `Status: ${error.response.status}`,
+          );
         } else {
           Alert.alert('Network error', 'Failed to connect to server.');
         }
@@ -49,11 +61,13 @@ export default function RuleofGames() {
       return;
     }
     try {
-       const Sportsid=value1;
+      const Sportsid = value1;
       const response = await Api.fetchrules(Sportsid);
       if (response.status === 200) {
         if (Array.isArray(response.data) && response.data.length > 0) {
-          const rulesText = response.data.map(rule => rule.rules_of_game).join(', ');
+          const rulesText = response.data
+            .map(rule => rule.rules_of_game)
+            .join(', ');
           setShowTextBox(true);
           setShowSecondButton(true);
           setText(rulesText);
@@ -62,64 +76,62 @@ export default function RuleofGames() {
           setText('');
         }
       } else {
-        
         Alert.alert(`Unexpected response status: ${response.status}`);
       }
     } catch (error) {
-      if (error.response && error.response.status===404) {
-        Alert.alert('No Rules found for given Sport.') 
-      }else if(error.response){
+      if (error.response && error.response.status === 404) {
+        Alert.alert('No Rules found for given Sport.');
+      } else if (error.response) {
         Alert.alert('Error fetching rules', `Status: ${error.response.status}`);
-      }
-       else {
+      } else {
         Alert.alert('Network error', 'Failed to connect to server.');
       }
       setText('Error fetching rules.');
     }
   };
-  
+
   const UpdateData = async () => {
     if (!text.trim()) {
-        Alert.alert('Please write something in the text box.');
-        return;
+      Alert.alert('Please write something in the text box.');
+      return;
     }
 
     const saverules = {
-        sports_id: value1,  // Make sure the property matches the backend expectation
-        rules_of_game: text,
+      sports_id: value1, // Make sure the property matches the backend expectation
+      rules_of_game: text,
     };
 
     try {
-        const response = await Api.rulesofgames(saverules);
-        if (response.status === 200) {  // Check for 200 OK instead of 201 Created
-            Alert.alert(
-                'Success',
-                'Rules have been updated.',
-                [
-                    {
-                        text: 'OK',
-                        onPress: () => navigation.navigate('Chairperson'),
-                    },
-                ],
-                { cancelable: false }
-            );
-        } else {
-            Alert.alert(`Unexpected response status: ${response.status}`);
-        }
+      const response = await Api.rulesofgames(saverules);
+      if (response.status === 200) {
+        // Check for 200 OK instead of 201 Created
+        Alert.alert(
+          'Success',
+          'Rules have been updated.',
+          [
+            {
+              text: 'OK',
+              onPress: () => navigation.navigate('Chairperson'),
+            },
+          ],
+          {cancelable: false},
+        );
+      } else {
+        Alert.alert(`Unexpected response status: ${response.status}`);
+      }
     } catch (error) {
-        if (error.response) {
-            // Handle server error
-            Alert.alert('Error saving data', `Status: ${error.response.status}`);
-            console.error('Error response:', error.response);
-        } else if (error.request) {
-            // Handle network error
-            Alert.alert('Network error', 'Failed to connect to server.');
-            console.error('Error request:', error.request);
-        }
+      if (error.response) {
+        // Handle server error
+        Alert.alert('Error saving data', `Status: ${error.response.status}`);
+        console.error('Error response:', error.response);
+      } else if (error.request) {
+        // Handle network error
+        Alert.alert('Network error', 'Failed to connect to server.');
+        console.error('Error request:', error.request);
+      }
     }
-};
+  };
 
-  
   const handleBackPress = () => {
     navigation.navigate('Chairperson');
   };
@@ -128,7 +140,7 @@ export default function RuleofGames() {
     <SafeAreaView style={styles.container}>
       <Appbar.Header style={styles.appbarsetting}>
         <Appbar.BackAction onPress={handleBackPress} color="#ffffff" />
-        <Appbar.Content title="Chairperson" titleStyle={styles.appbarTitle} />
+        <Appbar.Content title="Rules" titleStyle={styles.appbarTitle} />
       </Appbar.Header>
 
       <View style={styles.contentContainer}>
@@ -165,7 +177,7 @@ export default function RuleofGames() {
       </View>
     </SafeAreaView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -176,7 +188,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#6200ee',
   },
   appbarTitle: {
-    fontSize: 26,   
+    fontSize: 26,
     color: '#ffffff',
   },
   contentContainer: {
@@ -187,7 +199,7 @@ const styles = StyleSheet.create({
   dropdown: {
     borderColor: '#ccc',
     borderWidth: 1,
-    borderRadius: 10,  // Rounded corners
+    borderRadius: 10, // Rounded corners
     paddingHorizontal: 10,
     marginBottom: 20,
   },

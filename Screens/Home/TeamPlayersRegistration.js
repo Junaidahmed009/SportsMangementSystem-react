@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   SafeAreaViewComponent,
   AppBarComponent,
@@ -14,10 +14,13 @@ import {
   DropdownComponent,
 } from '../MyComponents';
 import Api from '../Api';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
 export default function CricketRegistration() {
   const navigation = useNavigation();
+  const route = useRoute();
+  const {teamId, userId, sportsid} = route.params;
+
   const [openCourse, setOpenCourse] = useState(false);
   const [openSection, setOpenSection] = useState(false);
   const [openSemNo, setOpenSemNo] = useState(false);
@@ -46,6 +49,10 @@ export default function CricketRegistration() {
     {label: '6', value: '6'},
     {label: '7', value: '7'},
     {label: '8', value: '8'},
+    {label: '9', value: '9'},
+    {label: '10', value: '10'},
+    {label: '11', value: '11'},
+    {label: '12', value: '12'},
   ];
   const Sections = [
     {label: 'A', value: 'A'},
@@ -76,29 +83,108 @@ export default function CricketRegistration() {
         }));
         setItems1(Studentdata);
       } else {
-        console.error('Unexpected data format or response status:', response);
+        Alert.alert('Unexpected data format or response status:', response);
       }
     } catch (error) {
-      const message =
-        error.response?.status === 404
-          ? 'No data found for students'
-          : 'Network error, failed to connect to server';
-      console.log(message);
-      console.error('Error fetching data:', error);
+      if (error.response) {
+        if (error.response.status === 404) {
+          Alert.alert('Error', 'No Students found.');
+        } else {
+          Alert.alert('Error', 'An unexpected error occurred.');
+        }
+      } else {
+        // Network or other unexpected errors
+        Alert.alert('Network Error', 'Failed to connect to the server.');
+      }
     }
   };
 
-  const handleButtonPress = () => {
+  const playerLimitBySport = {
+    1: 10,
+    2: 10,
+    7: 10,
+    12: 10,
+    4: 2,
+    6: 2,
+    10: 2,
+  };
+  const handleUserHome = () => {
+    navigation.navigate('UserHome'); // Replace 'Home' with the correct route name
+  };
+
+  useEffect(() => {
+    // Automatically call handleLoginUser when the component is mounted
+    handleLoginUser();
+  }, [1]);
+
+  const handleLoginUser = async () => {
+    if (!userId) {
+      Alert.alert('Error', 'Some issue with User ID. Please try again later.');
+      return; // Exit the function early
+    }
+
+    const specialSportsIds = [3, 5, 8, 9, 11, 13];
+
+    const userData = {
+      UserId: userId,
+      ...(specialSportsIds.includes(sportsid) ? {TeamNo: teamId} : {}),
+    };
+
+    try {
+      const response = await Api.handleloginuser(userData);
+
+      if (response.status === 200) {
+        Alert.alert('Welcome', 'Please now select the remaining players.');
+        const {name, registration_no} = response.data;
+        const playerToAdd = {
+          name: name,
+          reg_no: registration_no,
+          // value: selectedPlayer.value,
+        };
+        setSelectedPlayers(prevPlayers => [...prevPlayers, playerToAdd]);
+        setRegNosArray(prevRegNos => [...prevRegNos, playerToAdd.reg_no]);
+      } else if (response.status === 201) {
+        Alert.alert('Congrats', 'You are Registered.');
+        handleUserHome();
+      } else {
+        Alert.alert('Error', 'Unexpected response. Please try again.');
+      }
+    } catch (error) {
+      if (error.response) {
+        if (error.response.status === 404) {
+          Alert.alert('Error', 'Caption not found in the User table.');
+          handleUserHome();
+        } else if (error.response.status === 409) {
+          Alert.alert('Error', 'User Not found in Student Table.');
+          handleUserHome();
+        } else {
+          Alert.alert('Error', 'An unexpected error occurred.');
+        }
+      } else {
+        // Network or other unexpected errors
+        Alert.alert('Network Error', 'Failed to connect to the server.');
+      }
+    }
+  };
+
+  const GetPlayers = () => {
     if (!value1) {
       Alert.alert('Please select a value from Dropdown');
-    }
-    if (selectedPlayers.length >= 12) {
-      Alert.alert(
-        'Player Limit Reached',
-        'You can only select up to 12 players.',
-      );
       return;
     }
+
+    const maxPlayersAllowed = playerLimitBySport[sportsid];
+
+    if (maxPlayersAllowed !== undefined) {
+      if (selectedPlayers.length >= maxPlayersAllowed) {
+        Alert.alert(
+          'Player Limit Reached',
+          `You can only select up to ${maxPlayersAllowed} players.`,
+        );
+        return;
+      }
+    }
+
     const selectedPlayer = items1.find(item => item.value === value1);
 
     if (selectedPlayer && regNosArray.includes(selectedPlayer.reg_no)) {
@@ -116,19 +202,58 @@ export default function CricketRegistration() {
       setSelectedPlayers(prevPlayers => [...prevPlayers, playerToAdd]);
       setRegNosArray(prevRegNos => [...prevRegNos, selectedPlayer.reg_no]);
       setValue1(null);
-      console.log('Player added successfully:', playerToAdd);
     } else {
-      console.log('No player found matching the current value1:', value1);
+      Alert.alert('No player found matching the current value1:', value1);
     }
   };
 
-  const logRegNos = () => {
-    if (regNosArray.length == 12) {
-      console.log('ok');
-    } else {
-      Alert.alert('Please select 12 values');
+  const SavePlayerData = async () => {
+    if (!regNosArray || regNosArray.length === 0) {
+      Alert.alert('Please select some users');
+      return;
     }
-    console.log("Selected Players' Reg Nos:", regNosArray);
+    const maxPlayersAllowed = playerLimitBySport[sportsid];
+    if (
+      maxPlayersAllowed !== undefined &&
+      regNosArray.length > maxPlayersAllowed
+    ) {
+      Alert.alert(
+        'Player Limit',
+        `You can only select ${maxPlayersAllowed} players for this sport.`,
+      );
+      return;
+    }
+
+    const Playersdata = {
+      RollNumbers: regNosArray,
+      TeamNo: teamId,
+    };
+
+    try {
+      const response = await Api.postPlayersdata(Playersdata);
+
+      if (response.status === 201) {
+        Alert.alert('Team Created.');
+        handleUserHome();
+      } else {
+        Alert.alert('Unexpected response. Please try again.');
+      }
+    } catch (error) {
+      Alert.alert('SavePlayerData Error:', error);
+
+      if (error.response) {
+        const {status} = error.response;
+        if (status === 404) {
+          Alert.alert('Not Found', 'Caption Not found in user table');
+        } else if (status === 400) {
+          Alert.alert('Not Found', 'Player Already exists in same team');
+        } else {
+          Alert.alert('Error', 'An unexpected error occurred.');
+        }
+      } else {
+        Alert.alert('Network Error', 'Failed to connect to the server.');
+      }
+    }
   };
 
   const removePlayer = regNo => {
@@ -136,7 +261,6 @@ export default function CricketRegistration() {
       prevPlayers.filter(player => player.reg_no !== regNo),
     );
     setRegNosArray(prevRegNos => prevRegNos.filter(reg => reg !== regNo));
-    console.log(`Player with reg_no ${regNo} removed successfully.`);
   };
 
   return (
@@ -227,7 +351,7 @@ export default function CricketRegistration() {
       <View style={styles.buttons}>
         <ButtonComponent
           buttonTitle="Get player"
-          onPress={handleButtonPress}
+          onPress={GetPlayers}
           CustomStyle={{
             width: '50%',
             marginHorizontal: 5,
@@ -235,7 +359,7 @@ export default function CricketRegistration() {
         />
         <ButtonComponent
           buttonTitle="Save"
-          onPress={logRegNos}
+          onPress={SavePlayerData}
           CustomStyle={{
             width: '50%',
             marginHorizontal: 5,

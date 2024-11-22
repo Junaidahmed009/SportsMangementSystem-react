@@ -1,8 +1,13 @@
-import { View, Text, Alert, StyleSheet } from 'react-native'
-import React, { useState } from 'react'
-import { SafeAreaViewComponent, AppBarComponent, TextInputComponent, ButtonComponent } from '../MyComponents'
+import {View, Text, Alert, StyleSheet} from 'react-native';
+import React, {useState} from 'react';
+import {
+  SafeAreaViewComponent,
+  AppBarComponent,
+  TextInputComponent,
+  ButtonComponent,
+} from '../MyComponents';
 import Api from '../Api';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 
 export default function AddEventmanager() {
   const navigation = useNavigation();
@@ -11,12 +16,12 @@ export default function AddEventmanager() {
   const Eventmanagerdata = async () => {
     if (!regno) {
       Alert.alert('Please Enter Registration-no');
-      return;  // Add return to stop execution
+      return; // Add return to stop execution
     }
 
     const data = {
-      registration_no: regno
-    }
+      registration_no: regno,
+    };
 
     try {
       const response = await Api.eventmanagerdata(data);
@@ -32,7 +37,7 @@ export default function AddEventmanager() {
               },
             },
           ],
-          { cancelable: false }
+          {cancelable: false},
         );
       }
     } catch (error) {
@@ -43,19 +48,24 @@ export default function AddEventmanager() {
       } else {
         // Handle other errors
         console.error('error:', error);
-        Alert.alert('Registration failed', 'An error occurred during registration. Please try again.');
+        Alert.alert(
+          'Registration failed',
+          'An error occurred during registration. Please try again.',
+        );
       }
     }
-  }
+  };
   const handlechairperson = () => {
-    navigation.navigate('Chairperson')
-  }
-
+    navigation.navigate('Chairperson');
+  };
 
   // The return statement needs to be inside the function
   return (
     <SafeAreaViewComponent>
-      <AppBarComponent title={'Add Moderators'} handleBackPress={handlechairperson}/>
+      <AppBarComponent
+        title={'Add Managers'}
+        handleBackPress={handlechairperson}
+      />
       <View>
         <TextInputComponent
           placeholder="Reg-no(2000-arid-111)"
@@ -71,7 +81,7 @@ export default function AddEventmanager() {
       </View>
       <View style={styles.buttons}>
         <ButtonComponent
-          buttonTitle='Ok'
+          buttonTitle="Ok"
           onPress={Eventmanagerdata}
           CustomStyle={{
             width: '50%',
@@ -79,24 +89,22 @@ export default function AddEventmanager() {
           }}
         />
         <ButtonComponent
-          buttonTitle='Cancel'
+          buttonTitle="Cancel"
           onPress={handlechairperson}
           CustomStyle={{
             width: '50%',
             marginHorizontal: 5,
-          }
-
-          }
+          }}
         />
       </View>
     </SafeAreaViewComponent>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   buttons: {
     justifyContent: 'center',
     flexDirection: 'row',
-    padding: 20
-  }
+    padding: 20,
+  },
 });

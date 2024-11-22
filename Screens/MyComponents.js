@@ -8,7 +8,7 @@ import {
   SafeAreaView,
   FlatList,
 } from 'react-native';
-import {Appbar} from 'react-native-paper';
+import {Appbar, customText} from 'react-native-paper';
 import DropDownPicker from 'react-native-dropdown-picker';
 
 //TextBox
@@ -37,14 +37,19 @@ export const TextInputComponent = ({
   //         marginTop: 30,
   //         marginHorizontal: 10,
   //       }}
-  //     />
+  //     const [tname, setname] = useState();
   //   </View>
 );
 
 //Button
-export const ButtonComponent = ({buttonTitle, onPress, CustomStyle}) => (
+export const ButtonComponent = ({
+  buttonTitle,
+  onPress,
+  CustomStyle,
+  customTextstyle,
+}) => (
   <TouchableOpacity style={[styles.button, CustomStyle]} onPress={onPress}>
-    <Text style={styles.buttonText}>{buttonTitle}</Text>
+    <Text style={[styles.buttonText, customTextstyle]}>{buttonTitle}</Text>
   </TouchableOpacity>
   //Components
   //  <View style={styles.buttons}>
@@ -108,8 +113,6 @@ export const DropdownComponent = ({
     // setValue={setValue1}
     // setItems={setItems1}
     // placeholder="Select Session"
-    // // style={styles.dropdown}
-    // // dropDownContainerStyle={styles.dropdownContainer}
   );
 };
 
@@ -126,34 +129,11 @@ export const AppBarComponent = ({handleBackPress, title, CustomStyle}) => (
 export const SafeAreaViewComponent = ({children, CustomStyle}) => (
   <SafeAreaView style={[styles.safeArea, CustomStyle]}>{children}</SafeAreaView>
 );
+//
+export const Card = ({children, customStyle}) => {
+  return <View style={[styles.card, customStyle]}>{children}</View>;
+};
 
-// //Flatlist
-// export const FlatListComponent = ({
-//   data,
-//   removePlayer,
-//   showRemoveButton = false,
-//   keyExtractor,
-//   buttonText,
-// }) => {
-//   return (
-//     <FlatList
-//       data={data}
-//       renderItem={({item}) => (
-//         <View style={styles.listItemContainer}>
-//           <Text style={styles.listItemText}>{item.value}</Text>
-//           {showRemoveButton && (
-//             <TouchableOpacity
-//               style={styles.removeButton}
-//               onPress={() => removePlayer(item.value)}>
-//               <Text style={styles.removeButtonText}>{buttonText}</Text>
-//             </TouchableOpacity>
-//           )}
-//         </View>
-//       )}
-//       keyExtractor={keyExtractor} // Use the passed keyExtractor function
-//     />
-//   );
-// };
 const styles = StyleSheet.create({
   container: {
     padding: 20,
@@ -224,40 +204,17 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#888',
   },
-
-  // listItemContainer: {
-  //   flexDirection: 'row',
-  //   backgroundColor: '#f0f8ff',
-  //   borderRadius: 8,
-  //   padding: 12,
-  //   marginVertical: 6,
-  //   marginHorizontal: 10,
-  //   shadowColor: '#000',
-  //   shadowOffset: {width: 0, height: 2},
-  //   shadowOpacity: 0.3,
-  //   shadowRadius: 4,
-  //   elevation: 3,
-  //   alignItems: 'center',
-  //   justifyContent: 'space-between',
-  // },
-  // listItemText: {
-  //   fontSize: 16,
-  //   color: '#333',
-  //   fontWeight: '500',
-  //   flexShrink: 1, // Allows text to shrink
-  //   marginRight: 10, // Space between text and button
-  // },
-  // removeButton: {
-  //   backgroundColor: '#6200ee',
-  //   paddingVertical: 4,
-  //   paddingHorizontal: 10,
-  //   borderRadius: 4,
-  //   minWidth: 60, // Fixed width for button consistency
-  //   alignItems: 'center', // Center text in button
-  // },
-  // removeButtonText: {
-  //   color: '#fff',
-  //   fontSize: 14,
-  //   fontWeight: 'bold',
-  // },
+  card: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 15,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+    margin: 12,
+    minHeight: 200, // Ensures the card is at least 100px tall
+    marginTop: 30,
+  },
 });

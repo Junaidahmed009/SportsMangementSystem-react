@@ -109,10 +109,11 @@ export default function TeamRegistration() {
 
       if (response.status === 201) {
         const data = response.data;
-        const teamId = data.teamId;
+        const teamId = data.id;
         const userId = userData.id;
+        const sportsid = sportsvalue;
         Alert.alert('Team is registered.');
-        handleplayersRegistration(teamId, userId);
+        handleplayersRegistration(teamId, userId, sportsid);
       } else {
         Alert.alert('Unexpected response. Please try again.');
       }
@@ -158,8 +159,8 @@ export default function TeamRegistration() {
       }
     });
   };
-  const handleplayersRegistration = (teamId, userId) => {
-    navigation.navigate('PlayersRegistration', {teamId, userId});
+  const handleplayersRegistration = (teamId, userId, sportsid) => {
+    navigation.navigate('PlayersRegistration', {teamId, userId, sportsid});
   };
 
   handleUserhome = () => {
