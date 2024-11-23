@@ -32,7 +32,7 @@ function CricketManagerhome() {
     navigation.navigate('CricketDetails');
   };
   const handleCricketMatchDetails = () => {
-    navigation.navigate('CricketMatchDetails');
+    navigation.navigate('Test1');
   };
 
   return (

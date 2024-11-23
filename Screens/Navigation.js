@@ -21,6 +21,7 @@ import CricketScoring from './Cricket/CricketScoring';
 import ViewManagers from './ChairpersonScreens/ViewManagers';
 import CricketDetails from './Home/CricketDetails';
 import CricketMatchDetails from './Home/CricketMatchDetails';
+import Test1 from './Cricket/Test1';
 const Stack = createNativeStackNavigator();
 export default function Navigation() {
   return (
@@ -58,6 +59,7 @@ export default function Navigation() {
           name="CricketMatchDetails"
           component={CricketMatchDetails}
         />
+        <Stack.Screen name="Test1" component={Test1} />
       </Stack.Navigator>
     </NavigationContainer>
   );
