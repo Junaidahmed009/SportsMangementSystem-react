@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   Alert,
   Button,
-  ScrollView,
 } from 'react-native';
 import {
   SafeAreaViewComponent,
@@ -19,57 +18,170 @@ import {
 } from '../MyComponents';
 import DatePicker from 'react-native-date-picker';
 import Api from '../Api';
+import {getUserData} from '../UsersAccount/UserData';
+import {useNavigation} from '@react-navigation/native';
 
 export default function CreateFixtures() {
+  const navigation = useNavigation();
+  const userData = getUserData();
   const [data, setData] = useState([]); // Stores team data fetched from backend
   const [modalVisible, setModalVisible] = useState(false); // Controls visibility of team selection modal
   const [activeCardEdited, setactiveCardedited] = useState(null); // Active card index being edited in modal
   const [cardsData, setCardsData] = useState(
-    Array(3)
+    Array(2)
       .fill(null)
-      .map(() => ({
+      .map((_, index) => ({
         selectedTeams: [], // Stores selected teams for each card
         venue: '', // Venue for the match
         matchDate: new Date(), // Date and time for the match
         isPickerOpen: false, // Flag to show/hide date picker modal
+        id: `first-${index}`,
       })),
   );
   const [cardsData2, setCardsData2] = useState(
-    Array(3)
+    Array(2)
       .fill(null)
-      .map(() => ({
+      .map((_, index) => ({
         venue: '', // Venue for the match
         matchDate: new Date(), // Date and time for the match
         isPickerOpen: false, // Flag to show/hide date picker modal
+        id: `second-${index}`,
+        title: 'League Matches 2',
+      })),
+  );
+  const [quartercardsData, setquarterCardsData] = useState(
+    Array(2)
+      .fill(null)
+      .map((_, index) => ({
+        venue: '', // Venue for the match
+        matchDate: new Date(), // Date and time for the match
+        isPickerOpen: false, // Flag to show/hide date picker modal
+        id: `third-${index}`,
+        title: 'Quarter Final',
+      })),
+  );
+  const [semicardsData, setsemiCardsData] = useState(
+    Array(2)
+      .fill(null)
+      .map((_, index) => ({
+        venue: '', // Venue for the match
+        matchDate: new Date(), // Date and time for the match
+        isPickerOpen: false, // Flag to show/hide date picker modal
+        id: `fourth-${index}`,
+        title: 'Semi Final',
+      })),
+  );
+  const [finalcardsData, setfinalCardsData] = useState(
+    Array(1)
+      .fill(null)
+      .map((_, index) => ({
+        venue: '', // Venue for the match
+        matchDate: new Date(), // Date and time for the match
+        isPickerOpen: false, // Flag to show/hide date picker modal
+        id: `fifth-${index}`,
+        title: 'Final',
       })),
   );
   const mergedCardsData = [
-    ...cardsData.map(item => ({...item, type: 'firstCard'})), // Add a type for cardsData
-    ...cardsData2.map(item => ({...item, type: 'secondCard'})), // Add a type for cardsData2
+    ...cardsData.map(item => ({
+      ...item,
+      type: 'firstCard',
+    })), // Add a type for cardsData
+    ...cardsData2.map(item => ({
+      ...item,
+      type: 'secondCard',
+    })), // Add a type for cardsData2
+    ...quartercardsData.map(item => ({
+      ...item,
+      type: 'thirdCard',
+    })), // Add a type for cardsData
+    ...semicardsData.map(item => ({
+      ...item,
+      type: 'fourthCard',
+    })), // Add a type for cardsData2
+    ...finalcardsData.map(item => ({
+      ...item,
+      type: 'fifthCard',
+    })), // Add a type for cardsData
   ];
-  const ScheduleDataForBackend = () => {
-    // Check if all venues are filled, and show an alert if any are empty
-    const hasEmptyVenue = cardsData.some(card => !card.venue.trim()); // Check if any venue is empty or just whitespace
-    if (hasEmptyVenue) {
-      Alert.alert('Please fill all 16 cards with a venue.');
-      return; // Exit the function if any venue is empty
+  const formatDateToCustomFormat = date => {
+    const d = new Date(date); // used for get dates or time from different standard of datetimes.
+    const pad = num => String(num).padStart(2, '0'); // this adds a single num a o like 2pm it makes 02.
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(
+      d.getDate(),
+    )} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(
+      d.getSeconds(),
+    )}.${String(d.getMilliseconds()).padStart(3, '0')}`;
+  };
+  const ScheduleDataForBackend = async () => {
+    try {
+      const allCards = [
+        ...cardsData,
+        ...cardsData2,
+        ...quartercardsData,
+        ...semicardsData,
+        ...finalcardsData,
+      ];
+      if (allCards.some(card => !card.venue.trim())) {
+        Alert.alert('Please fill all 16 cards with a venue.');
+        return; // Exit the function if any venue is empty
+      }
+      const formatCardData = (cards, matchType, includeTeams = false) =>
+        cards.map(card => ({
+          ...(includeTeams && {
+            Team1_id: card.selectedTeams?.[0]?.id || null, // Team 1 ID (if applicable)
+            Team2_id: card.selectedTeams?.[1]?.id || null, // Team 2 ID (if applicable)
+          }),
+          ...(includeTeams || {
+            Team1_id: null,
+            Team2_id: null,
+          }),
+          // matchDate: card.matchDate, // Match date and time
+          MatchDate: formatDateToCustomFormat(card.matchDate),
+          Venue: card.venue.trim(), // Trimmed venue
+          Match_type: matchType, // Match type
+        }));
+
+      const card1formattedData = formatCardData(cardsData, 'Group-Stage', true);
+      const card2formattedData = formatCardData(cardsData2, 'Group-Stage 2');
+      const quarterformattedData = formatCardData(
+        quartercardsData,
+        'Quarter Final',
+      );
+      const semiformattedData = formatCardData(semicardsData, 'Semi Final');
+      const finalsormattedData = formatCardData(finalcardsData, 'Final');
+      const DisplayAlldata = [
+        ...card1formattedData,
+        ...card2formattedData,
+        ...quarterformattedData,
+        ...semiformattedData,
+        ...finalsormattedData,
+      ];
+      // Log the data before sending it to backend (for debugging)
+      console.log(DisplayAlldata, userData.id);
+      const AllData = {
+        Schedules: DisplayAlldata,
+        UserId: userData.id,
+      };
+      const response = await Api.PostFixturesData(AllData);
+      if (response.status === 201) {
+        Alert.alert(
+          'Success',
+          'Your Fixtures for the Event have been created successfully',
+        );
+      } else {
+        Alert.alert(
+          'Error',
+          `Unexpected response from the server. Status: ${response.status}`,
+        );
+      }
+    } catch (error) {
+      console.error('Error sending schedule data:', error);
+      Alert.alert(
+        'Error',
+        `An error occurred while creating fixtures: ${error.message}`,
+      );
     }
-
-    // Map through each card and extract the necessary fields
-    const formattedData = cardsData.map(card => ({
-      team1_id: card.selectedTeams[0]?.id || null, // Set to null if undefined
-      team2_id: card.selectedTeams[1]?.id || null, // Set to null if undefined
-      matchDate: card.matchDate, // Match date and time
-      venue: card.venue.trim(), // Venue for the match
-      match_type: 'Group-Stage',
-      winner_id: ' ',
-    }));
-
-    // Log the data before sending it to backend (for debugging)
-    console.log(formattedData);
-
-    // Call the backend API to send the data
-    // Example: Api.sendFixtures(formattedData);
   };
 
   // Fetch teams from the backend
@@ -96,26 +208,48 @@ export default function CreateFixtures() {
     }
   };
 
-  // Function to update card data (venue, date, etc.)
-  //thiss updates the card data like which card no,its value means venue,date,teams ets
-  const updateCardData = (index, key, value) => {
-    setCardsData(prev =>
-      prev.map((card, i) => (i === index ? {...card, [key]: value} : card)),
-    );
+  const updateCardData = (id, key, value) => {
+    setCardsData(prev => {
+      return prev.map(card => {
+        return card.id === id ? {...card, [key]: value} : card;
+      });
+    });
+    setCardsData2(prev => {
+      return prev.map(card => {
+        return card.id === id ? {...card, [key]: value} : card;
+      });
+    });
+    setquarterCardsData(prev => {
+      return prev.map(card => {
+        return card.id === id ? {...card, [key]: value} : card;
+      });
+    });
+    setsemiCardsData(prev => {
+      return prev.map(card => {
+        return card.id === id ? {...card, [key]: value} : card;
+      });
+    });
+    setfinalCardsData(prev => {
+      return prev.map(card => {
+        return card.id === id ? {...card, [key]: value} : card;
+      });
+    });
   };
 
   // Handle opening the modal for selecting teams
-  const handleModal = index => {
-    setactiveCardedited(index); // Set the active card index to edit
+  const handleModal = id => {
+    setactiveCardedited(id); // Set the active card index to edit
     setModalVisible(true); // Open modal
   };
 
   const handleTeamSelect = team => {
     if (activeCardEdited === null || activeCardEdited === undefined) return;
+    const activecard = cardsData.find(card => card.id === activeCardEdited);
+    if (!activecard) return;
 
     // Check if the team is already selected in any previous card
-    const isTeamAlreadySelected = cardsData.some((card, index) => {
-      if (index !== activeCardEdited) {
+    const isTeamAlreadySelected = cardsData.some(card => {
+      if (card.id !== activeCardEdited) {
         // Check if the team is in any of the selectedTeams of previous cards
         return card.selectedTeams.some(t => t.id === team.id);
       }
@@ -133,8 +267,8 @@ export default function CreateFixtures() {
 
     // Update the selected teams for the active card
     setCardsData(prevCardsData =>
-      prevCardsData.map((card, index) => {
-        if (index === activeCardEdited) {
+      prevCardsData.map(card => {
+        if (card.id === activeCardEdited) {
           const selectedTeams = card.selectedTeams;
           const isAlreadySelected = selectedTeams.some(t => t.id === team.id);
 
@@ -154,7 +288,9 @@ export default function CreateFixtures() {
 
   // Function to save selected teams and close the modal
   const handleSaveSelection = () => {
-    const selectedTeams = cardsData[activeCardEdited]?.selectedTeams || [];
+    const activeCard = cardsData.find(card => card.id === activeCardEdited);
+    const selectedTeams = activeCard?.selectedTeams || [];
+    // const selectedTeams = cardsData[activeCardEdited]?.selectedTeams || [];
     if (selectedTeams.length < 2) {
       Alert.alert('Select at least 2 teams');
       return;
@@ -163,7 +299,9 @@ export default function CreateFixtures() {
   };
   // Render each team item in the team selection modal
   const renderTeamItem = ({item}) => {
-    const selectedTeams = cardsData[activeCardEdited]?.selectedTeams || [];
+    const activeCard = cardsData.find(card => card.id === activeCardEdited);
+    // const selectedTeams = cardsData[activeCardEdited]?.selectedTeams || [];
+    const selectedTeams = activeCard?.selectedTeams || [];
     const isSelected = selectedTeams.some(selected => selected.id === item.id);
 
     return (
@@ -178,78 +316,152 @@ export default function CreateFixtures() {
       </TouchableOpacity>
     );
   };
-
-  // Render each fixture card (for the match schedule)
-  const renderCard = ({item, index}) => (
-    <Card key={index}>
-      <View style={styles.rowContainer}>
-        {/* Button to open team selection modal */}
-        <ButtonComponent
-          buttonTitle="Select Teams"
-          onPress={() => handleModal(index)}
-          CustomStyle={{
-            width: '80%',
-            marginHorizontal: 5,
-            marginBottom: 10,
-            marginTop: 10,
-          }}
-        />
-        <Text style={{color: 'black'}}>
-          Selected Teams:{' '}
-          {item.selectedTeams.length > 0
-            ? item.selectedTeams.map(team => team.name).join(', ')
-            : 'No teams selected'}
-        </Text>
-      </View>
-      <View style={styles.Textboxstyle}>
-        <TextInputComponent
-          placeholder="Venue"
-          textValue={item.venue}
-          onChangeText={text => updateCardData(index, 'venue', text)}
-          CustomStyle={styles.textInput}
-        />
-      </View>
-      <View style={styles.buttons}>
-        {/* Button to open date picker modal */}
-        <ButtonComponent
-          buttonTitle="Select Date"
-          onPress={() => updateCardData(index, 'isPickerOpen', true)}
-          CustomStyle={{
-            width: '50%',
-            marginHorizontal: 5,
-            marginBottom: 10,
-          }}
-        />
-        <Text style={{margin: 10, color: 'black'}}>
-          Selected Date & Time: {item.matchDate.toLocaleString()}
-        </Text>
-      </View>
-      {/* Modal for date picker */}
-      <Modal visible={item.isPickerOpen} transparent animationType="slide">
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <DatePicker
-              date={item.matchDate}
-              onDateChange={date => updateCardData(index, 'matchDate', date)}
-              mode="datetime"
+  const renderCard = ({item}) => {
+    if (item.type === 'firstCard') {
+      return (
+        <Card key={item.id}>
+          <View style={styles.rowContainer}>
+            {/* Button to open team selection modal */}
+            <Text>League Matches</Text>
+            <ButtonComponent
+              buttonTitle="Select Teams"
+              onPress={() => handleModal(item.id)}
+              CustomStyle={{
+                width: '80%',
+                marginHorizontal: 5,
+                marginBottom: 10,
+                marginTop: 10,
+              }}
             />
-            <View style={styles.modalFooter}>
-              <Button
-                title="Confirm"
-                onPress={() => updateCardData(index, 'isPickerOpen', false)}
-                color="#6200ee"
-              />
-              <Button
-                title="Cancel"
-                onPress={() => updateCardData(index, 'isPickerOpen', false)}
-                color="#6200ee"
-              />
-            </View>
+            <Text style={{color: 'black'}}>
+              Selected Teams:{' '}
+              {item.selectedTeams.length > 0
+                ? item.selectedTeams.map(team => team.name).join(', ')
+                : 'No teams selected'}
+            </Text>
           </View>
-        </View>
-      </Modal>
-    </Card>
-  );
+          <View style={styles.Textboxstyle}>
+            <TextInputComponent
+              placeholder="Venue"
+              textValue={item.venue}
+              onChangeText={text => updateCardData(item.id, 'venue', text)}
+              CustomStyle={styles.textInput}
+            />
+          </View>
+          <View style={styles.buttons}>
+            <ButtonComponent
+              buttonTitle="Select Date"
+              onPress={() => updateCardData(item.id, 'isPickerOpen', true)}
+              CustomStyle={{
+                width: '50%',
+                marginHorizontal: 5,
+                marginBottom: 10,
+              }}
+            />
+            <Text style={{margin: 10, color: 'black'}}>
+              Selected Date & Time: {item.matchDate.toLocaleString()}
+            </Text>
+          </View>
+          <Modal visible={item.isPickerOpen} transparent animationType="slide">
+            <View style={styles.modalOverlay}>
+              <View style={styles.modalContent}>
+                <DatePicker
+                  date={item.matchDate}
+                  onDateChange={date =>
+                    updateCardData(item.id, 'matchDate', date)
+                  }
+                  mode="datetime"
+                />
+                <View style={styles.modalFooter}>
+                  <Button
+                    title="Confirm"
+                    onPress={() =>
+                      updateCardData(item.id, 'isPickerOpen', false)
+                    }
+                    color="#6200ee"
+                  />
+                  <Button
+                    title="Cancel"
+                    onPress={() =>
+                      updateCardData(item.id, 'isPickerOpen', false)
+                    }
+                    color="#6200ee"
+                  />
+                </View>
+              </View>
+            </View>
+          </Modal>
+        </Card>
+      );
+    } else if (
+      item.type === 'secondCard' ||
+      item.type === 'thirdCard' ||
+      item.type === 'fourthCard' ||
+      item.type === 'fifthCard'
+    ) {
+      // i change things here
+      return (
+        <Card key={item.id}>
+          <View style={styles.typeStyles}>
+            <Text>{item.title}</Text>
+          </View>
+
+          <View style={styles.Textboxstyle}>
+            <TextInputComponent
+              placeholder="Venue"
+              textValue={item.venue}
+              onChangeText={text => updateCardData(item.id, 'venue', text)}
+              CustomStyle={styles.textInput}
+            />
+          </View>
+          <View style={styles.buttons}>
+            <ButtonComponent
+              buttonTitle="Select Date"
+              onPress={() => updateCardData(item.id, 'isPickerOpen', true)}
+              CustomStyle={{
+                width: '50%',
+                marginHorizontal: 5,
+                marginBottom: 10,
+              }}
+            />
+            <Text style={{margin: 10, color: 'black'}}>
+              Selected Date & Time: {item.matchDate.toLocaleString()}
+            </Text>
+          </View>
+          <Modal visible={item.isPickerOpen} transparent animationType="slide">
+            <View style={styles.modalOverlay}>
+              <View style={styles.modalContent}>
+                <DatePicker
+                  date={item.matchDate}
+                  onDateChange={date =>
+                    updateCardData(item.id, 'matchDate', date)
+                  }
+                  mode="datetime"
+                />
+                <View style={styles.modalFooter}>
+                  <Button
+                    title="Confirm"
+                    onPress={() =>
+                      updateCardData(item.id, 'isPickerOpen', false)
+                    }
+                    color="#6200ee"
+                  />
+                  <Button
+                    title="Cancel"
+                    onPress={() =>
+                      updateCardData(item.id, 'isPickerOpen', false)
+                    }
+                    color="#6200ee"
+                  />
+                </View>
+              </View>
+            </View>
+          </Modal>
+        </Card>
+      );
+    }
+    return null;
+  };
 
   // Fetch teams when component is mounted
   useEffect(() => {
@@ -262,9 +474,10 @@ export default function CreateFixtures() {
       <Text style={styles.teamsText}>For 32 Teams</Text>
       {/* <Text style={styles.groupstagetext}>Group Stage-1(32)</Text> */}
       <FlatList
-        data={cardsData}
+        data={mergedCardsData}
         renderItem={renderCard}
-        keyExtractor={(item, index) => `card-${index}`}
+        // keyExtractor={(item, index) => `card-${item.type}-${index}`}
+        keyExtractor={item => item.id}
         ListFooterComponent={
           <View
             style={{
@@ -289,15 +502,17 @@ export default function CreateFixtures() {
         transparent
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}>
-        {/* i am here */}
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Select 2 Teams</Text>
             <FlatList
               data={data}
               renderItem={renderTeamItem}
-              keyExtractor={item => item.id.toString()}
-              extraData={cardsData[activeCardEdited]?.selectedTeams}
+              keyExtractor={item => item.id.toString()} // Ensure item.id is a valid unique string or number
+              extraData={
+                cardsData.find(card => card.id === activeCardEdited)
+                  ?.selectedTeams
+              }
             />
             <View style={styles.modalFooter}>
               <ButtonComponent
@@ -337,7 +552,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#000',
     margin: 10,
-    marginBottom: 10,
   },
   groupstagetext: {
     fontSize: 20,
@@ -408,6 +622,11 @@ const styles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
     justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  typeStyles: {
+    alignItems: 'center',
+    marginBottom: 10,
   },
 });

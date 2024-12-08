@@ -14,6 +14,7 @@ import {getUserData} from '../UsersAccount/UserData';
 
 export default function TeamRegistration() {
   const navigation = useNavigation();
+  const userData = getUserData();
   const [tname, setname] = useState();
   const [sportsopen, setSportsopen] = useState(false);
   const [sportsvalue, setSportsvalue] = useState(null);
@@ -27,7 +28,7 @@ export default function TeamRegistration() {
   const [valueSemNo, setValueSemNo] = useState(null);
 
   const [imageUri, setImageUri] = useState(null);
-  const userData = getUserData();
+
   const Courses = [
     {label: 'BSCS', value: 'BCS'},
     {label: 'BSIT', value: 'BIT'},
