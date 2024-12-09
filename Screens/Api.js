@@ -82,6 +82,12 @@ class Api {
   PostFixturesData(AllData) {
     return this.apiClient.post('Fixture/PostFixtures', AllData);
   }
+  fetchCricketrules() {
+    return this.apiClient.get('Rules/FetchCricketRules');
+  }
+  FetchCricketTeams() {
+    return this.apiClient.get('Team/GetCricketTeams');
+  }
 }
 
 export default new Api();

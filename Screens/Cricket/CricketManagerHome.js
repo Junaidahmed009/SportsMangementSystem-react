@@ -15,6 +15,9 @@ function CricketManagerhome() {
   const handleCricketFixtures = () => {
     navigation.navigate('CricketFixtures');
   };
+  const handleEditFixtures = () => {
+    navigation.navigate('EditFixtures');
+  };
   const handleCricketScore = () => {
     navigation.navigate('CricketScoring');
   };
@@ -48,12 +51,24 @@ function CricketManagerhome() {
         <View style={styles.welcometextview}>
           <Text style={styles.welcometext}>WELCOME</Text>
         </View>
-
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.buttonlogin}
             onPress={handleCricketFixtures}>
-            <Text style={styles.buttontext}>Add Fixtures</Text>
+            <Text style={styles.buttontext}>Create Fixtures</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.buttonlogin}
+            onPress={handleEditFixtures}>
+            <Text style={styles.buttontext}>Edit Fixtures</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={styles.buttonlogin}
+            onPress={handleCricketRules}>
+            <Text style={styles.buttontext}>Rules</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -66,22 +81,8 @@ function CricketManagerhome() {
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.buttonlogin}
-            onPress={handleCricketMatchDetails}>
-            <Text style={styles.buttontext}>Rules</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.buttonlogin}
             onPress={handleCricketScore}>
-            <Text style={styles.buttontext}>Score</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={styles.buttonlogin}
-            onPress={handleCricketSchedule}>
-            <Text style={styles.buttontext}>Schedule</Text>
+            <Text style={styles.buttontext}>Start Scoring</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -90,7 +91,6 @@ function CricketManagerhome() {
             <Text style={styles.buttontext}>View Teams</Text>
           </TouchableOpacity>
         </View>
-
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.buttonlogin}

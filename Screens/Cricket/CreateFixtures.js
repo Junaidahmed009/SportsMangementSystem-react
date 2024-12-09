@@ -23,12 +23,15 @@ import {useNavigation} from '@react-navigation/native';
 
 export default function CreateFixtures() {
   const navigation = useNavigation();
+  const handleUserHome = () => {
+    navigation.navigate('CricketManagerhome');
+  };
   const userData = getUserData();
   const [data, setData] = useState([]); // Stores team data fetched from backend
   const [modalVisible, setModalVisible] = useState(false); // Controls visibility of team selection modal
   const [activeCardEdited, setactiveCardedited] = useState(null); // Active card index being edited in modal
   const [cardsData, setCardsData] = useState(
-    Array(2)
+    Array(16)
       .fill(null)
       .map((_, index) => ({
         selectedTeams: [], // Stores selected teams for each card
@@ -39,23 +42,23 @@ export default function CreateFixtures() {
       })),
   );
   const [cardsData2, setCardsData2] = useState(
-    Array(2)
+    Array(8)
       .fill(null)
       .map((_, index) => ({
-        venue: '', // Venue for the match
-        matchDate: new Date(), // Date and time for the match
-        isPickerOpen: false, // Flag to show/hide date picker modal
+        venue: '',
+        matchDate: new Date(),
+        isPickerOpen: false,
         id: `second-${index}`,
         title: 'League Matches 2',
       })),
   );
   const [quartercardsData, setquarterCardsData] = useState(
-    Array(2)
+    Array(4)
       .fill(null)
       .map((_, index) => ({
-        venue: '', // Venue for the match
-        matchDate: new Date(), // Date and time for the match
-        isPickerOpen: false, // Flag to show/hide date picker modal
+        venue: '',
+        matchDate: new Date(),
+        isPickerOpen: false,
         id: `third-${index}`,
         title: 'Quarter Final',
       })),
@@ -64,9 +67,9 @@ export default function CreateFixtures() {
     Array(2)
       .fill(null)
       .map((_, index) => ({
-        venue: '', // Venue for the match
-        matchDate: new Date(), // Date and time for the match
-        isPickerOpen: false, // Flag to show/hide date picker modal
+        venue: '',
+        matchDate: new Date(),
+        isPickerOpen: false,
         id: `fourth-${index}`,
         title: 'Semi Final',
       })),
@@ -75,9 +78,9 @@ export default function CreateFixtures() {
     Array(1)
       .fill(null)
       .map((_, index) => ({
-        venue: '', // Venue for the match
-        matchDate: new Date(), // Date and time for the match
-        isPickerOpen: false, // Flag to show/hide date picker modal
+        venue: '',
+        matchDate: new Date(),
+        isPickerOpen: false,
         id: `fifth-${index}`,
         title: 'Final',
       })),
@@ -86,23 +89,23 @@ export default function CreateFixtures() {
     ...cardsData.map(item => ({
       ...item,
       type: 'firstCard',
-    })), // Add a type for cardsData
+    })),
     ...cardsData2.map(item => ({
       ...item,
       type: 'secondCard',
-    })), // Add a type for cardsData2
+    })),
     ...quartercardsData.map(item => ({
       ...item,
       type: 'thirdCard',
-    })), // Add a type for cardsData
+    })),
     ...semicardsData.map(item => ({
       ...item,
       type: 'fourthCard',
-    })), // Add a type for cardsData2
+    })),
     ...finalcardsData.map(item => ({
       ...item,
       type: 'fifthCard',
-    })), // Add a type for cardsData
+    })),
   ];
   const formatDateToCustomFormat = date => {
     const d = new Date(date); // used for get dates or time from different standard of datetimes.
@@ -124,22 +127,21 @@ export default function CreateFixtures() {
       ];
       if (allCards.some(card => !card.venue.trim())) {
         Alert.alert('Please fill all 16 cards with a venue.');
-        return; // Exit the function if any venue is empty
+        return;
       }
       const formatCardData = (cards, matchType, includeTeams = false) =>
         cards.map(card => ({
           ...(includeTeams && {
-            Team1_id: card.selectedTeams?.[0]?.id || null, // Team 1 ID (if applicable)
-            Team2_id: card.selectedTeams?.[1]?.id || null, // Team 2 ID (if applicable)
+            Team1_id: card.selectedTeams?.[0]?.id || null,
+            Team2_id: card.selectedTeams?.[1]?.id || null,
           }),
           ...(includeTeams || {
             Team1_id: null,
             Team2_id: null,
           }),
-          // matchDate: card.matchDate, // Match date and time
           MatchDate: formatDateToCustomFormat(card.matchDate),
-          Venue: card.venue.trim(), // Trimmed venue
-          Match_type: matchType, // Match type
+          Venue: card.venue.trim(),
+          Match_type: matchType,
         }));
 
       const card1formattedData = formatCardData(cardsData, 'Group-Stage', true);
@@ -157,8 +159,7 @@ export default function CreateFixtures() {
         ...semiformattedData,
         ...finalsormattedData,
       ];
-      // Log the data before sending it to backend (for debugging)
-      console.log(DisplayAlldata, userData.id);
+      // console.log(DisplayAlldata, userData.id);
       const AllData = {
         Schedules: DisplayAlldata,
         UserId: userData.id,
@@ -169,6 +170,7 @@ export default function CreateFixtures() {
           'Success',
           'Your Fixtures for the Event have been created successfully',
         );
+        handleUserHome();
       } else {
         Alert.alert(
           'Error',
@@ -184,17 +186,15 @@ export default function CreateFixtures() {
     }
   };
 
-  // Fetch teams from the backend
   const fetchTeams = async () => {
     try {
-      const response = await Api.fetchteams(); // API call to fetch teams
+      const response = await Api.fetchteams();
       if (response.status === 200) {
-        // If response is successful, map and store teams
         const teamsData = response.data.map(team => ({
           id: team.id,
           name: team.name,
         }));
-        setData(teamsData); // Update state with teams data
+        setData(teamsData);
       } else {
         console.error('Unexpected response status:', response.status);
       }
@@ -236,10 +236,9 @@ export default function CreateFixtures() {
     });
   };
 
-  // Handle opening the modal for selecting teams
   const handleModal = id => {
-    setactiveCardedited(id); // Set the active card index to edit
-    setModalVisible(true); // Open modal
+    setactiveCardedited(id);
+    setModalVisible(true);
   };
 
   const handleTeamSelect = team => {
@@ -253,19 +252,16 @@ export default function CreateFixtures() {
         // Check if the team is in any of the selectedTeams of previous cards
         return card.selectedTeams.some(t => t.id === team.id);
       }
-      return false; // Skip checking the active card
+      return false;
     });
-
-    // If the team is already selected in any other card, show an alert
     if (isTeamAlreadySelected) {
       Alert.alert(
         'Error',
         'This team has already been selected in another match.',
       );
-      return; // Exit early if the team is already selected
+      return;
     }
 
-    // Update the selected teams for the active card
     setCardsData(prevCardsData =>
       prevCardsData.map(card => {
         if (card.id === activeCardEdited) {
@@ -286,32 +282,25 @@ export default function CreateFixtures() {
     );
   };
 
-  // Function to save selected teams and close the modal
   const handleSaveSelection = () => {
     const activeCard = cardsData.find(card => card.id === activeCardEdited);
     const selectedTeams = activeCard?.selectedTeams || [];
-    // const selectedTeams = cardsData[activeCardEdited]?.selectedTeams || [];
+
     if (selectedTeams.length < 2) {
       Alert.alert('Select at least 2 teams');
       return;
     }
-    setModalVisible(false); // Close modal after saving selection
+    setModalVisible(false);
   };
-  // Render each team item in the team selection modal
   const renderTeamItem = ({item}) => {
     const activeCard = cardsData.find(card => card.id === activeCardEdited);
-    // const selectedTeams = cardsData[activeCardEdited]?.selectedTeams || [];
     const selectedTeams = activeCard?.selectedTeams || [];
     const isSelected = selectedTeams.some(selected => selected.id === item.id);
 
     return (
       <TouchableOpacity
-        style={[
-          styles.teamItem,
-          isSelected && styles.selectedTeam, // Highlight selected teams
-        ]}
-        onPress={() => handleTeamSelect(item)} // Handle team select
-      >
+        style={[styles.teamItem, isSelected && styles.selectedTeam]}
+        onPress={() => handleTeamSelect(item)}>
         <Text style={styles.teamText}>{item.name}</Text>
       </TouchableOpacity>
     );
@@ -321,7 +310,6 @@ export default function CreateFixtures() {
       return (
         <Card key={item.id}>
           <View style={styles.rowContainer}>
-            {/* Button to open team selection modal */}
             <Text>League Matches</Text>
             <ButtonComponent
               buttonTitle="Select Teams"
@@ -462,17 +450,14 @@ export default function CreateFixtures() {
     }
     return null;
   };
-
-  // Fetch teams when component is mounted
   useEffect(() => {
     fetchTeams();
   }, []);
 
   return (
     <SafeAreaViewComponent>
-      <AppBarComponent title="Create Schedule" />
+      <AppBarComponent title="Create Fixtures" />
       <Text style={styles.teamsText}>For 32 Teams</Text>
-      {/* <Text style={styles.groupstagetext}>Group Stage-1(32)</Text> */}
       <FlatList
         data={mergedCardsData}
         renderItem={renderCard}
@@ -508,7 +493,7 @@ export default function CreateFixtures() {
             <FlatList
               data={data}
               renderItem={renderTeamItem}
-              keyExtractor={item => item.id.toString()} // Ensure item.id is a valid unique string or number
+              keyExtractor={item => item.id.toString()}
               extraData={
                 cardsData.find(card => card.id === activeCardEdited)
                   ?.selectedTeams
