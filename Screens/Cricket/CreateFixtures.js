@@ -207,6 +207,9 @@ export default function CreateFixtures() {
       console.error('Error fetching teams:', error);
     }
   };
+  useEffect(() => {
+    fetchTeams();
+  }, []);
 
   const updateCardData = (id, key, value) => {
     setCardsData(prev => {
@@ -450,9 +453,6 @@ export default function CreateFixtures() {
     }
     return null;
   };
-  useEffect(() => {
-    fetchTeams();
-  }, []);
 
   return (
     <SafeAreaViewComponent>

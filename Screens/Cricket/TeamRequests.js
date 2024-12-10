@@ -9,12 +9,12 @@ import {
 import React, {useState, useEffect} from 'react';
 import {SafeAreaViewComponent, AppBarComponent} from '../MyComponents';
 import Api from '../Api';
+import {useNavigation} from '@react-navigation/native';
 
 export default function TeamRequests() {
+  const navigation = useNavigation();
   const [Teams, setTeams] = useState([]);
-  useEffect(() => {
-    FetchTeams();
-  }, []);
+
   const FetchTeams = async () => {
     try {
       const response = await Api.FetchCricketTeams();
@@ -45,8 +45,76 @@ export default function TeamRequests() {
       setTeams([]); // Set an empty array in case of an error
     }
   };
+  useEffect(() => {
+    FetchTeams();
+  }, []);
+  const updateStatus = async id => {
+    try {
+      // console.log('Updating status for ID:', id);
+      const response = await Api.TeamStatusUpdate(id);
 
+      if (response.status === 200) {
+        Alert.alert('Success', 'Team status updated successfully');
+      } else {
+        Alert.alert(
+          'Error',
+          'Some technical issue occurred. Please try again.',
+        );
+      }
+    } catch (error) {
+      console.log('Error:', error);
+
+      if (error.response) {
+        // Handle specific HTTP error responses
+        if (error.response.status === 404) {
+          console.log('404 Response:', error.response.data);
+          Alert.alert('Error', 'Team not found');
+        } else if (error.response.status === 409) {
+          Alert.alert('Error', 'Team already approved. Refresh the page.');
+        } else {
+          Alert.alert(
+            'Error',
+            `Request failed with status ${error.response.status}`,
+          );
+        }
+      } else {
+        // Handle network or unknown errors
+        Alert.alert(
+          'Network Error',
+          'Failed to connect to the server. Please try again.',
+        );
+      }
+    }
+  };
+
+  const handleplayers = Teamid => {
+    navigation.navigate('Players', {Teamid});
+  };
+  const handleHome = () => {
+    navigation.navigate('CricketManagerhome');
+  };
   const renderItem = ({item}) => {
+    const handleTeamDetails = () => {
+      const Teamid = item.id;
+      handleplayers(Teamid);
+    };
+    const handleStatusApprove = () => {
+      if (!item.teamStatus) {
+        Alert.alert(
+          'Confirmation',
+          `Are you sure you want to approve ${item.name} Team?`,
+          [
+            {
+              text: 'Cancel',
+              style: 'cancel',
+            },
+            {text: 'OK', onPress: () => updateStatus(item.id)},
+          ],
+          {cancelable: false},
+        );
+      }
+    };
+
     return (
       <View style={styles.teamContainer}>
         <Text style={styles.teamName}>{item.name}</Text>
@@ -58,13 +126,16 @@ export default function TeamRequests() {
         <View style={styles.buttonsContainer}>
           <TouchableOpacity
             style={styles.viewButton}
-            onPress={() => console.log(`Viewing players for ${item.id}`)}>
-            <Text style={styles.buttonText}>Approve</Text>
+            onPress={handleStatusApprove}
+            disabled={item.teamStatus}>
+            <Text style={styles.buttonText}>
+              {item.teamStatus ? 'Approved' : 'Approve'}
+            </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={styles.viewButton}
-            onPress={() => console.log(`Viewing players for ${item.name}`)}>
+            onPress={handleTeamDetails}>
             <Text style={styles.buttonText}>Team Details</Text>
           </TouchableOpacity>
         </View>
@@ -74,10 +145,7 @@ export default function TeamRequests() {
 
   return (
     <SafeAreaViewComponent>
-      <AppBarComponent
-        title={'Team Requests'}
-        handleBackPress={() => console.log('hello')}
-      />
+      <AppBarComponent title={'Team Requests'} handleBackPress={handleHome} />
       <FlatList
         data={Teams}
         keyExtractor={item => item.id}

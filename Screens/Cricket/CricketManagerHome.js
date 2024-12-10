@@ -16,7 +16,7 @@ function CricketManagerhome() {
     navigation.navigate('CricketFixtures');
   };
   const handleEditFixtures = () => {
-    navigation.navigate('EditFixtures');
+    navigation.navigate('EditFixtures'); //kal
   };
   const handleCricketScore = () => {
     navigation.navigate('CricketScoring');
@@ -26,7 +26,7 @@ function CricketManagerhome() {
   };
 
   const handleplayers = () => {
-    navigation.navigate('Players');
+    navigation.navigate('Players'); //kal
   };
   const handleteamrequests = () => {
     navigation.navigate('TeamRequests');
