@@ -31,7 +31,7 @@ export default function CreateFixtures() {
   const [modalVisible, setModalVisible] = useState(false); // Controls visibility of team selection modal
   const [activeCardEdited, setactiveCardedited] = useState(null); // Active card index being edited in modal
   const [cardsData, setCardsData] = useState(
-    Array(16)
+    Array(4)
       .fill(null)
       .map((_, index) => ({
         selectedTeams: [], // Stores selected teams for each card
@@ -42,7 +42,7 @@ export default function CreateFixtures() {
       })),
   );
   const [cardsData2, setCardsData2] = useState(
-    Array(8)
+    Array(4)
       .fill(null)
       .map((_, index) => ({
         venue: '',
@@ -144,8 +144,12 @@ export default function CreateFixtures() {
           Match_type: matchType,
         }));
 
-      const card1formattedData = formatCardData(cardsData, 'Group-Stage', true);
-      const card2formattedData = formatCardData(cardsData2, 'Group-Stage 2');
+      const card1formattedData = formatCardData(
+        cardsData,
+        'League Match',
+        true,
+      );
+      const card2formattedData = formatCardData(cardsData2, 'League Match 2');
       const quarterformattedData = formatCardData(
         quartercardsData,
         'Quarter Final',

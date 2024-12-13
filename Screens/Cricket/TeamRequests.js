@@ -30,7 +30,6 @@ export default function TeamRequests() {
         }
       }
     } catch (error) {
-      console.log(error);
       if (error.response && error.response.status === 404) {
         Alert.alert(
           'No Teams Found',
@@ -42,7 +41,7 @@ export default function TeamRequests() {
           'Failed to connect to the server. Please try again.',
         );
       }
-      setTeams([]); // Set an empty array in case of an error
+      setTeams([]);
     }
   };
   useEffect(() => {
@@ -50,7 +49,6 @@ export default function TeamRequests() {
   }, []);
   const updateStatus = async id => {
     try {
-      // console.log('Updating status for ID:', id);
       const response = await Api.TeamStatusUpdate(id);
 
       if (response.status === 200) {
@@ -62,12 +60,8 @@ export default function TeamRequests() {
         );
       }
     } catch (error) {
-      console.log('Error:', error);
-
       if (error.response) {
-        // Handle specific HTTP error responses
         if (error.response.status === 404) {
-          console.log('404 Response:', error.response.data);
           Alert.alert('Error', 'Team not found');
         } else if (error.response.status === 409) {
           Alert.alert('Error', 'Team already approved. Refresh the page.');
@@ -78,7 +72,6 @@ export default function TeamRequests() {
           );
         }
       } else {
-        // Handle network or unknown errors
         Alert.alert(
           'Network Error',
           'Failed to connect to the server. Please try again.',
@@ -121,8 +114,6 @@ export default function TeamRequests() {
         <Text style={styles.captainText}>
           Captain: {item.username}({item.regno})
         </Text>
-
-        {/* Button container with flexDirection: 'row' */}
         <View style={styles.buttonsContainer}>
           <TouchableOpacity
             style={styles.viewButton}
@@ -194,8 +185,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     borderRadius: 5,
     alignItems: 'center',
-    flex: 1, // Optional to make buttons take equal width
-    marginRight: 5, // Optional to space out the buttons
+    flex: 1,
+    marginRight: 5,
   },
   buttonText: {
     color: '#fff',

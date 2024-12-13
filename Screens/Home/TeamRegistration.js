@@ -44,6 +44,10 @@ export default function TeamRegistration() {
     {label: '6', value: '6'},
     {label: '7', value: '7'},
     {label: '8', value: '8'},
+    {label: '9', value: '9'},
+    {label: '10', value: '10'},
+    {label: '11', value: '11'},
+    {label: '12', value: '12'},
   ];
   const Sections = [
     {label: 'A', value: 'A'},
@@ -91,7 +95,8 @@ export default function TeamRegistration() {
   };
 
   const TeamCheck = async () => {
-    if (!tname || !valueCourse || !valueSection || !valueSemNo || !imageUri) {
+    if (!tname || !valueCourse || !valueSection || !valueSemNo) {
+      //|| !imageUri
       Alert.alert('Alert', 'Please check all fields');
       return;
     }

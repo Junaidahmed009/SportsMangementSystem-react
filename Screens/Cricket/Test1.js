@@ -1,295 +1,281 @@
-import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
-  StyleSheet,
-  Modal,
   FlatList,
+  StyleSheet,
   TouchableOpacity,
   Alert,
-  Button,
-  ScrollView,
+  Modal,
 } from 'react-native';
+import React, {useState, useEffect} from 'react';
 import {
   SafeAreaViewComponent,
   AppBarComponent,
-  Card,
-  TextInputComponent,
   ButtonComponent,
 } from '../MyComponents';
-import DatePicker from 'react-native-date-picker';
 import Api from '../Api';
+import {useNavigation} from '@react-navigation/native';
+import {getUserData} from '../UsersAccount/UserData';
 
-export default function CreateFixtures() {
-  const [data, setData] = useState([]); // Stores team data fetched from backend
+export default function Test1() {
+  const userData = getUserData();
+  const navigation = useNavigation();
+
+  const [data, setData] = useState([]); //Teams Data fetched from backend.
+  const [Fixtures, setFixtures] = useState([]);
+  const [cancelbutton, setcancelbutton] = useState([]);
+  const [activeCardEdited, setactiveCardedited] = useState(null);
   const [modalVisible, setModalVisible] = useState(false); // Controls visibility of team selection modal
-  const [activeCardEdited, setactiveCardedited] = useState(null); // Active card index being edited in modal
-  const [cardsData, setCardsData] = useState(
-    Array(3)
-      .fill(null)
-      .map(() => ({
-        selectedTeams: [], // Stores selected teams for each card
-        venue: '', // Venue for the match
-        matchDate: new Date(), // Date and time for the match
-        isPickerOpen: false, // Flag to show/hide date picker modal
-      })),
-  );
-  const [cardsData2, setCardsData2] = useState(
-    Array(3)
-      .fill(null)
-      .map(() => ({
-        venue: '', // Venue for the match
-        matchDate: new Date(), // Date and time for the match
-        isPickerOpen: false, // Flag to show/hide date picker modal
-      })),
-  );
-  const mergedCardsData = [
-    ...cardsData.map(item => ({...item, type: 'firstCard'})), // Add a type for cardsData
-    ...cardsData2.map(item => ({...item, type: 'secondCard'})), // Add a type for cardsData2
-  ];
-  const ScheduleDataForBackend = () => {
-    // Check if all venues are filled, and show an alert if any are empty
-    const hasEmptyVenue = cardsData.some(card => !card.venue.trim()); // Check if any venue is empty or just whitespace
-    if (hasEmptyVenue) {
-      Alert.alert('Please fill all 16 cards with a venue.');
-      return; // Exit the function if any venue is empty
+
+  const [leagueFixtures, setleagueFixtures] = useState([]);
+  const [league2Fixtures, setleague2Fixtures] = useState([]);
+  const [quarterfinalFixtures, setquarterfinalFixtures] = useState([]);
+  const [semifinalFixtures, setsemifinalFixtures] = useState([]);
+  const [finalFixtures, setfinalFixtures] = useState([]);
+
+  const handlesave = matchtype => {
+    const matchtypeFixtures = Fixtures.filter(f => f.match_type == matchtype);
+    switch (matchtype) {
+      case 'League Match':
+        setleagueFixtures(matchtypeFixtures);
+        break;
+      case 'League Match 2':
+        setleague2Fixtures(matchtypeFixtures);
+        break;
+      case 'Quarter Final':
+        setquarterfinalFixtures(matchtypeFixtures);
+        break;
+      case 'Semi Final':
+        setsemifinalFixtures(matchtypeFixtures);
+        break;
+      case 'Final':
+        setfinalFixtures(matchtypeFixtures);
+        break;
     }
-
-    // Map through each card and extract the necessary fields
-    const formattedData = cardsData.map(card => ({
-      team1_id: card.selectedTeams[0]?.id || null, // Set to null if undefined
-      team2_id: card.selectedTeams[1]?.id || null, // Set to null if undefined
-      matchDate: card.matchDate, // Match date and time
-      venue: card.venue.trim(), // Venue for the match
-      match_type: 'Group-Stage',
-      winner_id: ' ',
-    }));
-
-    // Log the data before sending it to backend (for debugging)
-    console.log(formattedData);
-
-    // Call the backend API to send the data
-    // Example: Api.sendFixtures(formattedData);
+    console.log(`Saved ${matchtype} fixtures:`, matchtypeFixtures);
   };
 
-  // Fetch teams from the backend
-  const fetchTeams = async () => {
+  const FetchFixtures = async () => {
     try {
-      const response = await Api.fetchteams(); // API call to fetch teams
+      const userid = userData.id;
+      const response = await Api.fetchfixtures(userid);
       if (response.status === 200) {
-        // If response is successful, map and store teams
+        if (Array.isArray(response.data) && response.data.length > 0) {
+          const updateFixtures = response.data.map(fixture => ({
+            ...fixture,
+            selectedteamsids: [],
+          }));
+          setFixtures(updateFixtures);
+        } else {
+          Alert.alert(
+            'No Fixtures Found',
+            'No cricket Fixtures are available for the current session.',
+          );
+          setFixtures([]);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      if (error.response && error.response.status === 404) {
+        Alert.alert(
+          'No Latest Sessions Found',
+          'No cricket Fixtures are available for the current session.',
+        );
+      } else {
+        Alert.alert(
+          'Network Error',
+          'Failed to connect to the server. Please try again.',
+        );
+      }
+      setFixtures([]);
+    }
+  };
+  useEffect(() => {
+    FetchFixtures();
+  }, []);
+
+  const fetchTeams = async matchType => {
+    try {
+      const response = await Api.fetchteams(matchType);
+      if (response.status === 200) {
         const teamsData = response.data.map(team => ({
           id: team.id,
           name: team.name,
         }));
-        setData(teamsData); // Update state with teams data
+        setData(teamsData);
+        // console.log(data);
       } else {
-        console.error('Unexpected response status:', response.status);
+        Alert.alert('Unexpected response status:', response.status);
       }
     } catch (error) {
-      if (error.response) {
-        if (error.response.status === 409) {
-          Alert.alert('No data was found');
-        }
+      console.log(error);
+      if (error.response && error.response.status === 404) {
+        Alert.alert('No Teams Found', 'No cricket Teams are available.');
+      } else {
+        Alert.alert(
+          'Network Error',
+          'Failed to connect to the server. Please try again.',
+        );
       }
-      console.error('Error fetching teams:', error);
     }
   };
 
-  // Function to update card data (venue, date, etc.)
-  //thiss updates the card data like which card no,its value means venue,date,teams ets
-  const updateCardData = (index, key, value) => {
-    setCardsData(prev =>
-      prev.map((card, i) => (i === index ? {...card, [key]: value} : card)),
-    );
-  };
-
-  // Handle opening the modal for selecting teams
-  const handleModal = index => {
-    setactiveCardedited(index); // Set the active card index to edit
-    setModalVisible(true); // Open modal
+  const handleHome = () => {
+    navigation.navigate('CricketManagerhome');
   };
 
   const handleTeamSelect = team => {
-    if (activeCardEdited === null || activeCardEdited === undefined) return;
+    setFixtures(prevFixtures =>
+      prevFixtures.map(fixture => {
+        if (fixture.id === activeCardEdited) {
+          const selectedTeamIds = fixture.selectedteamsids || [];
+          const selectedTeamNames = fixture.selectedteamsnames || [];
+          const isSelected = selectedTeamIds.includes(team.id);
 
-    // Check if the team is already selected in any previous card
-    const isTeamAlreadySelected = cardsData.some((card, index) => {
-      if (index !== activeCardEdited) {
-        // Check if the team is in any of the selectedTeams of previous cards
-        return card.selectedTeams.some(t => t.id === team.id);
-      }
-      return false; // Skip checking the active card
-    });
+          let updatedIds = [];
+          let updatedNames = [];
 
-    // If the team is already selected in any other card, show an alert
-    if (isTeamAlreadySelected) {
-      Alert.alert(
-        'Error',
-        'This team has already been selected in another match.',
-      );
-      return; // Exit early if the team is already selected
-    }
+          if (isSelected) {
+            // Remove the team by ID and Name
+            updatedIds = selectedTeamIds.filter(id => id !== team.id);
+            updatedNames = selectedTeamNames.filter(name => name !== team.name);
+          } else if (selectedTeamIds.length < 2) {
+            // Add the team ID and Name
+            updatedIds = [...selectedTeamIds, team.id];
+            updatedNames = [...selectedTeamNames, team.name];
+          } else {
+            Alert.alert('You can only select 2 teams per fixture.');
+            return fixture; // No changes if already 2 teams selected
+          }
 
-    // Update the selected teams for the active card
-    setCardsData(prevCardsData =>
-      prevCardsData.map((card, index) => {
-        if (index === activeCardEdited) {
-          const selectedTeams = card.selectedTeams;
-          const isAlreadySelected = selectedTeams.some(t => t.id === team.id);
-
-          // If the team is already selected, remove it; otherwise, add it
-          const updatedTeams = isAlreadySelected
-            ? selectedTeams.filter(t => t.id !== team.id)
-            : selectedTeams.length < 2
-            ? [...selectedTeams, team]
-            : selectedTeams; // Limit to 2 selected teams
-
-          return {...card, selectedTeams: updatedTeams};
+          return {
+            ...fixture,
+            selectedteamsids: updatedIds,
+            selectedteamsnames: updatedNames,
+          };
         }
-        return card;
+        return fixture;
       }),
     );
   };
 
-  // Function to save selected teams and close the modal
-  const handleSaveSelection = () => {
-    const selectedTeams = cardsData[activeCardEdited]?.selectedTeams || [];
-    if (selectedTeams.length < 2) {
-      Alert.alert('Select at least 2 teams');
-      return;
-    }
-    setModalVisible(false); // Close modal after saving selection
-  };
-  // Render each team item in the team selection modal
   const renderTeamItem = ({item}) => {
-    const selectedTeams = cardsData[activeCardEdited]?.selectedTeams || [];
-    const isSelected = selectedTeams.some(selected => selected.id === item.id);
+    const activeFixture = Fixtures.find(
+      fixture => fixture.id === activeCardEdited,
+    );
+    const selectedTeams = activeFixture?.selectedteamsids || [];
+    const isSelected = selectedTeams.includes(item.id); // Check by ID
 
     return (
       <TouchableOpacity
-        style={[
-          styles.teamItem,
-          isSelected && styles.selectedTeam, // Highlight selected teams
-        ]}
-        onPress={() => handleTeamSelect(item)} // Handle team select
-      >
+        style={[styles.teamItem, isSelected && styles.selectedTeam]}
+        onPress={() => handleTeamSelect(item)}>
         <Text style={styles.teamText}>{item.name}</Text>
       </TouchableOpacity>
     );
   };
 
-  // Render each fixture card (for the match schedule)
-  const renderCard = ({item, index}) => (
-    <Card key={index}>
-      <View style={styles.rowContainer}>
-        {/* Button to open team selection modal */}
-        <ButtonComponent
-          buttonTitle="Select Teams"
-          onPress={() => handleModal(index)}
-          CustomStyle={{
-            width: '80%',
-            marginHorizontal: 5,
-            marginBottom: 10,
-            marginTop: 10,
-          }}
-        />
-        <Text style={{color: 'black'}}>
-          Selected Teams:{' '}
-          {item.selectedTeams.length > 0
-            ? item.selectedTeams.map(team => team.name).join(', ')
-            : 'No teams selected'}
-        </Text>
-      </View>
-      <View style={styles.Textboxstyle}>
-        <TextInputComponent
-          placeholder="Venue"
-          textValue={item.venue}
-          onChangeText={text => updateCardData(index, 'venue', text)}
-          CustomStyle={styles.textInput}
-        />
-      </View>
-      <View style={styles.buttons}>
-        {/* Button to open date picker modal */}
-        <ButtonComponent
-          buttonTitle="Select Date"
-          onPress={() => updateCardData(index, 'isPickerOpen', true)}
-          CustomStyle={{
-            width: '50%',
-            marginHorizontal: 5,
-            marginBottom: 10,
-          }}
-        />
-        <Text style={{margin: 10, color: 'black'}}>
-          Selected Date & Time: {item.matchDate.toLocaleString()}
-        </Text>
-      </View>
-      {/* Modal for date picker */}
-      <Modal visible={item.isPickerOpen} transparent animationType="slide">
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <DatePicker
-              date={item.matchDate}
-              onDateChange={date => updateCardData(index, 'matchDate', date)}
-              mode="datetime"
-            />
-            <View style={styles.modalFooter}>
-              <Button
-                title="Confirm"
-                onPress={() => updateCardData(index, 'isPickerOpen', false)}
-                color="#6200ee"
-              />
-              <Button
-                title="Cancel"
-                onPress={() => updateCardData(index, 'isPickerOpen', false)}
-                color="#6200ee"
-              />
-            </View>
-          </View>
+  const handleSaveSelection = () => {
+    const activeFixture = Fixtures.find(
+      fixture => fixture.id === activeCardEdited,
+    );
+    // Use the correct property name: selectedteamsids
+    if (!activeFixture || activeFixture.selectedteamsids.length < 2) {
+      Alert.alert('Select at least 2 teams');
+      return;
+    }
+    setModalVisible(false);
+  };
+  const handleCancelSelection = () => {
+    // Revert to the original selected teams if canceled
+    setFixtures(prevFixtures =>
+      prevFixtures.map(fixture =>
+        fixture.id === activeCardEdited
+          ? {...fixture, selectedteamsids: cancelbutton}
+          : fixture,
+      ),
+    );
+    setModalVisible(false);
+  };
+
+  const renderItem = ({item, index}) => {
+    const isLastFixtureOfMatchType =
+      index === Fixtures.length - 1 ||
+      Fixtures[index + 1]?.match_type !== item.match_type;
+    const handleEditCards = () => {
+      setactiveCardedited(item.id);
+      setcancelbutton(item.selectedteamsids);
+      fetchTeams(item.match_type);
+      setModalVisible(true);
+    };
+
+    const activeFixture = Fixtures.find(fixture => fixture.id === item.id);
+    const selectedTeamNames = activeFixture?.selectedteamsnames || [];
+    const Selectedteamstext =
+      selectedTeamNames.length > 0
+        ? selectedTeamNames.join(', ')
+        : 'No teams selected';
+
+    return (
+      <View style={styles.teamContainer}>
+        <View style={styles.matchtype}>
+          <Text style={styles.teamName}>{item.match_type}</Text>
         </View>
-      </Modal>
-    </Card>
-  );
+        <Text style={styles.captainText}>Venue: {item.venue}</Text>
+        <Text style={styles.captainText}>MatchDate: {item.matchDate}</Text>
+        <View style={styles.buttonsContainer}>
+          <TouchableOpacity style={styles.viewButton} onPress={handleEditCards}>
+            <Text style={styles.buttonText}>Select Teams</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.SelectedteamsView}>
+          <Text style={styles.Selectedteamstext}>
+            Selected Teams: {Selectedteamstext}
+          </Text>
+        </View>
+        {isLastFixtureOfMatchType && (
+          <View style={styles.saveButton}>
+            <TouchableOpacity
+              style={styles.saveButtonstyle}
+              onPress={() => handlesave(item.match_type)}>
+              <Text style={styles.saveButtonText}>
+                Save {item.match_type} Fixtures
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )}
+      </View>
+    );
+  };
 
-  // Fetch teams when component is mounted
-  useEffect(() => {
-    fetchTeams();
-  }, []);
-
+  const printdata = () => {
+    console.log(Fixtures);
+    setData([]);
+  };
   return (
     <SafeAreaViewComponent>
-      <AppBarComponent title="Create Schedule" />
-      <Text style={styles.teamsText}>For 32 Teams</Text>
-      {/* <Text style={styles.groupstagetext}>Group Stage-1(32)</Text> */}
-      <FlatList
-        data={cardsData}
-        renderItem={renderCard}
-        keyExtractor={(item, index) => `card-${index}`}
-        ListFooterComponent={
-          <View
-            style={{
-              padding: 10,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-            <ButtonComponent
-              buttonTitle="Save"
-              onPress={ScheduleDataForBackend}
-              CustomStyle={{
-                width: '50%',
-                // marginHorizontal: 5,
-                // marginBottom: 10,
-              }}
-            />
-          </View>
-        }
+      <AppBarComponent title={'EDit Fixtures'} handleBackPress={handleHome} />
+      <View>
+        <FlatList
+          data={Fixtures}
+          keyExtractor={item => item.id}
+          renderItem={renderItem}
+          contentContainerStyle={styles.listContainer}
+        />
+      </View>
+      <ButtonComponent
+        buttonTitle="Ok"
+        onPress={printdata}
+        CustomStyle={{
+          width: '50%',
+          marginHorizontal: 5,
+        }}
       />
       <Modal
         animationType="slide"
         transparent
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}>
-        {/* i am here */}
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Select 2 Teams</Text>
@@ -297,7 +283,7 @@ export default function CreateFixtures() {
               data={data}
               renderItem={renderTeamItem}
               keyExtractor={item => item.id.toString()}
-              extraData={cardsData[activeCardEdited]?.selectedTeams}
+              extraData={Fixtures}
             />
             <View style={styles.modalFooter}>
               <ButtonComponent
@@ -311,7 +297,7 @@ export default function CreateFixtures() {
               />
               <ButtonComponent
                 buttonTitle="Cancel"
-                onPress={() => setModalVisible(false)}
+                onPress={handleCancelSelection}
                 CustomStyle={{
                   height: 50,
                   width: '40%',
@@ -327,42 +313,68 @@ export default function CreateFixtures() {
 }
 
 const styles = StyleSheet.create({
-  rowContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 20,
+  listContainer: {
+    padding: 10,
   },
-  teamsText: {
-    fontSize: 20,
+  teamContainer: {
+    backgroundColor: '#fff',
+    padding: 15,
+    borderRadius: 8,
+    marginBottom: 10,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    shadowOffset: {width: 0, height: 2},
+    elevation: 2,
+  },
+  teamName: {
+    fontSize: 22,
     fontWeight: 'bold',
-    color: '#000',
-    margin: 10,
+    marginBottom: 5,
+    color: 'black',
+  },
+  matchtype: {
+    marginBottom: 5,
+    // marginTop: 10,
+    alignItems: 'center',
+  },
+
+  captainText: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#555',
     marginBottom: 10,
   },
-  groupstagetext: {
-    fontSize: 20,
+  Selectedteamstext: {
+    fontSize: 14,
     fontWeight: 'bold',
-    color: '#000',
-    margin: 10,
-    marginBottom: -10,
+    color: '#555',
   },
-  textInput: {
-    height: 50,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 10,
-    padding: 15,
+  SelectedteamsView: {
+    marginBottom: 10,
+    marginTop: 10,
+    alignItems: 'center',
   },
-  Textboxstyle: {
-    justifyContent: 'center',
-    margin: 5,
-    marginTop: -5,
-  },
-  buttons: {
-    margin: 10,
+  buttonsContainer: {
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 10,
+    marginTop: 5,
+  },
+  viewButton: {
+    backgroundColor: '#6200ee',
+    paddingVertical: 8,
+    paddingHorizontal: 15,
+    borderRadius: 5,
+    alignItems: 'center',
+    flex: 1,
+    marginRight: 5,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   modalContainer: {
     flex: 1,
@@ -384,6 +396,15 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 10,
   },
+  modalFooter: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginTop: 20,
+  },
+  teamText: {
+    fontSize: 16,
+    color: '#555',
+  },
   teamItem: {
     padding: 15,
     borderBottomWidth: 1,
@@ -396,18 +417,24 @@ const styles = StyleSheet.create({
     borderColor: '#28a745',
     borderWidth: 1,
   },
-  teamText: {
-    fontSize: 16,
-    color: '#555',
+  saveButton: {
+    marginTop: 10,
+    marginBottom: 10,
+    alignItems: 'center',
   },
-  modalFooter: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginTop: 20,
+  saveButtonstyle: {
+    backgroundColor: '#6200ee',
+    paddingVertical: 8,
+    paddingHorizontal: 15,
+    borderRadius: 20,
+    alignItems: 'center',
+    // flex: 1,
+    marginRight: 5,
   },
-  modalOverlay: {
-    flex: 1,
-    justifyContent: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  saveButtonText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
 });

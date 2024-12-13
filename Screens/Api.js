@@ -94,6 +94,14 @@ class Api {
   fetchteams() {
     return this.apiClient.get('Team/GetLatestCricketTeams');
   }
+  fetchfixtures(userid) {
+    return this.apiClient.get(`Fixture/GetFixtures?userid=${userid}`);
+  }
+  fetchteams(matchType) {
+    return this.apiClient.get(
+      `Fixture/GetLeaguetypeTeams?matchtype=${matchType}`,
+    );
+  }
 }
 
 export default new Api();

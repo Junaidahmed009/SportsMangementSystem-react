@@ -26,7 +26,7 @@ function CricketManagerhome() {
   };
 
   const handleplayers = () => {
-    navigation.navigate('Players'); //kal
+    navigation.navigate('Players');
   };
   const handleteamrequests = () => {
     navigation.navigate('TeamRequests');
@@ -34,7 +34,7 @@ function CricketManagerhome() {
   const handleCricketSchedule = () => {
     navigation.navigate('CricketDetails');
   };
-  const handleCricketMatchDetails = () => {
+  const handleTest1 = () => {
     navigation.navigate('Test1');
   };
 
@@ -79,9 +79,7 @@ function CricketManagerhome() {
         </View>
 
         <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={styles.buttonlogin}
-            onPress={handleCricketScore}>
+          <TouchableOpacity style={styles.buttonlogin} onPress={handleTest1}>
             <Text style={styles.buttontext}>Start Scoring</Text>
           </TouchableOpacity>
 
