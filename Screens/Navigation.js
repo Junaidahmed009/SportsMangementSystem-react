@@ -10,19 +10,23 @@ import AddSession from './ChairpersonScreens/AddSession';
 import addgamesandmanagers from './ChairpersonScreens/AddGames&Managers';
 import RuleofGames from './ChairpersonScreens/RuleofGames';
 import AddEventmanager from './ChairpersonScreens/AddEventmanager';
-import CricketManagerNav from './Cricket/CricketManagerHome';
-import CricketFixtures from './Cricket/CreateFixtures';
-import RuleofCricket from './Cricket/RuleofCricket';
+import CricketManagerNav from './EventManagersScreens/AllEventManagersHome';
+import CricketFixtures from './EventManagersScreens/CreateFixtures';
+import RuleofCricket from './EventManagersScreens/RuleofCricket';
 import PlayersRegistration from './Home/TeamPlayersRegistration';
 import TeamRegistration from './Home/TeamRegistration';
-import Players from './Cricket/Players';
-import TeamRequests from './Cricket/TeamRequests';
-import CricketScoring from './Cricket/CricketScoring';
+import Players from './EventManagersScreens/Players';
+import TeamRequests from './EventManagersScreens/TeamRequests';
+import CricketScoring from './EventManagersScreens/StartScoring';
 import ViewManagers from './ChairpersonScreens/ViewManagers';
 import CricketDetails from './Home/CricketDetails';
 import CricketMatchDetails from './Home/CricketMatchDetails';
-import Test1 from './Cricket/Test1';
-import EditFixtures from './Cricket/EditFixtures';
+import Test1 from './EventManagersScreens/Test1';
+import EditFixtures from './EventManagersScreens/EditFixtures';
+import ManagerHome from './individualScreens/ManagerHome';
+import Cricket from './ScoringScreens.js/Cricket';
+import Football from './ScoringScreens.js/Football';
+import Badminton from './ScoringScreens.js/Badminton';
 const Stack = createNativeStackNavigator();
 export default function Navigation() {
   return (
@@ -62,6 +66,10 @@ export default function Navigation() {
         />
         <Stack.Screen name="Test1" component={Test1} />
         <Stack.Screen name="EditFixtures" component={EditFixtures} />
+        <Stack.Screen name="ManagerHome" component={ManagerHome} />
+        <Stack.Screen name="Cricket" component={Cricket} />
+        <Stack.Screen name="Football" component={Football} />
+        <Stack.Screen name="Badminton" component={Badminton} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -95,6 +95,27 @@ export default function Test1() {
   }, []);
 
   const fetchTeams = async matchType => {
+    // Check if data already exists
+    if (data && data.length > 0) {
+      Alert.alert(
+        'Warning',
+        'Fetching teams for another match type will overwrite the current list. Do you want to continue?',
+        [
+          {text: 'Cancel', style: 'cancel'},
+          {
+            text: 'OK',
+          },
+        ],
+      );
+      return; // Exit the current call to wait for user confirmation
+    }
+
+    // Fetch teams directly if no data exists
+    await fetchAndSetTeams(matchType);
+  };
+
+  const fetchAndSetTeams = async matchType => {
+    // Check if data already exists
     try {
       const response = await Api.fetchteams(matchType);
       if (response.status === 200) {
@@ -131,6 +152,20 @@ export default function Test1() {
           const selectedTeamIds = fixture.selectedteamsids || [];
           const selectedTeamNames = fixture.selectedteamsnames || [];
           const isSelected = selectedTeamIds.includes(team.id);
+
+          if (!isSelected) {
+            // Check if the team is already selected in other fixtures
+            const isTeamAlreadySelected = prevFixtures.some(
+              otherFixture =>
+                otherFixture.id !== activeCardEdited && // Skip the current fixture
+                otherFixture.selectedteamsids?.includes(team.id), // Check other fixtures
+            );
+
+            if (isTeamAlreadySelected) {
+              Alert.alert('This team is already selected in another fixture.');
+              return fixture; // No changes if the team is already selected
+            }
+          }
 
           let updatedIds = [];
           let updatedNames = [];
@@ -187,11 +222,19 @@ export default function Test1() {
     setModalVisible(false);
   };
   const handleCancelSelection = () => {
-    // Revert to the original selected teams if canceled
+    if (!cancelbutton || !cancelbutton.ids || !cancelbutton.names) {
+      console.error('Cancel button data is missing or undefined');
+      return;
+    }
+
     setFixtures(prevFixtures =>
       prevFixtures.map(fixture =>
         fixture.id === activeCardEdited
-          ? {...fixture, selectedteamsids: cancelbutton}
+          ? {
+              ...fixture,
+              selectedteamsids: cancelbutton.ids,
+              selectedteamsnames: cancelbutton.names,
+            }
           : fixture,
       ),
     );
@@ -203,8 +246,11 @@ export default function Test1() {
       index === Fixtures.length - 1 ||
       Fixtures[index + 1]?.match_type !== item.match_type;
     const handleEditCards = () => {
+      setcancelbutton({
+        ids: item.selectedteamsids || [],
+        names: item.selectedteamsnames || [],
+      });
       setactiveCardedited(item.id);
-      setcancelbutton(item.selectedteamsids);
       fetchTeams(item.match_type);
       setModalVisible(true);
     };
@@ -247,29 +293,14 @@ export default function Test1() {
       </View>
     );
   };
-
-  const printdata = () => {
-    console.log(Fixtures);
-    setData([]);
-  };
   return (
     <SafeAreaViewComponent>
       <AppBarComponent title={'EDit Fixtures'} handleBackPress={handleHome} />
-      <View>
-        <FlatList
-          data={Fixtures}
-          keyExtractor={item => item.id}
-          renderItem={renderItem}
-          contentContainerStyle={styles.listContainer}
-        />
-      </View>
-      <ButtonComponent
-        buttonTitle="Ok"
-        onPress={printdata}
-        CustomStyle={{
-          width: '50%',
-          marginHorizontal: 5,
-        }}
+      <FlatList
+        data={Fixtures}
+        keyExtractor={item => item.id}
+        renderItem={renderItem}
+        contentContainerStyle={styles.listContainer}
       />
       <Modal
         animationType="slide"
@@ -285,6 +316,7 @@ export default function Test1() {
               keyExtractor={item => item.id.toString()}
               extraData={Fixtures}
             />
+
             <View style={styles.modalFooter}>
               <ButtonComponent
                 buttonTitle="Save"

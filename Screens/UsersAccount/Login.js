@@ -15,7 +15,10 @@ export default function Login() {
   const navChairperson = () => {
     navigation.navigate('Chairperson');
   };
-  const handleCricketManager = () => {
+  // const handleallEventmanagershome = () => {
+  //   navigation.navigate('ManagerHome');
+  // };
+  const handleAllEventManagershome = () => {
     navigation.navigate('CricketManagerhome');
   };
   const handleUserhome = () => {
@@ -53,11 +56,13 @@ export default function Login() {
           navChairperson();
         } else if (
           receivedUser.role === 'EventManager' &&
-          receivedUser.SportId === 1
+          [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13].includes(
+            receivedUser.SportId,
+          )
         ) {
           setRegno('');
           setPass('');
-          handleCricketManager();
+          handleAllEventManagershome();
         } else if (receivedUser.role === 'user') {
           setRegno('');
           setPass('');
@@ -69,6 +74,7 @@ export default function Login() {
         Alert.alert('Login failed. Please try again.');
       }
     } catch (error) {
+      console.log(error);
       if (error.response && error.response.status === 404) {
         Alert.alert('Registration number or password is incorrect.');
       } else if (error.response && error.response.status === 409) {

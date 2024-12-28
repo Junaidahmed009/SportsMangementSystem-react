@@ -44,10 +44,10 @@ export default function TeamRegistration() {
     {label: '6', value: '6'},
     {label: '7', value: '7'},
     {label: '8', value: '8'},
-    {label: '9', value: '9'},
-    {label: '10', value: '10'},
-    {label: '11', value: '11'},
-    {label: '12', value: '12'},
+    // {label: '9', value: '9'},
+    // {label: '10', value: '10'},
+    // {label: '11', value: '11'},
+    // {label: '12', value: '12'},
   ];
   const Sections = [
     {label: 'A', value: 'A'},
@@ -103,7 +103,7 @@ export default function TeamRegistration() {
 
     const teamdata = {
       name: tname,
-      className: `${valueCourse}(${valueSection})(${valueSemNo})`,
+      className: `${valueCourse}-${valueSection}${valueSemNo}`,
       caption_id: userData.id,
       sports_id: sportsvalue,
       image_path: imageUri,

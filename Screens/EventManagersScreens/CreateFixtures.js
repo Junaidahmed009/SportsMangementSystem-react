@@ -26,65 +26,15 @@ export default function CreateFixtures() {
   const handleUserHome = () => {
     navigation.navigate('CricketManagerhome');
   };
-  const userData = getUserData();
+  const [sport, setSport] = useState([]);
   const [data, setData] = useState([]); // Stores team data fetched from backend
   const [modalVisible, setModalVisible] = useState(false); // Controls visibility of team selection modal
-  const [activeCardEdited, setactiveCardedited] = useState(null); // Active card index being edited in modal
-  const [cardsData, setCardsData] = useState(
-    Array(4)
-      .fill(null)
-      .map((_, index) => ({
-        selectedTeams: [], // Stores selected teams for each card
-        venue: '', // Venue for the match
-        matchDate: new Date(), // Date and time for the match
-        isPickerOpen: false, // Flag to show/hide date picker modal
-        id: `first-${index}`,
-      })),
-  );
-  const [cardsData2, setCardsData2] = useState(
-    Array(4)
-      .fill(null)
-      .map((_, index) => ({
-        venue: '',
-        matchDate: new Date(),
-        isPickerOpen: false,
-        id: `second-${index}`,
-        title: 'League Matches 2',
-      })),
-  );
-  const [quartercardsData, setquarterCardsData] = useState(
-    Array(4)
-      .fill(null)
-      .map((_, index) => ({
-        venue: '',
-        matchDate: new Date(),
-        isPickerOpen: false,
-        id: `third-${index}`,
-        title: 'Quarter Final',
-      })),
-  );
-  const [semicardsData, setsemiCardsData] = useState(
-    Array(2)
-      .fill(null)
-      .map((_, index) => ({
-        venue: '',
-        matchDate: new Date(),
-        isPickerOpen: false,
-        id: `fourth-${index}`,
-        title: 'Semi Final',
-      })),
-  );
-  const [finalcardsData, setfinalCardsData] = useState(
-    Array(1)
-      .fill(null)
-      .map((_, index) => ({
-        venue: '',
-        matchDate: new Date(),
-        isPickerOpen: false,
-        id: `fifth-${index}`,
-        title: 'Final',
-      })),
-  );
+  const [activeCardEdited, setactiveCardedited] = useState(null);
+  const [cardsData, setCardsData] = useState([]);
+  const [cardsData2, setCardsData2] = useState([]);
+  const [quartercardsData, setQuarterCardsData] = useState([]);
+  const [semicardsData, setSemiCardsData] = useState([]);
+  const [finalcardsData, setFinalCardsData] = useState([]); // Active card index being edited in modal
   const mergedCardsData = [
     ...cardsData.map(item => ({
       ...item,
@@ -107,6 +57,106 @@ export default function CreateFixtures() {
       type: 'fifthCard',
     })),
   ];
+  const userData = getUserData();
+  const fetchManagerData = async () => {
+    try {
+      const id = userData.id; // Assuming userData is available
+      const response = await Api.getManagerSport(id);
+      if (response.status === 200) {
+        const Sport = response.data;
+        console.log(Sport);
+        if (Sport.game === 'Cricket') {
+          setSport([16, 8, 4, 2, 1]);
+        } else if (
+          Sport.game === 'Football' ||
+          Sport.game === 'Badminton(Dual)' ||
+          Sport.game === 'Race' ||
+          Sport.game === 'Badminton(Single)'
+        ) {
+          setSport([0, 8, 4, 2, 1]);
+        } else if (Sport.game === 'Tug of War' || Sport.game === 'Race') {
+          setSport([0, 0, 4, 2, 1]);
+        } else if (Sport.game === 'Chess') {
+          setSport([0, 0, 0, 2, 1]);
+        }
+      } else {
+        Alert.alert('No Sport Found for Manager');
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      Alert.alert('An error occurred while fetching manager data.');
+    }
+  };
+  // / Update Cards Data when `sport` changes
+  useEffect(() => {
+    if (sport.length > 0) {
+      // Update each state dynamically
+      setCardsData(
+        Array(sport[0])
+          .fill(null)
+          .map((_, index) => ({
+            selectedTeams: [],
+            venue: '',
+            matchDate: new Date(),
+            isPickerOpen: false,
+            id: `first-${index}`,
+          })),
+      );
+
+      setCardsData2(
+        Array(sport[1])
+          .fill(null)
+          .map((_, index) => ({
+            venue: '',
+            matchDate: new Date(),
+            isPickerOpen: false,
+            id: `second-${index}`,
+            title: 'League Matches 2',
+          })),
+      );
+
+      setQuarterCardsData(
+        Array(sport[2])
+          .fill(null)
+          .map((_, index) => ({
+            venue: '',
+            matchDate: new Date(),
+            isPickerOpen: false,
+            id: `third-${index}`,
+            title: 'Quarter Final',
+          })),
+      );
+
+      setSemiCardsData(
+        Array(sport[3])
+          .fill(null)
+          .map((_, index) => ({
+            venue: '',
+            matchDate: new Date(),
+            isPickerOpen: false,
+            id: `fourth-${index}`,
+            title: 'Semi Final',
+          })),
+      );
+
+      setFinalCardsData(
+        Array(sport[4])
+          .fill(null)
+          .map((_, index) => ({
+            venue: '',
+            matchDate: new Date(),
+            isPickerOpen: false,
+            id: `fifth-${index}`,
+            title: 'Final',
+          })),
+      );
+    }
+  }, [sport]); // Depend on `sport`
+
+  // Fetch data on component mount
+  useEffect(() => {
+    fetchManagerData();
+  }, []);
   const formatDateToCustomFormat = date => {
     const d = new Date(date); // used for get dates or time from different standard of datetimes.
     const pad = num => String(num).padStart(2, '0'); // this adds a single num a o like 2pm it makes 02.
@@ -126,7 +176,7 @@ export default function CreateFixtures() {
         ...finalcardsData,
       ];
       if (allCards.some(card => !card.venue.trim())) {
-        Alert.alert('Please fill all 16 cards with a venue.');
+        Alert.alert('Please fill all 31 cards with a venue.');
         return;
       }
       const formatCardData = (cards, matchType, includeTeams = false) =>
@@ -192,7 +242,8 @@ export default function CreateFixtures() {
 
   const fetchTeams = async () => {
     try {
-      const response = await Api.fetchteams();
+      const id = userData.id;
+      const response = await Api.fetchteams1(id);
       if (response.status === 200) {
         const teamsData = response.data.map(team => ({
           id: team.id,
@@ -204,11 +255,19 @@ export default function CreateFixtures() {
       }
     } catch (error) {
       if (error.response) {
-        if (error.response.status === 409) {
-          Alert.alert('No data was found');
+        if (error.response.status === 404) {
+          Alert.alert(
+            'No data for teams was found',
+            'Select Venue and Date only.',
+          );
+        } else if (error.response.status === 409) {
+          Alert.alert(
+            'Low Count',
+            'Teams less than 32.Select Venue and Date only.',
+          );
         }
       }
-      console.error('Error fetching teams:', error);
+      // console.error('Error fetching teams:', error);
     }
   };
   useEffect(() => {
@@ -365,7 +424,7 @@ export default function CreateFixtures() {
                   onDateChange={date =>
                     updateCardData(item.id, 'matchDate', date)
                   }
-                  mode="datetime"
+                  textColor="black" // This should work to change the text color
                 />
                 <View style={styles.modalFooter}>
                   <Button
@@ -461,7 +520,7 @@ export default function CreateFixtures() {
   return (
     <SafeAreaViewComponent>
       <AppBarComponent title="Create Fixtures" />
-      <Text style={styles.teamsText}>For 32 Teams</Text>
+      {/* <Text style={styles.teamsText}>For 32 Teams</Text> */}
       <FlatList
         data={mergedCardsData}
         renderItem={renderCard}
@@ -574,7 +633,7 @@ const styles = StyleSheet.create({
     padding: 15,
   },
   modalContent: {
-    backgroundColor: 'white',
+    backgroundColor: 'black',
     borderRadius: 10,
     padding: 20,
     elevation: 5,

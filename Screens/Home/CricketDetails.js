@@ -15,7 +15,7 @@ export default function CricketDetails() {
     <SafeAreaViewComponent>
       {/* App Bar */}
       <AppBarComponent
-        title={'BIIT Sports'}
+        title={'Scoring'}
         handleBackPress={() => console.log('hello')}
       />
 
@@ -24,6 +24,7 @@ export default function CricketDetails() {
         {matchData.map((match, index) => (
           <View key={index} style={styles.card}>
             <Text style={styles.matchTitle}>{match.title}</Text>
+            <Text style={styles.matchTitle}>{match.stadium}</Text>
             <View style={styles.teamsContainer}>
               <Text style={styles.teamBox}>{match.teamA}</Text>
               <Text style={styles.vsText}>VS</Text>
@@ -32,7 +33,7 @@ export default function CricketDetails() {
             <Text style={styles.matchInfo}>{match.dateTime}</Text>
             <Text style={styles.matchStatus}>{match.status}</Text>
             <TouchableOpacity style={styles.detailsButton}>
-              <Text style={styles.detailsButtonText}>Details</Text>
+              <Text style={styles.detailsButtonText}>Start Match</Text>
             </TouchableOpacity>
           </View>
         ))}
@@ -44,21 +45,31 @@ export default function CricketDetails() {
 // Sample match data
 const matchData = [
   {
-    title: 'Match 1 - Pindi Stadium',
+    title: 'Match 1',
+    stadium: 'Venue : Pindi Stadium',
     teamA: 'Shaheens',
     teamB: 'Fighters',
-    dateTime: '12/11/2024 09:00am',
-    status: 'Rain Delay',
+    dateTime: 'Date : 12/11/2024 09:00am',
+    // status: 'Yet to be Played',
   },
   {
-    title: 'Match 2 - Carriage Factory',
-    teamA: 'Gladiators',
-    teamB: 'Eagles',
-    dateTime: '22/2/2024 08:00am',
-    status: 'Yet to be Played',
+    title: 'Match 2',
+    stadium: 'Venue : Pindi Stadium',
+    teamA: 'lions',
+    teamB: 'gladiators',
+    dateTime: 'Date : 12/11/2024 09:00am',
+    // status: 'Yet to be Played',
   },
   {
-    title: 'Match 3 - Shalamar Ground',
+    title: 'Match 3',
+    stadium: 'Venue : Pindi Stadium',
+    teamA: 'Test1',
+    teamB: 'Test2',
+    dateTime: 'Date : 12/11/2024 09:00am',
+    // status: 'Test1 Defeated Test2',
+  },
+  {
+    title: 'Match 4 - Shalamar Ground',
     teamA: 'Pindiboys',
     teamB: 'Sharks',
     dateTime: '',
@@ -95,13 +106,16 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   teamBox: {
-    borderWidth: 1,
-    borderColor: '#333',
+    // borderWidth: 1,
+    // borderColor: '#333',
     borderRadius: 5,
     paddingVertical: 5,
     paddingHorizontal: 15,
     textAlign: 'center',
+    fontSize: 16,
+    fontWeight: 'bold',
     color: 'black',
+    // color: 'black',
   },
   vsText: {
     marginHorizontal: 10,

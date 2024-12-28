@@ -1,4 +1,4 @@
-import {View, Text, Alert, StyleSheet} from 'react-native';
+import {View, Text, Alert, StyleSheet, ScrollView} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {
   SafeAreaViewComponent,
@@ -10,6 +10,26 @@ import Api from '../Api';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
 export default function UserHome() {
+  // const buttondata = [
+  //   {
+  //     title: 'Enroll Team',
+  //     onPress: handleTeamRegistration,
+  //     style: {width: '60%'},
+  //   },
+  //   {title: 'Cricket', onPress: handleFixtures, style: {styles.buttonstyles},},
+  //   {title: 'Football', onPress: handleFixtures},
+  //   {title: 'Badminton(Single)', onPress: handleFixtures},
+  //   {title: 'Badminton(Dual)', onPress: handleFixtures},
+  //   {title: 'Ludo(Single)', onPress: handleFixtures},
+  //   {title: 'Ludo(Dual)', onPress: handleFixtures},
+  //   {title: 'Tug of War', onPress: handleFixtures},
+  //   {title: 'Race', onPress: handleFixtures},
+  //   {title: 'Snooker(Single)', onPress: handleFixtures},
+  //   {title: 'Snooker(Dual)', onPress: handleFixtures},
+  //   {title: 'Table Tennis', onPress: handleFixtures},
+  //   {title: 'Volleyball', onPress: handleFixtures},
+  //   {title: 'Arm Wrestling', onPress: handleFixtures},
+  // ];
   const navigation = useNavigation();
   const [open1, setOpen1] = useState(false);
   const [value1, setValue1] = useState(null);
@@ -52,7 +72,19 @@ export default function UserHome() {
     navigation.navigate('Login');
   };
   const handleCricket = () => {
+    navigation.navigate('Cricket');
+  };
+  const handleCricketDetails = () => {
     navigation.navigate('CricketDetails');
+  };
+  const handleFootball = () => {
+    navigation.navigate('Football');
+  };
+  const handleBadminton = () => {
+    navigation.navigate('Badminton');
+  };
+  const handleplayersRegistration = () => {
+    navigation.navigate('PlayersRegistration');
   };
 
   const route = useRoute();
@@ -112,57 +144,6 @@ export default function UserHome() {
             color: 'white', // Optional: change text color
           }}
         />
-        <ButtonComponent
-          buttonTitle="Football"
-          // onPress={Eventmanagerdata}
-          CustomStyle={{
-            width: '50%',
-            marginHorizontal: 5,
-            justifyContent: 'center', // Vertically center the content
-            alignItems: 'center', // Horizontally center the content
-            borderRadius: 10,
-          }}
-          customTextstyle={{
-            fontSize: 20, // Adjust this value to increase text size
-            fontWeight: 'bold', // Optional: make the text bold
-            color: 'white', // Optional: change text color
-          }}
-        />
-      </View>
-      <View style={styles.firsttwo}>
-        <ButtonComponent
-          buttonTitle="Ludo(Dual)"
-          // onPress={Eventmanagerdata}
-          CustomStyle={{
-            height: 100,
-            width: '50%',
-            marginHorizontal: 5,
-            justifyContent: 'center', // Vertically center the content
-            alignItems: 'center', // Horizontally center the content
-            borderRadius: 10,
-          }}
-          customTextstyle={{
-            fontSize: 20, // Adjust this value to increase text size
-            fontWeight: 'bold', // Optional: make the text bold
-            color: 'white', // Optional: change text color
-          }}
-        />
-        <ButtonComponent
-          buttonTitle="Badminton(S)"
-          // onPress={Eventmanagerdata}
-          CustomStyle={{
-            width: '50%',
-            marginHorizontal: 5,
-            justifyContent: 'center', // Vertically center the content
-            alignItems: 'center', // Horizontally center the content
-            borderRadius: 10,
-          }}
-          customTextstyle={{
-            fontSize: 20, // Adjust this value to increase text size
-            fontWeight: 'bold', // Optional: make the text bold
-            color: 'white', // Optional: change text color
-          }}
-        />
       </View>
     </SafeAreaViewComponent>
   );
@@ -189,6 +170,176 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'row',
     padding: 20,
+    marginTop: -5,
     // }
   },
+  buttonstyles: {
+    height: 100,
+    borderRadius: 10,
+  },
 });
+
+{
+  /* 
+
+     <ButtonComponent
+          buttonTitle="Display Fixtures"
+          onPress={handleCricketDetails}
+          CustomStyle={{
+            width: '50%',
+            marginHorizontal: 5,
+            justifyContent: 'center', // Vertically center the content
+            alignItems: 'center', // Horizontally center the content
+            borderRadius: 10,
+          }}
+          customTextstyle={{
+            fontSize: 20, // Adjust this value to increase text size
+            fontWeight: 'bold', // Optional: make the text bold
+            color: 'white', // Optional: change text color
+          }}
+        /> */
+}
+{
+  /* </View>
+
+      <View style={styles.firsttwo}>
+        <ButtonComponent
+          buttonTitle="Badminton(S)"
+          onPress={handleBadminton}
+          CustomStyle={{
+            width: '50%',
+            marginHorizontal: 5,
+            height: 100, // Adjust this value to increase height
+            justifyContent: 'center', // Vertically center the content
+            alignItems: 'center', // Horizontally center the content
+            borderRadius: 10, // Remove rounded corners (set to 0)
+          }}
+          customTextstyle={{
+            fontSize: 20, // Adjust this value to increase text size
+            fontWeight: 'bold', // Optional: make the text bold
+            color: 'white', // Optional: change text color
+          }}
+        />
+        <ButtonComponent
+          buttonTitle="Badminton(D)"
+          onPress={handleFootball}
+          CustomStyle={{
+            width: '50%',
+            marginHorizontal: 5,
+            justifyContent: 'center', // Vertically center the content
+            alignItems: 'center', // Horizontally center the content
+            borderRadius: 10,
+          }}
+          customTextstyle={{
+            fontSize: 20, // Adjust this value to increase text size
+            fontWeight: 'bold', // Optional: make the text bold
+            color: 'white', // Optional: change text color
+          }}
+        />
+      </View>
+      <View style={styles.firsttwo}>
+        <ButtonComponent
+          buttonTitle="Ludo(Single)"
+          onPress={handleplayersRegistration}
+          CustomStyle={{
+            width: '50%',
+            marginHorizontal: 5,
+            height: 100, // Adjust this value to increase height
+            justifyContent: 'center', // Vertically center the content
+            alignItems: 'center', // Horizontally center the content
+            borderRadius: 10, // Remove rounded corners (set to 0)
+          }}
+          customTextstyle={{
+            fontSize: 20, // Adjust this value to increase text size
+            fontWeight: 'bold', // Optional: make the text bold
+            color: 'white', // Optional: change text color
+          }}
+        />
+        <ButtonComponent
+          buttonTitle="Ludo(Dual)"
+          // onPress={Eventmanagerdata}
+          CustomStyle={{
+            width: '50%',
+            marginHorizontal: 5,
+            justifyContent: 'center', // Vertically center the content
+            alignItems: 'center', // Horizontally center the content
+            borderRadius: 10,
+          }}
+          customTextstyle={{
+            fontSize: 20, // Adjust this value to increase text size
+            fontWeight: 'bold', // Optional: make the text bold
+            color: 'white', // Optional: change text color
+          }}
+        />
+      </View>
+      <View style={styles.firsttwo}>
+        <ButtonComponent
+          buttonTitle="Tug of War"
+          // onPress={handleCricket}
+          CustomStyle={{
+            width: '50%',
+            marginHorizontal: 5,
+            height: 100, // Adjust this value to increase height
+            justifyContent: 'center', // Vertically center the content
+            alignItems: 'center', // Horizontally center the content
+            borderRadius: 10, // Remove rounded corners (set to 0)
+          }}
+          customTextstyle={{
+            fontSize: 20, // Adjust this value to increase text size
+            fontWeight: 'bold', // Optional: make the text bold
+            color: 'white', // Optional: change text color
+          }}
+        />
+        <ButtonComponent
+          buttonTitle="Table tennis"
+          // onPress={Eventmanagerdata}
+          CustomStyle={{
+            width: '50%',
+            marginHorizontal: 5,
+            justifyContent: 'center', // Vertically center the content
+            alignItems: 'center', // Horizontally center the content
+            borderRadius: 10,
+          }}
+          customTextstyle={{
+            fontSize: 20, // Adjust this value to increase text size
+            fontWeight: 'bold', // Optional: make the text bold
+            color: 'white', // Optional: change text color
+          }}
+        />
+      </View>
+      {/* <View style={styles.firsttwo}>
+        <ButtonComponent
+          buttonTitle="Snooker(Single)"
+          // onPress={handleCricket}
+          CustomStyle={{
+            width: '50%',
+            marginHorizontal: 5,
+            height: 100, // Adjust this value to increase height
+            justifyContent: 'center', // Vertically center the content
+            alignItems: 'center', // Horizontally center the content
+            borderRadius: 10, // Remove rounded corners (set to 0)
+          }}
+          customTextstyle={{
+            fontSize: 20, // Adjust this value to increase text size
+            fontWeight: 'bold', // Optional: make the text bold
+            color: 'white', // Optional: change text color
+          }}
+        />
+        <ButtonComponent
+          buttonTitle="Snooker(Dual)"
+          // onPress={Eventmanagerdata}
+          CustomStyle={{
+            width: '50%',
+            marginHorizontal: 5,
+            justifyContent: 'center', // Vertically center the content
+            alignItems: 'center', // Horizontally center the content
+            borderRadius: 10,
+          }}
+          customTextstyle={{
+            fontSize: 20, // Adjust this value to increase text size
+            fontWeight: 'bold', // Optional: make the text bold
+            color: 'white', // Optional: change text color
+          }}
+        />
+      // </View> */
+}

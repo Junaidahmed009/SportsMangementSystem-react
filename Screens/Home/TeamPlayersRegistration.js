@@ -14,12 +14,12 @@ import {
   DropdownComponent,
 } from '../MyComponents';
 import Api from '../Api';
-import {useNavigation, useRoute} from '@react-navigation/native';
+// import {useNavigation, useRoute} from '@react-navigation/native';
 
 export default function CricketRegistration() {
-  const navigation = useNavigation();
-  const route = useRoute();
-  const {teamId, userId, sportsid} = route.params;
+  // const navigation = useNavigation();
+  // const route = useRoute();
+  // const {teamId, userId, sportsid} = route.params;
 
   const [openCourse, setOpenCourse] = useState(false);
   const [openSection, setOpenSection] = useState(false);
@@ -35,7 +35,7 @@ export default function CricketRegistration() {
   const [regNosArray, setRegNosArray] = useState([]); // the selected player roll no is saved here
 
   const Courses = [
-    {label: 'BSCS', value: 'BCS'},
+    {label: 'BCS', value: 'BCS'},
     {label: 'BSIT', value: 'BIT'},
     {label: 'BSCS(AI)', value: 'BSCS(AI)'},
     {label: 'BSSE', value: 'BSSE'},
@@ -49,10 +49,10 @@ export default function CricketRegistration() {
     {label: '6', value: '6'},
     {label: '7', value: '7'},
     {label: '8', value: '8'},
-    {label: '9', value: '9'},
-    {label: '10', value: '10'},
-    {label: '11', value: '11'},
-    {label: '12', value: '12'},
+    // {label: '9', value: '9'},
+    // {label: '10', value: '10'},
+    // {label: '11', value: '11'},
+    // {label: '12', value: '12'},
   ];
   const Sections = [
     {label: 'A', value: 'A'},
@@ -86,6 +86,7 @@ export default function CricketRegistration() {
         Alert.alert('Unexpected data format or response status:', response);
       }
     } catch (error) {
+      console.log(error);
       if (error.response) {
         if (error.response.status === 404) {
           Alert.alert('Error', 'No Students found.');
@@ -112,60 +113,60 @@ export default function CricketRegistration() {
     navigation.navigate('UserHome'); // Replace 'Home' with the correct route name
   };
 
-  useEffect(() => {
-    // Automatically call handleLoginUser when the component is mounted
-    handleLoginUser();
-  }, [1]);
+  // useEffect(() => {
+  //   // Automatically call handleLoginUser when the component is mounted
+  //   handleLoginUser();
+  // }, []);
 
-  const handleLoginUser = async () => {
-    if (!userId) {
-      Alert.alert('Error', 'Some issue with User ID. Please try again later.');
-      return; // Exit the function early
-    }
+  // const handleLoginUser = async () => {
+  //   if (!userId) {
+  //     Alert.alert('Error', 'Some issue with User ID. Please try again later.');
+  //     return; // Exit the function early
+  //   }
 
-    const specialSportsIds = [3, 5, 8, 9, 11, 13];
+  //   const specialSportsIds = [3, 5, 8, 9, 11, 13];
 
-    const userData = {
-      UserId: userId,
-      ...(specialSportsIds.includes(sportsid) ? {TeamNo: teamId} : {}),
-    };
+  //   const userData = {
+  //     UserId: userId,
+  //     ...(specialSportsIds.includes(sportsid) ? {TeamNo: teamId} : {}),
+  //   };
 
-    try {
-      const response = await Api.handleloginuser(userData);
+  //   try {
+  //     const response = await Api.handleloginuser(userData);
 
-      if (response.status === 200) {
-        Alert.alert('Welcome', 'Please now select the remaining players.');
-        const {name, registration_no} = response.data;
-        const playerToAdd = {
-          name: name,
-          reg_no: registration_no,
-          // value: selectedPlayer.value,
-        };
-        setSelectedPlayers(prevPlayers => [...prevPlayers, playerToAdd]);
-        setRegNosArray(prevRegNos => [...prevRegNos, playerToAdd.reg_no]);
-      } else if (response.status === 201) {
-        Alert.alert('Congrats', 'You are Registered.');
-        handleUserHome();
-      } else {
-        Alert.alert('Error', 'Unexpected response. Please try again.');
-      }
-    } catch (error) {
-      if (error.response) {
-        if (error.response.status === 404) {
-          Alert.alert('Error', 'Caption not found in the User table.');
-          handleUserHome();
-        } else if (error.response.status === 409) {
-          Alert.alert('Error', 'User Not found in Student Table.');
-          handleUserHome();
-        } else {
-          Alert.alert('Error', 'An unexpected error occurred.');
-        }
-      } else {
-        // Network or other unexpected errors
-        Alert.alert('Network Error', 'Failed to connect to the server.');
-      }
-    }
-  };
+  //     if (response.status === 200) {
+  //       Alert.alert('Welcome', 'Please now select the remaining players.');
+  //       const {name, registration_no} = response.data;
+  //       const playerToAdd = {
+  //         name: name,
+  //         reg_no: registration_no,
+  //         // value: selectedPlayer.value,
+  //       };
+  //       setSelectedPlayers(prevPlayers => [...prevPlayers, playerToAdd]);
+  //       setRegNosArray(prevRegNos => [...prevRegNos, playerToAdd.reg_no]);
+  //     } else if (response.status === 201) {
+  //       Alert.alert('Congrats', 'You are Registered.');
+  //       handleUserHome();
+  //     } else {
+  //       Alert.alert('Error', 'Unexpected response. Please try again.');
+  //     }
+  //   } catch (error) {
+  //     if (error.response) {
+  //       if (error.response.status === 404) {
+  //         Alert.alert('Error', 'Caption not found in the User table.');
+  //         handleUserHome();
+  //       } else if (error.response.status === 409) {
+  //         Alert.alert('Error', 'User Not found in Student Table.');
+  //         handleUserHome();
+  //       } else {
+  //         Alert.alert('Error', 'An unexpected error occurred.');
+  //       }
+  //     } else {
+  //       // Network or other unexpected errors
+  //       Alert.alert('Network Error', 'Failed to connect to the server.');
+  //     }
+  //   }
+  // };
 
   const GetPlayers = () => {
     if (!value1) {
@@ -173,7 +174,7 @@ export default function CricketRegistration() {
       return;
     }
 
-    const maxPlayersAllowed = playerLimitBySport[sportsid];
+    // const maxPlayersAllowed = playerLimitBySport[sportsid];
 
     if (maxPlayersAllowed !== undefined) {
       if (selectedPlayers.length >= maxPlayersAllowed) {

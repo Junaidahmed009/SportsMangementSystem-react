@@ -31,7 +31,7 @@ function CricketManagerhome() {
   const handleteamrequests = () => {
     navigation.navigate('TeamRequests');
   };
-  const handleCricketSchedule = () => {
+  const handleCricketDetails = () => {
     navigation.navigate('CricketDetails');
   };
   const handleTest1 = () => {

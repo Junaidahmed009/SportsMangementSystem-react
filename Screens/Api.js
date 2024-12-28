@@ -4,7 +4,7 @@ class Api {
   //baseURL: 'http://192.168.1.51/SportsManagementSystemBE/api/',
   constructor() {
     this.apiClient = axios.create({
-      baseURL: 'http://192.168.1.69/SportsManagementSystemBE/api/',
+      baseURL: 'http://192.168.1.37/SportsManagementSystemBE/api/',
       timeout: 10000,
       headers: {
         'Content-type': 'application/json',
@@ -91,16 +91,26 @@ class Api {
   FetchTeamsPlayers(Teamid) {
     return this.apiClient.get(`Players/GetTeamPlayers?id=${Teamid}`);
   }
-  fetchteams() {
-    return this.apiClient.get('Team/GetLatestCricketTeams');
+  fetchteams1(id) {
+    return this.apiClient.get(`Team/GetAllLatestTeams?userid=${id}`);
   }
   fetchfixtures(userid) {
     return this.apiClient.get(`Fixture/GetFixtures?userid=${userid}`);
   }
-  fetchteams(matchType) {
-    return this.apiClient.get(
-      `Fixture/GetLeaguetypeTeams?matchtype=${matchType}`,
-    );
+  fetchteams(userid) {
+    return this.apiClient.get(`Team/AllApprovedTeams?id=${userid}`);
+  }
+  fetchaccountdata(userid) {
+    return this.apiClient.get(`Users/Accountuserdata?id=${userid}`);
+  }
+  PostImage(formData) {
+    return this.apiClient.post(`Team/UploadImage`, formData);
+  }
+  getManagerSport(id) {
+    return this.apiClient.get(`Fixture/GetManagerSport?id=${id}`);
+  }
+  updatefixtures(AllData) {
+    return this.apiClient.put('Fixture/UpdateFixtures', AllData);
   }
 }
 
