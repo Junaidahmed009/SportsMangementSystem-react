@@ -159,6 +159,7 @@ export default function CricketRegistration() {
           'Player Limit Reached',
           `You can only select up to ${maxPlayersAllowed} players.`,
         );
+        setValue1(null);
         return;
       }
     }
@@ -190,6 +191,7 @@ export default function CricketRegistration() {
       Alert.alert('Please select some users');
       return;
     }
+
     const maxPlayersAllowed = playerLimitBySport[sportsid];
     if (
       maxPlayersAllowed !== undefined &&
@@ -217,14 +219,22 @@ export default function CricketRegistration() {
         Alert.alert('Unexpected response. Please try again.');
       }
     } catch (error) {
-      Alert.alert('SavePlayerData Error:', error);
+      console.log(error);
 
       if (error.response) {
-        const {status} = error.response;
+        const {status, data} = error.response;
+
         if (status === 404) {
-          Alert.alert('Not Found', 'Caption Not found in user table');
-        } else if (status === 400) {
-          Alert.alert('Not Found', 'Player Already exists in same team');
+          Alert.alert(
+            'Not Found',
+            'Some players do not exist in the database.',
+          );
+        } else if (status === 409) {
+          const rollno = data?.Rollno; // Extract roll number from response data
+          Alert.alert(
+            'Player Conflict',
+            `Player with roll number ${rollno} is already part of another team for this sport.`,
+          );
         } else {
           Alert.alert('Error', 'An unexpected error occurred.');
         }
