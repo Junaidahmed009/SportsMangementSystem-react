@@ -4,7 +4,7 @@ class Api {
   //baseURL: 'http://192.168.1.51/SportsManagementSystemBE/api/',
   constructor() {
     this.apiClient = axios.create({
-      baseURL: 'http://192.168.1.37/SportsManagementSystemBE/api/',
+      baseURL: 'http://192.168.25.229/SportsManagementSystemBE/api/',
       timeout: 10000,
       headers: {
         'Content-type': 'application/json',
@@ -15,8 +15,10 @@ class Api {
   signup(user) {
     return this.apiClient.post('Users/SignupUser', user);
   }
-  login(loginUser) {
-    return this.apiClient.post('Users/LoginUser', loginUser);
+  login(reg_no, password) {
+    return this.apiClient.get(
+      `Users/LoginUser?regno=${reg_no}&pass=${password}`,
+    );
   }
   forgetpassword(userdetails) {
     return this.apiClient.post('Users/Forgetpasswordverification', userdetails);
@@ -52,20 +54,20 @@ class Api {
   }
   //Session Screens
   fetchSessions() {
-    return this.apiClient.get('Session/Getsessions');
+    return this.apiClient.get('Session/GetsessionsandSports');
   }
 
   // Cricket registration Screens
   getteamstatus(tname) {
     return this.apiClient.get('Team/CheckTeamNames', {params: {tname}});
   }
-  fetchstudents(course, sections, semno) {
-    return this.apiClient.get('Students/GetStudents', {
-      params: {course, sections, semno},
-    });
+  fetchstudents(course, sections, semno, Gender) {
+    return this.apiClient.get(
+      `Students/GetStudents?course=${course}&sections=${sections}&semno=${semno}&gender=${Gender}`,
+    );
   }
   postteamdata(teamdata) {
-    return this.apiClient.post('Team/PostTeamadata', teamdata);
+    return this.apiClient.post('Team/AddTeam', teamdata);
   }
   fetchteamSports() {
     return this.apiClient.get('Sports/GetSports');
@@ -73,8 +75,8 @@ class Api {
   postPlayersdata(Playersdata) {
     return this.apiClient.post('Players/PostPlayers', Playersdata);
   }
-  handleloginuser(userData) {
-    return this.apiClient.post('Players/HandleUser', userData);
+  handleloginuser(id) {
+    return this.apiClient.get(`Players/HandleUser?userid=${id}`);
   }
   PostFixturesData(AllData) {
     return this.apiClient.post('Fixture/PostFixtures', AllData);
@@ -111,6 +113,15 @@ class Api {
   }
   updatefixtures(AllData) {
     return this.apiClient.put('Fixture/UpdateFixtures', AllData);
+  }
+  fetchUsersfixtures(id) {
+    return this.apiClient.get(`Fixture/GetUsersFixtures?sportsId=${id}`);
+  }
+  fetchmanagerfixtures(id) {
+    return this.apiClient.get(`Fixture/GetUsersFixtures?sportsId=${id}`);
+  }
+  postimage(formData, config) {
+    return this.apiClient.post(`Team/UploadImage`, formData, config);
   }
 }
 

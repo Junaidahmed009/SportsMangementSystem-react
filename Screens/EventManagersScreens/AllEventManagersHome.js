@@ -26,7 +26,7 @@ function CricketManagerhome() {
   };
 
   const handleplayers = () => {
-    navigation.navigate('Players');
+    navigation.navigate('ImageTest');
   };
   const handleteamrequests = () => {
     navigation.navigate('TeamRequests');
@@ -68,7 +68,7 @@ function CricketManagerhome() {
           <TouchableOpacity
             style={styles.buttonlogin}
             onPress={handleCricketRules}>
-            <Text style={styles.buttontext}>Rules</Text>
+            <Text style={styles.buttontext}>Game Instructions</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -79,13 +79,13 @@ function CricketManagerhome() {
         </View>
 
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.buttonlogin} onPress={handleTest1}>
+          <TouchableOpacity
+            style={styles.buttonlogin}
+            onPress={handleCricketScore}>
             <Text style={styles.buttontext}>Start Scoring</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
-            style={styles.buttonlogin}
-            onPress={() => console.log('Pressed')}>
+          <TouchableOpacity style={styles.buttonlogin} onPress={handleplayers}>
             <Text style={styles.buttontext}>View Teams</Text>
           </TouchableOpacity>
         </View>

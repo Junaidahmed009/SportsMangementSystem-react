@@ -35,19 +35,21 @@ export default function Login() {
       return;
     }
 
-    const loginUser = {
-      registration_no: regno,
-      password: pass,
-    };
+    // const loginUser = {
+    //   registration_no: regno,
+    //   password: pass,
+    // };
 
     setLoading(true); // Start loading
 
     try {
-      const response = await Api.login(loginUser);
+      const reg_no = regno;
+      const password = pass;
+      const response = await Api.login(reg_no, password);
 
       if (response.status === 200) {
         const receivedUser = response.data;
-        console.log(receivedUser);
+        // console.log(receivedUser);
         storeUserData(receivedUser); // Store user data
 
         if (receivedUser.role === 'Admin') {
@@ -74,7 +76,7 @@ export default function Login() {
         Alert.alert('Login failed. Please try again.');
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       if (error.response && error.response.status === 404) {
         Alert.alert('Registration number or password is incorrect.');
       } else if (error.response && error.response.status === 409) {
@@ -83,7 +85,11 @@ export default function Login() {
         setPass('');
         handleUserhome();
       } else {
-        Alert.alert('An error occurred during login. Please try again.');
+        // Alert.alert('An error occurred during login. Please try again.');
+        Alert.alert(
+          'Oops, something went wrong!',
+          "But don't worry! Every login attempt is a step closer to success.Give it another shot!",
+        );
       }
     } finally {
       setLoading(false); // Stop loading

@@ -55,7 +55,7 @@ function Chairperson() {
 
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.buttonlogin} onPress={handleRules}>
-            <Text style={styles.buttontext}>Edit Rules</Text>
+            <Text style={styles.buttontext}>Edit Instructions</Text>
           </TouchableOpacity>
 
           <TouchableOpacity

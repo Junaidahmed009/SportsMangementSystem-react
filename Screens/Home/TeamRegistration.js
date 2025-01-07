@@ -28,6 +28,7 @@ export default function TeamRegistration() {
   const [valueSemNo, setValueSemNo] = useState(null);
 
   const [imageUri, setImageUri] = useState(null);
+  const [serverImagePath, setServerImagePath] = useState(null);
 
   const Courses = [
     {label: 'BSCS', value: 'BCS'},
@@ -59,7 +60,7 @@ export default function TeamRegistration() {
 
   useEffect(() => {
     fetchSports();
-  }, []); // Only call once when user open drop down
+  }, []);
 
   const fetchSports = async () => {
     try {
@@ -79,7 +80,6 @@ export default function TeamRegistration() {
         // console.error('Unexpected response status:', response.status);
       }
     } catch (error) {
-      // console.log(error);
       if (error.response && error.response.status === 404) {
         Alert.alert('No data found for Sports');
       } else if (error.response) {
@@ -88,34 +88,62 @@ export default function TeamRegistration() {
           // `Status: ${error.response.status}`,
         );
       } else {
-        // console.log(error);
         Alert.alert('Network error', 'Failed to connect to server.');
       }
     }
   };
-
+  handleUserhome = () => {
+    navigation.navigate('UserHome');
+  };
   const TeamCheck = async () => {
-    if (!tname || !valueCourse || !valueSection || !valueSemNo) {
-      //|| !imageUri
+    if (
+      !tname ||
+      !valueCourse ||
+      !valueSection ||
+      !valueSemNo ||
+      !serverImagePath
+    ) {
       Alert.alert('Alert', 'Please check all fields');
       return;
     }
-
-    const teamdata = {
-      name: tname,
-      className: `${valueCourse}-${valueSection}${valueSemNo}`,
-      caption_id: userData.id,
-      sports_id: sportsvalue,
-      image_path: imageUri,
-      teamStatus: 0,
-    };
-
+    let teamdata;
+    if (
+      sportsvalue === 3 ||
+      sportsvalue === 5 ||
+      sportsvalue === 8 ||
+      sportsvalue === 9 ||
+      sportsvalue === 11 ||
+      sportsvalue === 13 ||
+      sportsvalue === 14
+    ) {
+      teamdata = {
+        Name: tname,
+        className: `${valueCourse}-${valueSection}${valueSemNo}`,
+        Caption_id: userData.id,
+        Sports_id: sportsvalue,
+        Image_path: serverImagePath,
+        TeamStatus: 0,
+        TeamType: 'SingleUser',
+      };
+    } else {
+      teamdata = {
+        Name: tname,
+        ClassName: `${valueCourse}-${valueSection}${valueSemNo}`,
+        Caption_id: userData.id,
+        Sports_id: sportsvalue,
+        Image_path: serverImagePath,
+        TeamStatus: 0,
+        TeamType: 'DoubleUsers',
+      };
+    }
     try {
       const response = await Api.postteamdata(teamdata);
-
       if (response.status === 201) {
-        const data = response.data;
-        const teamId = data.id;
+        Alert.alert('Sucess', 'You Team is Registered');
+        handleUserhome();
+      } else if (response.status === 200) {
+        const teamdata = response.data;
+        const teamId = teamdata.id;
         const userId = userData.id;
         const sportsid = sportsvalue;
         Alert.alert('Team is registered.');
@@ -124,18 +152,13 @@ export default function TeamRegistration() {
         Alert.alert('Unexpected response. Please try again.');
       }
     } catch (error) {
-      //data code is coming from backend to handle different erors
       if (error.response && error.response.data) {
         const {status, data} = error.response;
 
-        // Check for specific error codes
-        if (
-          (status === 409 && (data.errorcode === 1 || data.errorcode === 5)) ||
-          (status === 404 && (data.errorcode === 1 || data.errorcode === 2))
-        ) {
+        if (status === 409 && (data.errorcode === 5 || data.errorcode === 6)) {
           Alert.alert('Alert', 'Some issue in registration, please try later.');
-        } else if (status === 409 && data.errorcode === 2) {
-          Alert.alert('Alert', 'New Session not Started');
+        } else if (status === 404 && data.errorcode === 1) {
+          Alert.alert('Alert', 'New Session not Started yet.');
         } else if (status === 409 && data.errorcode === 3) {
           Alert.alert('Alert', 'Team with same name already registered');
         } else if (status === 409 && data.errorcode === 4) {
@@ -159,19 +182,69 @@ export default function TeamRegistration() {
   };
 
   const pickImage = () => {
-    launchImageLibrary({mediaType: 'photo', quality: 1}, response => {
-      if (response.assets) {
-        setImageUri(response.assets[0].uri);
+    if (serverImagePath) {
+      Alert.alert('Error', 'Image Already selected.');
+      return;
+    }
+    launchImageLibrary({mediaType: 'photo', quality: 2}, response => {
+      if (response.didCancel) {
+        Alert.alert('Cancelled', 'You cancelled image selection.');
+      } else if (response.errorCode) {
+        Alert.alert('Error', `Image selection error: ${response.errorMessage}`);
+      } else if (response.assets && response.assets[0]) {
+        const selectedImage = response.assets[0];
+        setImageUri(selectedImage.uri);
+        Alert.alert(
+          'Confirm Upload',
+          'Do you want to upload this image?',
+          [
+            {
+              text: 'Cancel',
+              style: 'cancel',
+            },
+            {
+              text: 'Upload',
+              onPress: () => uploadImage(selectedImage), // Proceed to upload the image
+            },
+          ],
+          {cancelable: false},
+        );
       }
     });
+  };
+
+  const uploadImage = async image => {
+    try {
+      const formData = new FormData();
+      formData.append('file', {
+        uri: image.uri,
+        type: image.type,
+        name: image.fileName,
+      });
+
+      // Call the Api.postimage function with the formData and headers
+      const response = await Api.postimage(formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      if (response.status === 200) {
+        const serverPath = response.data[0]; // Assuming the backend returns an array of paths
+        setServerImagePath(serverPath);
+        Alert.alert('Success', 'Image uploaded successfully!');
+      } else {
+        Alert.alert('Error', 'Failed to upload image to the server.');
+      }
+    } catch (error) {
+      // console.error(error);
+      Alert.alert('Error', 'An error occurred while uploading the image.');
+    }
   };
   const handleplayersRegistration = (teamId, userId, sportsid) => {
     navigation.navigate('PlayersRegistration', {teamId, userId, sportsid});
   };
 
-  handleUserhome = () => {
-    navigation.navigate('UserHome');
-  };
   return (
     <SafeAreaViewComponent>
       <AppBarComponent
@@ -276,6 +349,12 @@ export default function TeamRegistration() {
             <Text style={styles.cardText}>Selected Image</Text>
           </View>
         )}
+
+        {/* {serverImagePath && (
+          <Text style={styles.serverPathText}>
+            Server Path: {serverImagePath}
+          </Text>
+        )} */}
       </View>
 
       <View style={styles.buttons}>

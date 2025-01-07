@@ -19,14 +19,14 @@ import Players from './EventManagersScreens/Players';
 import TeamRequests from './EventManagersScreens/TeamRequests';
 import CricketScoring from './EventManagersScreens/StartScoring';
 import ViewManagers from './ChairpersonScreens/ViewManagers';
-import CricketDetails from './Home/CricketDetails';
+import Fixtures from './Home/Fixtures';
 import CricketMatchDetails from './Home/CricketMatchDetails';
 import Test1 from './EventManagersScreens/Test1';
 import EditFixtures from './EventManagersScreens/EditFixtures';
-import ManagerHome from './individualScreens/ManagerHome';
 import Cricket from './ScoringScreens.js/Cricket';
 import Football from './ScoringScreens.js/Football';
 import Badminton from './ScoringScreens.js/Badminton';
+import ImageTest from './Home/ImageTest';
 const Stack = createNativeStackNavigator();
 export default function Navigation() {
   return (
@@ -59,17 +59,18 @@ export default function Navigation() {
         <Stack.Screen name="TeamRequests" component={TeamRequests} />
         <Stack.Screen name="CricketScoring" component={CricketScoring} />
         <Stack.Screen name="ViewManagers" component={ViewManagers} />
-        <Stack.Screen name="CricketDetails" component={CricketDetails} />
+        <Stack.Screen name="Fixtures" component={Fixtures} />
         <Stack.Screen
           name="CricketMatchDetails"
           component={CricketMatchDetails}
         />
         <Stack.Screen name="Test1" component={Test1} />
         <Stack.Screen name="EditFixtures" component={EditFixtures} />
-        <Stack.Screen name="ManagerHome" component={ManagerHome} />
+        {/* <Stack.Screen name="ManagerHome" component={ManagerHome} /> */}
         <Stack.Screen name="Cricket" component={Cricket} />
         <Stack.Screen name="Football" component={Football} />
         <Stack.Screen name="Badminton" component={Badminton} />
+        <Stack.Screen name="ImageTest" component={ImageTest} />
       </Stack.Navigator>
     </NavigationContainer>
   );

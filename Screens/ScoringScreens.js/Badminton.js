@@ -3,7 +3,7 @@ import {
   View,
   Text,
   StyleSheet,
-  Image,
+  // Image,
   ScrollView,
   SafeAreaView,
 } from 'react-native';
@@ -11,11 +11,11 @@ import {SafeAreaViewComponent, AppBarComponent} from '../MyComponents';
 
 const Badminton = () => {
   // Image paths
-  const images = [
-    require('../images/5946c08f45a42.jpg'),
-    require('../images/59362-pakistanteamcoverjpg-1511858515.jpg'),
-    require('../images/images.jpeg'),
-  ];
+  // const images = [
+  //   require('../images/5946c08f45a42.jpg'),
+  //   require('../images/59362-pakistanteamcoverjpg-1511858515.jpg'),
+  //   require('../images/images.jpeg'),
+  // ];
 
   return (
     <SafeAreaViewComponent>
@@ -50,7 +50,7 @@ const Badminton = () => {
       </View>
       {/* Moments Section */}
       <Text style={styles.momentsHeader}>Moments</Text>
-      <ScrollView horizontal contentContainerStyle={styles.momentsContainer}>
+      {/* <ScrollView horizontal contentContainerStyle={styles.momentsContainer}>
         {images.map((image, index) => (
           <View key={index} style={styles.imageWrapper}>
             <Text style={styles.timeText}>
@@ -59,7 +59,7 @@ const Badminton = () => {
             <Image source={image} style={styles.image} />
           </View>
         ))}
-      </ScrollView>
+      </ScrollView> */}
       {/* Scores */}
       <View style={styles.scoresContainer}>
         <View style={styles.scoreBox}>

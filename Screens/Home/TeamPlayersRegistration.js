@@ -14,12 +14,12 @@ import {
   DropdownComponent,
 } from '../MyComponents';
 import Api from '../Api';
-// import {useNavigation, useRoute} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
 export default function CricketRegistration() {
-  // const navigation = useNavigation();
-  // const route = useRoute();
-  // const {teamId, userId, sportsid} = route.params;
+  const navigation = useNavigation();
+  const route = useRoute();
+  const {teamId, userId, sportsid} = route.params;
 
   const [openCourse, setOpenCourse] = useState(false);
   const [openSection, setOpenSection] = useState(false);
@@ -49,10 +49,6 @@ export default function CricketRegistration() {
     {label: '6', value: '6'},
     {label: '7', value: '7'},
     {label: '8', value: '8'},
-    // {label: '9', value: '9'},
-    // {label: '10', value: '10'},
-    // {label: '11', value: '11'},
-    // {label: '12', value: '12'},
   ];
   const Sections = [
     {label: 'A', value: 'A'},
@@ -61,17 +57,54 @@ export default function CricketRegistration() {
     {label: 'D', value: 'D'},
     {label: 'E', value: 'E'},
   ];
+  useEffect(() => {
+    handleLoginUser();
+  }, []);
+  const [userGender, setuserGender] = useState(null);
+  //this function is getting data of user and setting it. also setting the user name and reg no seprate and gender seprately.
+  const handleLoginUser = async () => {
+    if (!userId) {
+      Alert.alert('Error', 'Some issue with User ID. Please try again later.');
+      return;
+    }
 
+    const id = userId;
+    try {
+      const response = await Api.handleloginuser(id);
+      if (response.status === 200) {
+        Alert.alert('Welcome', 'Please now select the remaining players.');
+        const userdata = [];
+        response.data.forEach(user => {
+          userdata.push({name: user.Name, reg_no: user.Reg_no});
+          setuserGender(user.Gender);
+        });
+        setSelectedPlayers(prevPlayers => [...prevPlayers, ...userdata]);
+        setRegNosArray(prevRegNos => [
+          ...prevRegNos,
+          ...userdata.map(user => user.reg_no),
+        ]);
+      } else {
+        Alert.alert('Error', 'Unexpected response. Please try again.');
+      }
+    } catch (error) {
+      Alert.alert('Networsfrwek Error', 'Failed to connect to the server.');
+    }
+  };
+  // fetching students based on gender.
   const fetchStudents = async () => {
     if (!valueCourse || !valueSection || !valueSemNo) {
       Alert.alert('Please select all 3 fields');
       return;
     }
+    // console.log(valueCourse, valueSection, valueSemNo, userGender);
+
     try {
+      const Gender = userGender;
       const response = await Api.fetchstudents(
         valueCourse,
         valueSection,
         valueSemNo,
+        Gender,
       );
       if (response.status === 200 && Array.isArray(response.data)) {
         Alert.alert('Check the list & Select players');
@@ -86,10 +119,9 @@ export default function CricketRegistration() {
         Alert.alert('Unexpected data format or response status:', response);
       }
     } catch (error) {
-      console.log(error);
       if (error.response) {
         if (error.response.status === 404) {
-          Alert.alert('Error', 'No Students found.');
+          Alert.alert('Not Found', 'No Students found.');
         } else {
           Alert.alert('Error', 'An unexpected error occurred.');
         }
@@ -101,80 +133,25 @@ export default function CricketRegistration() {
   };
 
   const playerLimitBySport = {
-    1: 10,
-    2: 10,
-    7: 10,
-    12: 10,
+    1: 8,
+    2: 8,
     4: 2,
     6: 2,
+    7: 8,
     10: 2,
+    12: 8,
   };
   const handleUserHome = () => {
     navigation.navigate('UserHome'); // Replace 'Home' with the correct route name
   };
-
-  // useEffect(() => {
-  //   // Automatically call handleLoginUser when the component is mounted
-  //   handleLoginUser();
-  // }, []);
-
-  // const handleLoginUser = async () => {
-  //   if (!userId) {
-  //     Alert.alert('Error', 'Some issue with User ID. Please try again later.');
-  //     return; // Exit the function early
-  //   }
-
-  //   const specialSportsIds = [3, 5, 8, 9, 11, 13];
-
-  //   const userData = {
-  //     UserId: userId,
-  //     ...(specialSportsIds.includes(sportsid) ? {TeamNo: teamId} : {}),
-  //   };
-
-  //   try {
-  //     const response = await Api.handleloginuser(userData);
-
-  //     if (response.status === 200) {
-  //       Alert.alert('Welcome', 'Please now select the remaining players.');
-  //       const {name, registration_no} = response.data;
-  //       const playerToAdd = {
-  //         name: name,
-  //         reg_no: registration_no,
-  //         // value: selectedPlayer.value,
-  //       };
-  //       setSelectedPlayers(prevPlayers => [...prevPlayers, playerToAdd]);
-  //       setRegNosArray(prevRegNos => [...prevRegNos, playerToAdd.reg_no]);
-  //     } else if (response.status === 201) {
-  //       Alert.alert('Congrats', 'You are Registered.');
-  //       handleUserHome();
-  //     } else {
-  //       Alert.alert('Error', 'Unexpected response. Please try again.');
-  //     }
-  //   } catch (error) {
-  //     if (error.response) {
-  //       if (error.response.status === 404) {
-  //         Alert.alert('Error', 'Caption not found in the User table.');
-  //         handleUserHome();
-  //       } else if (error.response.status === 409) {
-  //         Alert.alert('Error', 'User Not found in Student Table.');
-  //         handleUserHome();
-  //       } else {
-  //         Alert.alert('Error', 'An unexpected error occurred.');
-  //       }
-  //     } else {
-  //       // Network or other unexpected errors
-  //       Alert.alert('Network Error', 'Failed to connect to the server.');
-  //     }
-  //   }
-  // };
-
+  //getting player from dropdown and also max limit is allowed
   const GetPlayers = () => {
     if (!value1) {
       Alert.alert('Please select a value from Dropdown');
       return;
     }
 
-    // const maxPlayersAllowed = playerLimitBySport[sportsid];
+    const maxPlayersAllowed = playerLimitBySport[sportsid];
 
     if (maxPlayersAllowed !== undefined) {
       if (selectedPlayers.length >= maxPlayersAllowed) {
@@ -197,7 +174,7 @@ export default function CricketRegistration() {
       const playerToAdd = {
         name: selectedPlayer.name,
         reg_no: selectedPlayer.reg_no,
-        // value: selectedPlayer.value,
+        value: selectedPlayer.value,
       };
 
       setSelectedPlayers(prevPlayers => [...prevPlayers, playerToAdd]);
@@ -461,3 +438,13 @@ const styles = StyleSheet.create({
     paddingTop: 10,
   },
 });
+
+//  get user function part
+// const specialSportsIds = [3, 5, 8, 9, 11, 13];
+
+// const userData = {
+//   UserId: userId,
+//   ...(specialSportsIds.includes(sportsid) ? {TeamNo: teamId} : {}),
+// };
+
+//-------------
