@@ -1,18 +1,3 @@
-// import {View, Text} from 'react-native';
-// import React from 'react';
-// import {useNavigation, useRoute} from '@react-navigation/native';
-
-// export default function Fixtures() {
-//   const navigation = useNavigation();
-//   const route = useRoute();
-//   const {Sportid} = route.params;
-//   return (
-//     <View>
-//       <Text>{Sportid}</Text>
-//     </View>
-//   );
-// }
-
 import {useState, useEffect} from 'react';
 import React from 'react';
 import {
@@ -39,16 +24,6 @@ export default function Fixtures() {
       const response = await Api.fetchUsersfixtures(id);
       if (response.status === 200) {
         const results = response.data.results || response.data; // Handle cases where results key might not exist
-
-        // if (!results || !Array.isArray(results) || results.length === 0) {
-        //   setfixtures([]);
-        //   Alert.alert(
-        //     'No Fixtures Found',
-        //     'No fixtures are available for the selected sport.',
-        //   );
-        //   return;
-        // }
-
         const fixtureData = results.map(item => ({
           fixtureId: item.fixture_id,
           team1name: item.team1_name,
@@ -85,6 +60,7 @@ export default function Fixtures() {
   const handleHome = () => {
     navigation.navigate('UserHome');
   };
+
   return (
     <SafeAreaViewComponent>
       <AppBarComponent title={'Fixtures'} handleBackPress={handleHome} />

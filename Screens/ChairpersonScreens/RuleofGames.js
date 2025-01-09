@@ -140,7 +140,7 @@ export default function RuleofGames() {
     <SafeAreaView style={styles.container}>
       <Appbar.Header style={styles.appbarsetting}>
         <Appbar.BackAction onPress={handleBackPress} color="#ffffff" />
-        <Appbar.Content title="Rules" titleStyle={styles.appbarTitle} />
+        <Appbar.Content title="Instructions" titleStyle={styles.appbarTitle} />
       </Appbar.Header>
 
       <View style={styles.contentContainer}>

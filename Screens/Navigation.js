@@ -17,16 +17,16 @@ import PlayersRegistration from './Home/TeamPlayersRegistration';
 import TeamRegistration from './Home/TeamRegistration';
 import Players from './EventManagersScreens/Players';
 import TeamRequests from './EventManagersScreens/TeamRequests';
-import CricketScoring from './EventManagersScreens/StartScoring';
 import ViewManagers from './ChairpersonScreens/ViewManagers';
 import Fixtures from './Home/Fixtures';
 import CricketMatchDetails from './Home/CricketMatchDetails';
 import Test1 from './EventManagersScreens/Test1';
 import EditFixtures from './EventManagersScreens/EditFixtures';
-import Cricket from './ScoringScreens.js/Cricket';
+import CricketScoring from './ScoringScreens.js/CricketScoring';
 import Football from './ScoringScreens.js/Football';
 import Badminton from './ScoringScreens.js/Badminton';
 import ImageTest from './Home/ImageTest';
+import StartScoring from './EventManagersScreens/StartScoring';
 const Stack = createNativeStackNavigator();
 export default function Navigation() {
   return (
@@ -48,7 +48,6 @@ export default function Navigation() {
         <Stack.Screen name="AddEventmanager" component={AddEventmanager} />
         <Stack.Screen name="CricketManagerhome" component={CricketManagerNav} />
         <Stack.Screen name="CricketFixtures" component={CricketFixtures} />
-        {/* <Stack.Screen name='CricketScore' component={CricketScore}/> */}
         <Stack.Screen name="RuleofCricket" component={RuleofCricket} />
         <Stack.Screen
           name="PlayersRegistration"
@@ -57,7 +56,6 @@ export default function Navigation() {
         <Stack.Screen name="TeamRegistration" component={TeamRegistration} />
         <Stack.Screen name="Players" component={Players} />
         <Stack.Screen name="TeamRequests" component={TeamRequests} />
-        <Stack.Screen name="CricketScoring" component={CricketScoring} />
         <Stack.Screen name="ViewManagers" component={ViewManagers} />
         <Stack.Screen name="Fixtures" component={Fixtures} />
         <Stack.Screen
@@ -66,11 +64,11 @@ export default function Navigation() {
         />
         <Stack.Screen name="Test1" component={Test1} />
         <Stack.Screen name="EditFixtures" component={EditFixtures} />
-        {/* <Stack.Screen name="ManagerHome" component={ManagerHome} /> */}
-        <Stack.Screen name="Cricket" component={Cricket} />
+        <Stack.Screen name="CricketScoring" component={CricketScoring} />
         <Stack.Screen name="Football" component={Football} />
         <Stack.Screen name="Badminton" component={Badminton} />
         <Stack.Screen name="ImageTest" component={ImageTest} />
+        <Stack.Screen name="StartScoring" component={StartScoring} />
       </Stack.Navigator>
     </NavigationContainer>
   );

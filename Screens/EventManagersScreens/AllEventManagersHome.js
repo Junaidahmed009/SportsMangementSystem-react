@@ -12,14 +12,14 @@ const Tab = createBottomTabNavigator();
 
 function CricketManagerhome() {
   const navigation = useNavigation();
-  const handleCricketFixtures = () => {
+  const handleCreateFixtures = () => {
     navigation.navigate('CricketFixtures');
   };
   const handleEditFixtures = () => {
     navigation.navigate('EditFixtures'); //kal
   };
-  const handleCricketScore = () => {
-    navigation.navigate('CricketScoring');
+  const handleStartScoring = () => {
+    navigation.navigate('StartScoring');
   };
   const handleCricketRules = () => {
     navigation.navigate('RuleofCricket');
@@ -54,7 +54,7 @@ function CricketManagerhome() {
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.buttonlogin}
-            onPress={handleCricketFixtures}>
+            onPress={handleCreateFixtures}>
             <Text style={styles.buttontext}>Create Fixtures</Text>
           </TouchableOpacity>
 
@@ -81,7 +81,7 @@ function CricketManagerhome() {
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.buttonlogin}
-            onPress={handleCricketScore}>
+            onPress={handleStartScoring}>
             <Text style={styles.buttontext}>Start Scoring</Text>
           </TouchableOpacity>
 

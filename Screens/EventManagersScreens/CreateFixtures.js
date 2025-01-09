@@ -64,7 +64,7 @@ export default function CreateFixtures() {
       const response = await Api.getManagerSport(id);
       if (response.status === 200) {
         const Sport = response.data;
-        console.log(Sport);
+        // console.log(Sport);
         if (Sport.game === 'Cricket') {
           setSport([16, 8, 4, 2, 1]);
         } else if (
@@ -285,17 +285,17 @@ export default function CreateFixtures() {
         return card.id === id ? {...card, [key]: value} : card;
       });
     });
-    setquarterCardsData(prev => {
+    setQuarterCardsData(prev => {
       return prev.map(card => {
         return card.id === id ? {...card, [key]: value} : card;
       });
     });
-    setsemiCardsData(prev => {
+    setSemiCardsData(prev => {
       return prev.map(card => {
         return card.id === id ? {...card, [key]: value} : card;
       });
     });
-    setfinalCardsData(prev => {
+    setFinalCardsData(prev => {
       return prev.map(card => {
         return card.id === id ? {...card, [key]: value} : card;
       });

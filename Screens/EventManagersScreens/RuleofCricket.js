@@ -42,7 +42,7 @@ export default function RuleofCricket() {
   return (
     <SafeAreaViewComponent>
       <AppBarComponent
-        title={'Cricket Rules'}
+        title={'Instructions'}
         handleBackPress={handleUserHome}
       />
       <View style={styles.container}>

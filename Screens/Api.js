@@ -4,7 +4,7 @@ class Api {
   //baseURL: 'http://192.168.1.51/SportsManagementSystemBE/api/',
   constructor() {
     this.apiClient = axios.create({
-      baseURL: 'http://192.168.1.67/SportsManagementSystemBE/api/',
+      baseURL: 'http://192.168.1.26/SportsManagementSystemBE/api/',
       timeout: 10000,
       headers: {
         'Content-type': 'application/json',
@@ -117,8 +117,8 @@ class Api {
   fetchUsersfixtures(id) {
     return this.apiClient.get(`Fixture/GetUsersFixtures?sportsId=${id}`);
   }
-  fetchmanagerfixtures(id) {
-    return this.apiClient.get(`Fixture/GetUsersFixtures?sportsId=${id}`);
+  fetchManagerfixtures(id) {
+    // return this.apiClient.get(`Fixture/GetUsersFixtures?sportsId=${id}`);
   }
   postimage(formData, config) {
     return this.apiClient.post(`Team/UploadImage`, formData, config);

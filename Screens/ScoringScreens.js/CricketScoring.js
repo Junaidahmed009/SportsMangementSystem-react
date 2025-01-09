@@ -11,7 +11,7 @@ import {SafeAreaViewComponent, AppBarComponent} from '../MyComponents';
 import {Checkbox, RadioButton} from 'react-native-paper';
 import DropDownPicker from 'react-native-dropdown-picker';
 
-export default function Cricket() {
+export default function CricketScoring() {
   const [teamsData, setteamsData] = useState([
     {
       score: '',
