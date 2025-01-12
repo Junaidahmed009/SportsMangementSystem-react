@@ -1,22 +1,18 @@
 import {useState, useEffect} from 'react';
 import React from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  ScrollView,
-  Alert,
-} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, Alert} from 'react-native';
 import {SafeAreaViewComponent, AppBarComponent} from '../MyComponents';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import Api from '../Api';
+import {Searchbar} from 'react-native-paper';
 
 export default function Fixtures() {
   const navigation = useNavigation();
   const route = useRoute();
   const {Sportid} = route.params;
   const [fixtures, setfixtures] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [Sporttitle, setsporttitle] = useState('Fixtures');
 
   const FetchFixtures = async () => {
     const id = Sportid; // Ensure Sportid is defined and valid
@@ -36,6 +32,9 @@ export default function Fixtures() {
           sportType: item.sport_type,
         }));
         setfixtures(fixtureData);
+        if (fixtureData.length > 0) {
+          setsporttitle(fixtureData[0].sportName);
+        }
       } else {
         Alert.alert('Error', `Unexpected response status: ${response.status}`);
       }
@@ -60,14 +59,25 @@ export default function Fixtures() {
   const handleHome = () => {
     navigation.navigate('UserHome');
   };
+  // Filter fixtures based on search query
+  const filteredFixtures = fixtures.filter(
+    fixture =>
+      fixture.team1name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      fixture.team2name.toLowerCase().includes(searchQuery.toLowerCase()),
+  );
 
   return (
     <SafeAreaViewComponent>
-      <AppBarComponent title={'Fixtures'} handleBackPress={handleHome} />
+      <AppBarComponent title={Sporttitle} handleBackPress={handleHome} />
+      <Searchbar
+        placeholder="Search by Team name"
+        value={searchQuery}
+        onChangeText={setSearchQuery}
+        style={styles.searchBar}
+      />
       <ScrollView contentContainerStyle={styles.content}>
-        {fixtures.map((fix, index) => (
-          <View key={index} style={styles.card}>
-            {/* <Text style={styles.matchTitle}>{fix.sportName}</Text> */}
+        {filteredFixtures.map(fix => (
+          <View key={fix.fixtureId} style={styles.card}>
             <Text style={styles.matchTitle2}>{fix.matchType}</Text>
             <View style={styles.teamsContainer}>
               <Text style={styles.teamBox}>{fix.team1name}</Text>
@@ -76,11 +86,7 @@ export default function Fixtures() {
             </View>
             <Text style={styles.teamBox2}>{fix.winnerTeam}</Text>
             <Text style={styles.matchInfo}>{fix.matchDate}</Text>
-            {/* <Text style={styles.matchStatus}>{fix.sportType}</Text> */}
             <Text style={styles.matchStatus}>{fix.venue}</Text>
-            {/* <TouchableOpacity style={styles.detailsButton} onPress={printdata}>
-              <Text style={styles.detailsButtonText}>Start Match</Text>
-            </TouchableOpacity> */}
           </View>
         ))}
       </ScrollView>
@@ -89,6 +95,12 @@ export default function Fixtures() {
 }
 
 const styles = StyleSheet.create({
+  searchBar: {
+    marginTop: 10,
+    marginBottom: 10,
+    marginHorizontal: 8,
+    backgroundColor: '#EEEFF5',
+  },
   content: {
     padding: 16,
   },

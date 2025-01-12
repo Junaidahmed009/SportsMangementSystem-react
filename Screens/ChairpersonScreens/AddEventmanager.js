@@ -46,8 +46,7 @@ export default function AddEventmanager() {
       } else if (error.response && error.response.status === 400) {
         Alert.alert('User is Already Event Manager.');
       } else {
-        // Handle other errors
-        console.error('error:', error);
+        // console.error('error:', error);
         Alert.alert(
           'Registration failed',
           'An error occurred during registration. Please try again.',

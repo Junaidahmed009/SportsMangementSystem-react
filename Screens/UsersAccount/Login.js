@@ -86,10 +86,7 @@ export default function Login() {
         handleUserhome();
       } else {
         // Alert.alert('An error occurred during login. Please try again.');
-        Alert.alert(
-          'Oops, something went wrong!',
-          "But don't worry! Every login attempt is a step closer to success.Give it another shot!",
-        );
+        Alert.alert('Login Failed', 'Try Again');
       }
     } finally {
       setLoading(false); // Stop loading

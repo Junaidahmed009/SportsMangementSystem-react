@@ -1,18 +1,3 @@
-// import {View, Text} from 'react-native';
-// import React from 'react';
-// import {useNavigation, useRoute} from '@react-navigation/native';
-
-// export default function Fixtures() {
-//   const navigation = useNavigation();
-//   const route = useRoute();
-//   const {Sportid} = route.params;
-//   return (
-//     <View>
-//       <Text>{Sportid}</Text>
-//     </View>
-//   );
-// }
-
 import {useState, useEffect} from 'react';
 import React from 'react';
 import {
@@ -71,9 +56,15 @@ export default function StartScoring() {
 
   useEffect(() => {
     FetchFixtures();
-  }, [Sportid]);
+  }, []);
   const handleHome = () => {
     navigation.navigate('UserHome');
+  };
+  const handleCricketScoring = Fixtureid => {
+    navigation.navigate('CricketScoring', {Fixtureid});
+  };
+  const printdata = id => {
+    console.log(id);
   };
   return (
     <SafeAreaViewComponent>
@@ -81,7 +72,6 @@ export default function StartScoring() {
       <ScrollView contentContainerStyle={styles.content}>
         {fixtures.map((fix, index) => (
           <View key={index} style={styles.card}>
-            {/* <Text style={styles.matchTitle}>{fix.sportName}</Text> */}
             <Text style={styles.matchTitle2}>{fix.matchType}</Text>
             <View style={styles.teamsContainer}>
               <Text style={styles.teamBox}>{fix.team1name}</Text>
@@ -90,11 +80,12 @@ export default function StartScoring() {
             </View>
             <Text style={styles.teamBox2}>{fix.winnerTeam}</Text>
             <Text style={styles.matchInfo}>{fix.matchDate}</Text>
-            {/* <Text style={styles.matchStatus}>{fix.sportType}</Text> */}
             <Text style={styles.matchStatus}>{fix.venue}</Text>
-            {/* <TouchableOpacity style={styles.detailsButton} onPress={printdata}>
+            <TouchableOpacity
+              style={styles.detailsButton}
+              onPress={() => handleCricketScoring(fix.fixtureId)}>
               <Text style={styles.detailsButtonText}>Start Match</Text>
-            </TouchableOpacity> */}
+            </TouchableOpacity>
           </View>
         ))}
       </ScrollView>

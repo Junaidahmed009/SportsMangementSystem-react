@@ -1,11 +1,19 @@
 import axios from 'axios';
 
 class Api {
-  //baseURL: 'http://192.168.1.51/SportsManagementSystemBE/api/',
+  //  constructor() {
+  //   this.apiClient = axios.create({
+  //     baseURL: 'http://192.168.1.49/SportsManagementSystemBE/api/',
+  //     timeout: 10000,
+  //     headers: {
+  //       'Content-type': 'application/json',
+  //     },
+  //   });
+  // }
   constructor() {
     this.apiClient = axios.create({
-      baseURL: 'http://192.168.1.26/SportsManagementSystemBE/api/',
-      timeout: 10000,
+      baseURL: 'http://192.168.1.50/SportsManagementSystemBE/api/',
+      timeout: 5000,
       headers: {
         'Content-type': 'application/json',
       },
@@ -118,7 +126,13 @@ class Api {
     return this.apiClient.get(`Fixture/GetUsersFixtures?sportsId=${id}`);
   }
   fetchManagerfixtures(id) {
-    // return this.apiClient.get(`Fixture/GetUsersFixtures?sportsId=${id}`);
+    return this.apiClient.get(`Fixture/GetManagerFixtures?userid=${id}`);
+  }
+  fetchteamsandplayers(Fixtureid) {
+    return this.apiClient.get(`Team/PlayingTeams?fixtureId=${Fixtureid}`);
+  }
+  PostCricketScore(payload) {
+    return this.apiClient.post('Scoring/AddOrUpdateCricketScore', payload);
   }
   postimage(formData, config) {
     return this.apiClient.post(`Team/UploadImage`, formData, config);
