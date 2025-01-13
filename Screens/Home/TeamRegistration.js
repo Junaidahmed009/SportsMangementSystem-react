@@ -223,7 +223,7 @@ export default function TeamRegistration() {
       });
 
       // Call the Api.postimage function with the formData and headers
-      const response = await Api.postimage(formData, {
+      const response = await Api.postCricketimages(formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -240,9 +240,6 @@ export default function TeamRegistration() {
       // console.error(error);
       Alert.alert('Error', 'An error occurred while uploading the image.');
     }
-  };
-  const handleplayersRegistration = (teamId, userId, sportsid) => {
-    navigation.navigate('PlayersRegistration', {teamId, userId, sportsid});
   };
 
   return (

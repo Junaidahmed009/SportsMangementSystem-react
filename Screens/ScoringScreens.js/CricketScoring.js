@@ -12,6 +12,8 @@ import {Checkbox, RadioButton} from 'react-native-paper';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Api from '../Api';
 import {useNavigation, useRoute} from '@react-navigation/native';
+import {launchImageLibrary} from 'react-native-image-picker';
+
 export default function CricketScoring() {
   const navigation = useNavigation();
   const route = useRoute();
@@ -94,7 +96,7 @@ export default function CricketScoring() {
   const formatPlayersForDropdown = players =>
     players.map(player => ({
       label: player.PlayerName,
-      value: player.reg_no,
+      value: player.id,
     }));
 
   // Update Dropdown Items Based on Selection
@@ -168,13 +170,66 @@ export default function CricketScoring() {
     // console.log('Dropdown Values:', {value1, value2, value3, value4});
     // console.log('Checked Option:', checked);
   };
+  //for sending only score,wicket and runs
+  const SendEvents = async () => {
+    let payload;
+    if (checked === 'option1') {
+      payload = {
+        fixture_id: Fixtureid,
+        event_type: value1,
+        event_description: team1Data.comments,
+        player_id: value2,
+        secondary_player_id: value3,
+        fielder_id: value4,
+      };
+    } else if (checked === 'option2') {
+      payload = {
+        fixture_id: Fixtureid,
+        event_type: value1,
+        event_description: team1Data.comments,
+        player_id: value2,
+        secondary_player_id: value3,
+        fielder_id: value4,
+      };
+    }
+    console.log(payload);
+    const imgpath = `"${serverImagePath[0]}"`;
+    console.log(imgpath);
+
+    try {
+      console.log(payload);
+      const response = await Api.PostCricketEvents(payload, imgpath);
+      console.log('2');
+      if (response.status === 200) {
+        Alert.alert('Events Updated');
+        setValue1(null);
+      } else {
+        Alert.alert('Issue', 'Some issue in Score upgrdition Try again');
+      }
+    } catch (error) {
+      console.log(error);
+      if (error.response && error.response.status === 404) {
+        Alert.alert('Issue', 'Some issue in Score upgrdition Try again');
+      } else {
+        Alert.alert(
+          'Updation Failed',
+          'An error occurred during Score Updation. Please try again.',
+        );
+      }
+    }
+    // console.log();
+    // console.log('Team 1 Data:', team1Data);
+    // console.log('Team 2 Data:', team2Data);
+    // console.log('Dropdown Values:', {value1, value2, value3, value4});
+    // console.log('Checked Option:', checked);
+  };
   const pickImages = () => {
-    if (serverImagePath.length > 0) {
+    if (serverImagePath) {
       Alert.alert('Error', 'Images have already been selected.');
       return;
     }
     launchImageLibrary(
-      {mediaType: 'photo', quality: 2, selectionLimit: 0}, // Allow multiple selections
+      {mediaType: 'photo', quality: 2}, // Allow multiple selections,, selectionLimit: 0
       response => {
         if (response.didCancel) {
           Alert.alert('Cancelled', 'You cancelled image selection.');
@@ -185,7 +240,7 @@ export default function CricketScoring() {
           );
         } else if (response.assets && response.assets.length > 0) {
           const selectedImages = response.assets;
-          setImageUris(selectedImages.map(image => image.uri)); // Store all selected URIs
+          setImageUri(selectedImages.map(image => image.uri)); // Store all selected URIs
           Alert.alert(
             'Confirm Upload',
             'Do you want to upload the selected images?',
@@ -217,22 +272,21 @@ export default function CricketScoring() {
           name: image.fileName,
         });
       });
-
-      console.log(formData);
       // Call the Api.postimage function with the formData and headers
-      // const response = await Api.postimage(formData, {
-      //   headers: {
-      //     'Content-Type': 'multipart/form-data',
-      //   },
-      // });
+      const response = await Api.postCricketimages(formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
 
-      // if (response.status === 200) {
-      //   const serverPaths = response.data; // Assuming the backend returns an array of paths
-      //   setServerImagePath(serverPaths); // Store all server image paths
-      //   Alert.alert('Success', 'Images uploaded successfully!');
-      // } else {
-      //   Alert.alert('Error', 'Failed to upload images to the server.');
-      // }
+      if (response.status === 200) {
+        const serverPaths = response.data; // Assuming the backend returns an array of paths
+        setServerImagePath(serverPaths); // Store all server image paths
+        console.log(serverPaths);
+        Alert.alert('Success', 'Images uploaded successfully!');
+      } else {
+        Alert.alert('Error', 'Failed to upload images to the server.');
+      }
     } catch (error) {
       Alert.alert('Error', 'An error occurred while uploading the images.');
     }
@@ -358,7 +412,8 @@ export default function CricketScoring() {
         <TouchableOpacity style={styles.actionButton} onPress={SendBackendData}>
           <Text style={styles.actionButtonText}>Save</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.actionButton}>
+
+        <TouchableOpacity style={styles.actionButton} onPress={SendEvents}>
           <Text style={styles.actionButtonText}>End Match</Text>
         </TouchableOpacity>
       </View>
