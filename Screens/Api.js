@@ -12,7 +12,7 @@ class Api {
   // }
   constructor() {
     this.apiClient = axios.create({
-      baseURL: 'http://192.168.1.49/SportsManagementSystemBE/api/',
+      baseURL: 'http://192.168.1.78/SportsManagementSystemBE/api/',
       timeout: 5000,
       headers: {
         'Content-type': 'application/json',
@@ -136,19 +136,15 @@ class Api {
   }
   PostCricketEvents(payload, imgpath) {
     return this.apiClient.post(
-      `MatchEvents/AddMatchEvents?ImgPath=${imgpath}`, // ImgPath in the query string
-      payload, // payload as the request body
+      `MatchEvents/AddMatchEvents?ImgPath=${imgpath}`,
+      payload,
     );
   }
-  // PostCricketEvents(payload, ImgPath) {
-  //   return this.apiClient.post(
-  //     `MatchEvents/AddMatchEvents?ImgPath=${ImgPath}`,
-  //     JSON.stringify(payload), // Convert payload to JSON string
-  //     {
-  //       headers: {'Content-Type': 'application/json'},
-  //     },
-  //   );
-  // }
+  EndCricketMatch(Fixtureid) {
+    return this.apiClient.put(
+      `Scoring/UpdateCricketWinner?fixtureId=${Fixtureid}`,
+    );
+  }
 
   postimage(formData, config) {
     return this.apiClient.post(`Team/UploadImage`, formData, config);

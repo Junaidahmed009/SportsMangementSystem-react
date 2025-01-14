@@ -27,6 +27,7 @@ import Football from './ScoringScreens.js/Football';
 import Badminton from './ScoringScreens.js/Badminton';
 import ImageTest from './Home/ImageTest';
 import StartScoring from './EventManagersScreens/StartScoring';
+import ScoringCard from './ScoringScreens.js/ScoringCard';
 const Stack = createNativeStackNavigator();
 export default function Navigation() {
   return (
@@ -69,6 +70,7 @@ export default function Navigation() {
         <Stack.Screen name="Badminton" component={Badminton} />
         <Stack.Screen name="ImageTest" component={ImageTest} />
         <Stack.Screen name="StartScoring" component={StartScoring} />
+        <Stack.Screen name="ScoringCard" component={ScoringCard} />
       </Stack.Navigator>
     </NavigationContainer>
   );

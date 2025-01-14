@@ -8,7 +8,7 @@ import {
   Alert,
 } from 'react-native';
 import {SafeAreaViewComponent, AppBarComponent} from '../MyComponents';
-import {Checkbox, RadioButton} from 'react-native-paper';
+import {RadioButton} from 'react-native-paper';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Api from '../Api';
 import {useNavigation, useRoute} from '@react-navigation/native';
@@ -137,6 +137,14 @@ export default function CricketScoring() {
         Wickets: team1Data.wickets,
         FixtureId: Fixtureid,
       };
+      if (
+        value1 ||
+        value2 ||
+        value3 ||
+        (serverImagePath && serverImagePath.length > 0)
+      ) {
+        await SendEvents(); // Ensure SendEvents handles async properly
+      }
     } else if (checked === 'option2') {
       payload = {
         Teamid: team2Id,
@@ -145,8 +153,15 @@ export default function CricketScoring() {
         Wickets: team2Data.wickets,
         FixtureId: Fixtureid,
       };
+      if (
+        value1 ||
+        value2 ||
+        value3 ||
+        (serverImagePath && serverImagePath.length > 0)
+      ) {
+        await SendEvents(); // Ensure SendEvents handles async properly
+      }
     }
-
     try {
       const response = await Api.PostCricketScore(payload);
       if (response.status === 200) {
@@ -164,11 +179,6 @@ export default function CricketScoring() {
         );
       }
     }
-    // console.log();
-    // console.log('Team 1 Data:', team1Data);
-    // console.log('Team 2 Data:', team2Data);
-    // console.log('Dropdown Values:', {value1, value2, value3, value4});
-    // console.log('Checked Option:', checked);
   };
   //for sending only score,wicket and runs
   const SendEvents = async () => {
@@ -192,23 +202,21 @@ export default function CricketScoring() {
         fielder_id: value4,
       };
     }
-    console.log(payload);
     const imgpath = `"${serverImagePath[0]}"`;
-    console.log(imgpath);
-
     try {
-      console.log(payload);
       const response = await Api.PostCricketEvents(payload, imgpath);
-      console.log('2');
       if (response.status === 200) {
         Alert.alert('Events Updated');
         setValue1(null);
+        setValue2(null);
+        setValue3(null);
+        setValue4(null);
+        setServerImagePath(' ');
       } else {
         Alert.alert('Issue', 'Some issue in Score upgrdition Try again');
       }
     } catch (error) {
-      console.log(error);
-      if (error.response && error.response.status === 404) {
+      if (error) {
         Alert.alert('Issue', 'Some issue in Score upgrdition Try again');
       } else {
         Alert.alert(
@@ -217,12 +225,8 @@ export default function CricketScoring() {
         );
       }
     }
-    // console.log();
-    // console.log('Team 1 Data:', team1Data);
-    // console.log('Team 2 Data:', team2Data);
-    // console.log('Dropdown Values:', {value1, value2, value3, value4});
-    // console.log('Checked Option:', checked);
   };
+
   const pickImages = () => {
     if (serverImagePath) {
       Alert.alert('Error', 'Images have already been selected.');
@@ -291,6 +295,37 @@ export default function CricketScoring() {
       Alert.alert('Error', 'An error occurred while uploading the images.');
     }
   };
+
+  const EndMatch = async () => {
+    navigation.navigate('ScoringCard', {Fixtureid});
+    //   try {
+    //     const response = await Api.EndCricketMatch(Fixtureid);
+    //     if (response.status === 200) {
+    //       const data = response.data;
+    //       const {Team1, Team2} = data;
+
+    //       setTeam1Id(Team1.TeamId);
+    //       setTeam1Name(Team1.TeamName);
+    //       setTeam1Players(Team1.Players);
+
+    //       setTeam2Id(Team2.TeamId);
+    //       setTeam2Name(Team2.TeamName);
+    //       setTeam2Players(Team2.Players);
+    //     } else {
+    //       Alert.alert('Error', `Unexpected response status: ${response.status}`);
+    //     }
+    //   } catch (error) {
+    //     if (error.response && error.response.status === 404) {
+    //       Alert.alert('No Teams or Players Found.');
+    //     } else if (error.response) {
+    //       Alert.alert('Error fetching data', `Status: ${error.response.status}`);
+    //     } else {
+    //       Alert.alert('Network error', 'Failed to connect to the server.');
+    //     }
+    //   }
+  };
+
+  // const handleScorecard = () => {};
 
   return (
     <SafeAreaViewComponent>
@@ -413,7 +448,7 @@ export default function CricketScoring() {
           <Text style={styles.actionButtonText}>Save</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.actionButton} onPress={SendEvents}>
+        <TouchableOpacity style={styles.actionButton} onPress={EndMatch}>
           <Text style={styles.actionButtonText}>End Match</Text>
         </TouchableOpacity>
       </View>
@@ -471,6 +506,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
+    padding: 6,
   },
   input: {
     borderWidth: 1,
@@ -546,6 +582,7 @@ const styles = StyleSheet.create({
     marginVertical: 10, // Adds some spacing above and below the row
   },
   drop1: {
+    zIndex: 10000, // Higher zIndex for the first dropdown
     marginBottom: 10,
     // flex: 1, // Makes the first dropdown take equal space
     marginHorizontal: 7, // Adds horizontal spacing between dropdowns
