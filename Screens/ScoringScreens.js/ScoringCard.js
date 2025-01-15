@@ -4,6 +4,7 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import Api from '../Api';
@@ -81,8 +82,11 @@ export default function ScoringCard() {
   useEffect(() => {
     FetchTeamsandPlayers();
   }, []);
+  const handlehome = () => {
+    navigation.navigate('StartScoring');
+  };
 
-  const UserData = () => {
+  const UserData = async () => {
     if (
       !value1 ||
       !Player1Score ||
@@ -94,25 +98,38 @@ export default function ScoringCard() {
       Alert.alert('Please Fill All Fields.');
       return; // Exit early if validation fails
     }
-
-    // Proceed only if all fields are filled
     const user1data = {
-      playerid: value1,
-      Score: Player1Score,
-      balls: Player1balls,
-      fixtureid: Fixtureid,
-      // winnerid: winnerid,
-      team1: team1Id,
+      player_id: value1,
+      score: Player1Score,
+      ball_consumed: Player1balls,
+      fixture_id: Fixtureid,
+      team_id: team1Id,
     };
 
     const user2data = {
-      playerid: value2,
-      Score: Player2Score,
-      balls: Player2balls,
-      fixtureid: Fixtureid,
-      // winnerid: winnerid,
-      team1: team1Id,
+      player_id: value2,
+      score: Player2Score,
+      ball_consumed: Player2balls,
+      fixture_id: Fixtureid,
+      team_id: team2Id,
     };
+
+    try {
+      const data = [user1data, user2data];
+      const response = await Api.PosthighScore(data);
+      if (response.status === 200) {
+        Alert.alert('Updated.');
+        handlehome();
+      } else {
+        Alert.alert('Error', `Unexpected response status: ${response.status}`);
+      }
+    } catch (error) {
+      if (error) {
+        Alert.alert('Error', 'Some issue on server please wait and try again');
+      } else {
+        Alert.alert('Network error', 'Failed to connect to the server.');
+      }
+    }
 
     console.log(user1data, user2data);
   };

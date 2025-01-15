@@ -59,7 +59,9 @@ export default function CricketScoring() {
   const [value2, setValue2] = useState(null);
   const [value3, setValue3] = useState(null);
   const [value4, setValue4] = useState(null);
-
+  const handlehome = () => {
+    navigation.navigate('StartScoring');
+  };
   // Fetch Teams and Players
   const FetchTeamsandPlayers = async () => {
     try {
@@ -84,7 +86,8 @@ export default function CricketScoring() {
       } else if (error.response) {
         Alert.alert('Error fetching data', `Status: ${error.response.status}`);
       } else {
-        Alert.alert('Network error', 'Failed to connect to the server.');
+        Alert.alert('Error', 'No Teams Selected.');
+        handlehome();
       }
     }
   };
@@ -126,104 +129,85 @@ export default function CricketScoring() {
       setteam2Data(prevData => ({...prevData, [field]: value}));
     }
   };
-  //for sending only score,wicket and runs
   const SendBackendData = async () => {
-    let payload;
-    if (checked === 'option1') {
-      payload = {
-        Teamid: team1Id,
-        Score: team1Data.score,
-        Over: team1Data.overs,
-        Wickets: team1Data.wickets,
-        FixtureId: Fixtureid,
-      };
-      if (
-        value1 ||
-        value2 ||
-        value3 ||
-        (serverImagePath && serverImagePath.length > 0)
-      ) {
-        await SendEvents(); // Ensure SendEvents handles async properly
-      }
-    } else if (checked === 'option2') {
-      payload = {
-        Teamid: team2Id,
-        Score: team2Data.score,
-        Over: team2Data.overs,
-        Wickets: team2Data.wickets,
-        FixtureId: Fixtureid,
-      };
-      if (
-        value1 ||
-        value2 ||
-        value3 ||
-        (serverImagePath && serverImagePath.length > 0)
-      ) {
-        await SendEvents(); // Ensure SendEvents handles async properly
-      }
+    let payload = {
+      Teamid: checked === 'option1' ? team1Id : team2Id,
+      Score: checked === 'option1' ? team1Data.score : team2Data.score,
+      Over: checked === 'option1' ? team1Data.overs : team2Data.overs,
+      Wickets: checked === 'option1' ? team1Data.wickets : team2Data.wickets,
+      FixtureId: Fixtureid,
+    };
+
+    // Validate required fields for sending events
+    const isEventValid = value1 || value2 || value3;
+    const imgpath =
+      serverImagePath && serverImagePath.length > 0
+        ? `"${serverImagePath[0]}"`
+        : null;
+
+    if (isEventValid && !imgpath) {
+      Alert.alert('Please select an image before submitting events.');
+      return; // Exit if validation fails
     }
+
+    if (isEventValid) {
+      await SendEvents(imgpath); // Pass imgpath to SendEvents
+    }
+
     try {
       const response = await Api.PostCricketScore(payload);
       if (response.status === 200) {
         Alert.alert('Score Updated');
       } else {
-        Alert.alert('Issue', 'Some issue in Score upgrdition Try again');
+        Alert.alert('Issue', 'Some issue in Score updation. Try again.');
       }
     } catch (error) {
-      if (error.response && error.response.status === 404) {
-        Alert.alert('Issue', 'Some issue in Score upgrdition Try again');
-      } else {
-        Alert.alert(
-          'Updation Failed',
-          'An error occurred during Score Updation. Please try again.',
-        );
-      }
+      console.error('Score update error:', error);
+      Alert.alert(
+        'Updation Failed',
+        'An error occurred during Score Updation. Please try again.',
+      );
     }
   };
+
   //for sending only score,wicket and runs
-  const SendEvents = async () => {
-    let payload;
-    if (checked === 'option1') {
-      payload = {
-        fixture_id: Fixtureid,
-        event_type: value1,
-        event_description: team1Data.comments,
-        player_id: value2,
-        secondary_player_id: value3,
-        fielder_id: value4,
-      };
-    } else if (checked === 'option2') {
-      payload = {
-        fixture_id: Fixtureid,
-        event_type: value1,
-        event_description: team1Data.comments,
-        player_id: value2,
-        secondary_player_id: value3,
-        fielder_id: value4,
-      };
+  const SendEvents = async imgpath => {
+    if (!imgpath) {
+      Alert.alert('Please select an image before submitting events.');
+      return; // Exit if no image is selected
     }
-    const imgpath = `"${serverImagePath[0]}"`;
+
+    // Create payload
+    const payload = {
+      fixture_id: Fixtureid,
+      event_type: value1,
+      event_description: team1Data.comments,
+      player_id: value2 || null,
+      secondary_player_id: value3 || null,
+      fielder_id: value4 || null,
+    };
+
+    console.log('Sending Events Payload:', payload);
+
     try {
       const response = await Api.PostCricketEvents(payload, imgpath);
       if (response.status === 200) {
-        Alert.alert('Events Updated');
+        Alert.alert('Event Saved Successfully');
+        // Reset state
         setValue1(null);
         setValue2(null);
         setValue3(null);
         setValue4(null);
-        setServerImagePath(' ');
+        setServerImagePath(''); // Clear image path
       } else {
-        Alert.alert('Issue', 'Some issue in Score upgrdition Try again');
+        Alert.alert('Issue', 'Some issue occurred. Try again.');
       }
     } catch (error) {
-      if (error) {
-        Alert.alert('Issue', 'Some issue in Score upgrdition Try again');
-      } else {
-        Alert.alert(
-          'Updation Failed',
-          'An error occurred during Score Updation. Please try again.',
-        );
-      }
+      console.error('Event update error:', error);
+      Alert.alert(
+        'Updation Failed',
+        'An error occurred during Event Updation. Please try again.',
+      );
     }
   };
 
@@ -295,34 +279,28 @@ export default function CricketScoring() {
       Alert.alert('Error', 'An error occurred while uploading the images.');
     }
   };
+  const handleCardData = () => {
+    navigation.navigate('ScoringCard', {Fixtureid});
+  };
 
   const EndMatch = async () => {
-    navigation.navigate('ScoringCard', {Fixtureid});
-    //   try {
-    //     const response = await Api.EndCricketMatch(Fixtureid);
-    //     if (response.status === 200) {
-    //       const data = response.data;
-    //       const {Team1, Team2} = data;
-
-    //       setTeam1Id(Team1.TeamId);
-    //       setTeam1Name(Team1.TeamName);
-    //       setTeam1Players(Team1.Players);
-
-    //       setTeam2Id(Team2.TeamId);
-    //       setTeam2Name(Team2.TeamName);
-    //       setTeam2Players(Team2.Players);
-    //     } else {
-    //       Alert.alert('Error', `Unexpected response status: ${response.status}`);
-    //     }
-    //   } catch (error) {
-    //     if (error.response && error.response.status === 404) {
-    //       Alert.alert('No Teams or Players Found.');
-    //     } else if (error.response) {
-    //       Alert.alert('Error fetching data', `Status: ${error.response.status}`);
-    //     } else {
-    //       Alert.alert('Network error', 'Failed to connect to the server.');
-    //     }
-    //   }
+    try {
+      const response = await Api.EndCricketMatch(Fixtureid);
+      if (response.status === 200) {
+        Alert.alert('Winner Updated.');
+        handleCardData();
+      } else {
+        Alert.alert('Error', `Unexpected response status: ${response.status}`);
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        Alert.alert('Error', 'Scores for one or both teams not found.');
+      } else if (error.response && error.response.status === 409) {
+        Alert.alert('Error', 'Scores Are Level Please Update');
+      } else {
+        Alert.alert('Network error', 'Failed to connect to the server.');
+      }
+    }
   };
 
   // const handleScorecard = () => {};

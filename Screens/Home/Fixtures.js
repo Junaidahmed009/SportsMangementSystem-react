@@ -1,6 +1,13 @@
 import {useState, useEffect} from 'react';
 import React from 'react';
-import {View, Text, StyleSheet, ScrollView, Alert} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  Alert,
+  TouchableOpacity,
+} from 'react-native';
 import {SafeAreaViewComponent, AppBarComponent} from '../MyComponents';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import Api from '../Api';
@@ -27,6 +34,7 @@ export default function Fixtures() {
           matchDate: item.matchdate,
           venue: item.venuee,
           winnerTeam: item.winner_name,
+          winnerId: item.winnerId,
           matchType: item.matchType,
           sportName: item.sport_name,
           sportType: item.sport_type,
@@ -65,6 +73,9 @@ export default function Fixtures() {
       fixture.team1name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       fixture.team2name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
+  const handleDetails = id => {
+    navigation.navigate('SingleCricketDetails', {id});
+  };
 
   return (
     <SafeAreaViewComponent>
@@ -87,6 +98,13 @@ export default function Fixtures() {
             <Text style={styles.teamBox2}>{fix.winnerTeam}</Text>
             <Text style={styles.matchInfo}>{fix.matchDate}</Text>
             <Text style={styles.matchStatus}>{fix.venue}</Text>
+            {fix.winnerId !== null && (
+              <TouchableOpacity
+                style={styles.detailsButton}
+                onPress={() => handleDetails(fix.fixtureId)}>
+                <Text style={styles.detailsButtonText}>Details</Text>
+              </TouchableOpacity>
+            )}
           </View>
         ))}
       </ScrollView>
@@ -177,6 +195,18 @@ const styles = StyleSheet.create({
     color: '#777',
     textAlign: 'center',
     marginBottom: 10,
+  },
+  detailsButton: {
+    backgroundColor: '#6200ee',
+    borderRadius: 20,
+    paddingVertical: 8,
+    paddingHorizontal: 20,
+    alignSelf: 'center',
+  },
+  detailsButtonText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: 'bold',
   },
   detailsButton: {
     backgroundColor: '#6200ee',

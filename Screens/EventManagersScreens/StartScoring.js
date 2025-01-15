@@ -57,15 +57,23 @@ export default function StartScoring() {
   useEffect(() => {
     FetchFixtures();
   }, []);
+
+  // const handleStartbutton = () => {
+  //   if(fixtures.winnerTeam==='Match Not Started'){
+  //      handleCricketScoring(fix.fixtureId)
+  //   }else{
+  //     display button=not
+  //   }
+  // };
   const handleHome = () => {
-    navigation.navigate('UserHome');
+    navigation.navigate('CricketManagerhome');
   };
   const handleCricketScoring = Fixtureid => {
     navigation.navigate('CricketScoring', {Fixtureid});
   };
-  const printdata = id => {
-    console.log(id);
-  };
+  // const printdata = id => {
+  //   console.log(id);
+  // };
   return (
     <SafeAreaViewComponent>
       <AppBarComponent title={'Fixtures'} handleBackPress={handleHome} />
@@ -81,11 +89,13 @@ export default function StartScoring() {
             <Text style={styles.teamBox2}>{fix.winnerTeam}</Text>
             <Text style={styles.matchInfo}>{fix.matchDate}</Text>
             <Text style={styles.matchStatus}>{fix.venue}</Text>
-            <TouchableOpacity
-              style={styles.detailsButton}
-              onPress={() => handleCricketScoring(fix.fixtureId)}>
-              <Text style={styles.detailsButtonText}>Start Match</Text>
-            </TouchableOpacity>
+            {fix.winnerTeam === 'Match Not Started' && (
+              <TouchableOpacity
+                style={styles.detailsButton}
+                onPress={() => handleCricketScoring(fix.fixtureId)}>
+                <Text style={styles.detailsButtonText}>Start Match</Text>
+              </TouchableOpacity>
+            )}
           </View>
         ))}
       </ScrollView>

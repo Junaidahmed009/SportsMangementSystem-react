@@ -28,6 +28,7 @@ import Badminton from './ScoringScreens.js/Badminton';
 import ImageTest from './Home/ImageTest';
 import StartScoring from './EventManagersScreens/StartScoring';
 import ScoringCard from './ScoringScreens.js/ScoringCard';
+import SingleCricketDetails from './Home/SingleCricketDetails';
 const Stack = createNativeStackNavigator();
 export default function Navigation() {
   return (
@@ -71,6 +72,10 @@ export default function Navigation() {
         <Stack.Screen name="ImageTest" component={ImageTest} />
         <Stack.Screen name="StartScoring" component={StartScoring} />
         <Stack.Screen name="ScoringCard" component={ScoringCard} />
+        <Stack.Screen
+          name="SingleCricketDetails"
+          component={SingleCricketDetails}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
