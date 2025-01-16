@@ -84,6 +84,18 @@ export default function UserHome() {
   const handleFixtures = Sportid => {
     navigation.navigate('Fixtures', {Sportid});
   };
+  const handleInstructions = () => {
+    navigation.navigate('UserInstructions');
+  };
+
+  const handleCaption = () => {
+    if (message === 'Guest') {
+      // console.log(message);
+      Alert.alert('Access Denied', 'Login to view Team Status.');
+    } else {
+      navigation.navigate('CaptionTeams');
+    }
+  };
 
   return (
     <SafeAreaViewComponent>
@@ -109,6 +121,25 @@ export default function UserHome() {
           CustomStyle={styles.enrollButton}
         />
       </View>
+      <View style={styles.container2}>
+        <View style={styles.card}>
+          <View style={styles.buttonContainer2}>
+            <ButtonComponent
+              buttonTitle="Team Status"
+              onPress={handleCaption}
+              CustomStyle={styles.button2}
+              customTextstyle={styles.buttonText2}
+            />
+            <ButtonComponent
+              buttonTitle="Instructions"
+              onPress={handleInstructions}
+              CustomStyle={styles.button2}
+              customTextstyle={styles.buttonText2}
+            />
+          </View>
+        </View>
+      </View>
+      {/* <View style={styles.flatListview}> */}
       <FlatList
         data={Sports}
         renderItem={renderItem}
@@ -116,6 +147,7 @@ export default function UserHome() {
         keyExtractor={item => item.value.toString()}
         contentContainerStyle={styles.flatListContainer}
       />
+      {/* </View> */}
     </SafeAreaViewComponent>
   );
 }
@@ -169,5 +201,38 @@ const styles = StyleSheet.create({
   },
   flatListContainer: {
     padding: 10,
+  },
+  container2: {
+    // flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f5f5f5', // Optional for overall screen
+  },
+  card: {
+    width: '90%',
+    padding: 20,
+    borderRadius: 10,
+    backgroundColor: '#fff',
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  buttonContainer2: {
+    flexDirection: 'row',
+    justifyContent: 'space-between', // Adds space between buttons
+  },
+  button2: {
+    flex: 1,
+    marginHorizontal: 5,
+    backgroundColor: '#6200ee', // Button color
+    padding: 10,
+    borderRadius: 5,
+  },
+  buttonText2: {
+    color: '#fff',
+    textAlign: 'center',
+    fontWeight: 'bold',
   },
 });

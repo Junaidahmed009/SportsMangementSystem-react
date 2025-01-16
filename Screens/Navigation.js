@@ -25,10 +25,11 @@ import EditFixtures from './EventManagersScreens/EditFixtures';
 import CricketScoring from './ScoringScreens.js/CricketScoring';
 import Football from './ScoringScreens.js/Football';
 import Badminton from './ScoringScreens.js/Badminton';
-import ImageTest from './Home/ImageTest';
 import StartScoring from './EventManagersScreens/StartScoring';
 import ScoringCard from './ScoringScreens.js/ScoringCard';
 import SingleCricketDetails from './Home/SingleCricketDetails';
+import CaptionTeams from './Home/CaptionTeams';
+import UserInstructions from './Home/UserInstructions';
 const Stack = createNativeStackNavigator();
 export default function Navigation() {
   return (
@@ -69,13 +70,14 @@ export default function Navigation() {
         <Stack.Screen name="CricketScoring" component={CricketScoring} />
         <Stack.Screen name="Football" component={Football} />
         <Stack.Screen name="Badminton" component={Badminton} />
-        <Stack.Screen name="ImageTest" component={ImageTest} />
         <Stack.Screen name="StartScoring" component={StartScoring} />
         <Stack.Screen name="ScoringCard" component={ScoringCard} />
         <Stack.Screen
           name="SingleCricketDetails"
           component={SingleCricketDetails}
         />
+        <Stack.Screen name="CaptionTeams" component={CaptionTeams} />
+        <Stack.Screen name="UserInstructions" component={UserInstructions} />
       </Stack.Navigator>
     </NavigationContainer>
   );

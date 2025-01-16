@@ -137,6 +137,9 @@ class Api {
   PostCricketScore(payload) {
     return this.apiClient.post('Scoring/AddOrUpdateCricketScore', payload);
   }
+  fetchCaptionTeams(id) {
+    return this.apiClient.get(`Team/GetUserAppliedTeams?userId=${id}`);
+  }
   PostCricketEvents(payload, imgpath) {
     return this.apiClient.post(
       `MatchEvents/AddMatchEvents?ImgPath=${imgpath}`,
