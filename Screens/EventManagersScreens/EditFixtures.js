@@ -72,74 +72,6 @@ export default function EditFixtures() {
     }
   };
 
-  // switch (matchtype) {
-  //   case 'League Match':
-  //     setleagueFixtures(matchtypeFixtures);
-  //     break;
-  //   case 'League Match 2':
-  //     setleague2Fixtures(matchtypeFixtures);
-  //     break;
-  //   case 'Quarter Final':
-  //     setquarterfinalFixtures(matchtypeFixtures);
-  //     break;
-  //   case 'Semi Final':
-  //     setsemifinalFixtures(matchtypeFixtures);
-  //     break;
-  //   case 'Final':
-  //     setfinalFixtures(matchtypeFixtures);
-  //     break;
-  //   default:
-  //     console.warn(`Unknown match type: ${matchtype}`);
-  // }
-
-  // Use matchtypeFixtures directly to avoid relying on asynchronous state
-
-  // const [filterdata, setfilterdata] = useState([]);
-  // const SaveEditedFixtures = async (matchtype, fixture) => {
-  //   let filterdata = [];
-  //   if (matchtype == 'League Match') {
-  //     filterdata = leagueFixtures.map(fixture => ({
-  //       fixtureid: fixture.id,
-  //       team1id: fixture.selectedteamsids[0] || null,
-  //       team2id: fixture.selectedteamsids[1] || null,
-  //     }));
-  //     console.log(filterdata);
-  //   }
-
-  // try {
-  //   const response = await Api.fetchfixtures(userid);
-  //   if (response.status === 200) {
-  //     if (Array.isArray(response.data) && response.data.length > 0) {
-  //       const updateFixtures = response.data.map(fixture => ({
-  //         ...fixture,
-  //         selectedteamsids: [],
-  //       }));
-  //       setFixtures(updateFixtures);
-  //     } else {
-  //       Alert.alert(
-  //         'No Fixtures Found',
-  //         'No cricket Fixtures are available for the current session.',
-  //       );
-  //       setFixtures([]);
-  //     }
-  //   }
-  // } catch (error) {
-  //   console.log(error);
-  //   if (error.response && error.response.status === 404) {
-  //     Alert.alert(
-  //       'No Latest Sessions Found',
-  //       'No cricket Fixtures are available for the current session.',
-  //     );
-  //   } else {
-  //     Alert.alert(
-  //       'Network Error',
-  //       'Failed to connect to the server. Please try again.',
-  //     );
-  //   }
-  //   setFixtures([]);
-  // }
-  // };
-
   //this function is used to fetch fixtures from backend
   const FetchFixtures = async () => {
     try {
@@ -752,3 +684,71 @@ const styles = StyleSheet.create({
 // //     }
 // //   }
 // // };
+
+// switch (matchtype) {
+//   case 'League Match':
+//     setleagueFixtures(matchtypeFixtures);
+//     break;
+//   case 'League Match 2':
+//     setleague2Fixtures(matchtypeFixtures);
+//     break;
+//   case 'Quarter Final':
+//     setquarterfinalFixtures(matchtypeFixtures);
+//     break;
+//   case 'Semi Final':
+//     setsemifinalFixtures(matchtypeFixtures);
+//     break;
+//   case 'Final':
+//     setfinalFixtures(matchtypeFixtures);
+//     break;
+//   default:
+//     console.warn(`Unknown match type: ${matchtype}`);
+// }
+
+// Use matchtypeFixtures directly to avoid relying on asynchronous state
+
+// const [filterdata, setfilterdata] = useState([]);
+// const SaveEditedFixtures = async (matchtype, fixture) => {
+//   let filterdata = [];
+//   if (matchtype == 'League Match') {
+//     filterdata = leagueFixtures.map(fixture => ({
+//       fixtureid: fixture.id,
+//       team1id: fixture.selectedteamsids[0] || null,
+//       team2id: fixture.selectedteamsids[1] || null,
+//     }));
+//     console.log(filterdata);
+//   }
+
+// try {
+//   const response = await Api.fetchfixtures(userid);
+//   if (response.status === 200) {
+//     if (Array.isArray(response.data) && response.data.length > 0) {
+//       const updateFixtures = response.data.map(fixture => ({
+//         ...fixture,
+//         selectedteamsids: [],
+//       }));
+//       setFixtures(updateFixtures);
+//     } else {
+//       Alert.alert(
+//         'No Fixtures Found',
+//         'No cricket Fixtures are available for the current session.',
+//       );
+//       setFixtures([]);
+//     }
+//   }
+// } catch (error) {
+//   console.log(error);
+//   if (error.response && error.response.status === 404) {
+//     Alert.alert(
+//       'No Latest Sessions Found',
+//       'No cricket Fixtures are available for the current session.',
+//     );
+//   } else {
+//     Alert.alert(
+//       'Network Error',
+//       'Failed to connect to the server. Please try again.',
+//     );
+//   }
+//   setFixtures([]);
+// }
+// };

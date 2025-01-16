@@ -129,6 +129,9 @@ export const AppBarComponent = ({handleBackPress, title, CustomStyle}) => (
 export const SafeAreaViewComponent = ({children, CustomStyle}) => (
   <SafeAreaView style={[styles.safeArea, CustomStyle]}>{children}</SafeAreaView>
 );
+export const BASE_URL =
+  'http://192.168.1.35/SportsManagementSystemBE/Resources';
+
 //
 export const Card = ({children, customStyle}) => {
   return <View style={[styles.card, customStyle]}>{children}</View>;

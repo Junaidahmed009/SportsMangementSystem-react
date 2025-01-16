@@ -27,6 +27,7 @@ export default function Login() {
   const handleGuest = () => {
     const responseMessage = 'Guest';
     navigation.navigate('UserHome', {message: responseMessage});
+    // console.log(responseMessage);
   };
 
   const handleLogin = async () => {

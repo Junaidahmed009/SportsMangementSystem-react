@@ -219,7 +219,7 @@ export default function CricketRegistration() {
         Alert.alert('Unexpected response. Please try again.');
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
 
       if (error.response) {
         const {status, data} = error.response;

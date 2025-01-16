@@ -12,7 +12,7 @@ class Api {
   // }
   constructor() {
     this.apiClient = axios.create({
-      baseURL: 'http://192.168.33.136/SportsManagementSystemBE/api/',
+      baseURL: 'http://192.168.1.35/SportsManagementSystemBE/api/',
       timeout: 5000,
       headers: {
         'Content-type': 'application/json',
@@ -94,6 +94,9 @@ class Api {
   }
   FetchCricketTeams() {
     return this.apiClient.get('Team/GetCricketTeams');
+  }
+  FetchallTeams(id) {
+    return this.apiClient.get(`Team/GetunapprovedTeams?id=${id}`);
   }
   TeamStatusUpdate(id) {
     return this.apiClient.put(`Team/UpdateTeamStatus?id=${id}`);

@@ -43,7 +43,7 @@ export default function UserHome() {
         Alert.alert('Error', `Unexpected response status: ${response.status}`);
       }
     } catch (error) {
-      console.error('Error fetching data:', error);
+      // console.error('Error fetching data:', error);
       Alert.alert(
         'Error',
         error.response
@@ -64,6 +64,7 @@ export default function UserHome() {
 
   const handleTeamRegistration = () => {
     if (message === 'Guest') {
+      // console.log(message);
       Alert.alert('Access Denied', 'Guests are not allowed to register teams.');
     } else {
       navigation.navigate('TeamRegistration');

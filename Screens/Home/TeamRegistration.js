@@ -180,7 +180,10 @@ export default function TeamRegistration() {
       // console.error('Error details:', error);
     }
   };
-
+  const handleplayersRegistration = (teamId, userId, sportsid) => {
+    navigation.navigate('PlayersRegistration', {teamId, userId, sportsid});
+    // console.log(teamId, userId, sportsid);
+  };
   const pickImage = () => {
     if (serverImagePath) {
       Alert.alert('Error', 'Image Already selected.');

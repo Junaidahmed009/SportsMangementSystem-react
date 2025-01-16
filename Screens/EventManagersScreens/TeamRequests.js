@@ -10,14 +10,17 @@ import React, {useState, useEffect} from 'react';
 import {SafeAreaViewComponent, AppBarComponent} from '../MyComponents';
 import Api from '../Api';
 import {useNavigation} from '@react-navigation/native';
+import {getUserData} from '../UsersAccount/UserData';
 
 export default function TeamRequests() {
+  const userData = getUserData();
   const navigation = useNavigation();
   const [Teams, setTeams] = useState([]);
 
   const FetchTeams = async () => {
     try {
-      const response = await Api.FetchCricketTeams();
+      const id = userData.id;
+      const response = await Api.FetchallTeams(id);
       if (response.status === 200) {
         if (Array.isArray(response.data) && response.data.length > 0) {
           setTeams(response.data);
@@ -80,8 +83,9 @@ export default function TeamRequests() {
     }
   };
 
-  const handleplayers = Teamid => {
-    navigation.navigate('Players', {Teamid});
+  const handleplayers = (Teamid, image_path) => {
+    navigation.navigate('Players', {Teamid, image_path});
+    console.log(image_path);
   };
   const handleHome = () => {
     navigation.navigate('CricketManagerhome');
@@ -89,7 +93,8 @@ export default function TeamRequests() {
   const renderItem = ({item}) => {
     const handleTeamDetails = () => {
       const Teamid = item.id;
-      handleplayers(Teamid);
+      const imgpath = item.image_path;
+      handleplayers(Teamid, imgpath);
     };
     const handleStatusApprove = () => {
       if (!item.teamStatus) {

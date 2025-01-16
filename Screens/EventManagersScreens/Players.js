@@ -1,14 +1,18 @@
-import {View, Text, StyleSheet, FlatList, Alert} from 'react-native';
+import {View, Text, StyleSheet, FlatList, Alert, Image} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {useNavigation, useRoute} from '@react-navigation/native';
-import {SafeAreaViewComponent, AppBarComponent} from '../MyComponents';
+import {
+  SafeAreaViewComponent,
+  AppBarComponent,
+  BASE_URL,
+} from '../MyComponents';
 import Api from '../Api';
 
 export default function Players() {
   const [players, setplayers] = useState([]);
   const navigation = useNavigation();
   const route = useRoute();
-  const {Teamid} = route.params;
+  const {Teamid, image_path} = route.params;
   const handleteamrequests = () => {
     navigation.navigate('TeamRequests');
   };
@@ -18,6 +22,7 @@ export default function Players() {
       if (response.status === 200) {
         if (Array.isArray(response.data) && response.data.length > 0) {
           setplayers(response.data);
+          // console.log(`${BASE_URL}${image_path}`);
         } else {
           Alert.alert('Alert', 'No Players Found for Team.');
         }
@@ -45,13 +50,23 @@ export default function Players() {
       </Text>
     </View>
   );
-
+  // const baseUrl = 'http://192.168.1.35/SportsManagementSystemBE/Resources';
   return (
     <SafeAreaViewComponent>
       <AppBarComponent
         title={'Team Details'}
         handleBackPress={handleteamrequests}
       />
+      <View style={styles.teamImageContainer}>
+        <Text style={styles.cardText}>Team Logo</Text>
+        <Image
+          source={{uri: `${BASE_URL}${image_path}`}}
+          style={styles.teamImage}
+        />
+      </View>
+      <View style={styles.cardText3}>
+        <Text style={styles.cardText2}>Team Members</Text>
+      </View>
       <FlatList
         data={players}
         keyExtractor={item => item.id}
@@ -62,6 +77,34 @@ export default function Players() {
   );
 }
 const styles = StyleSheet.create({
+  cardText: {
+    marginTop: 6,
+    marginBottom: 6,
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  cardText2: {
+    marginTop: 6,
+    marginBottom: 6,
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  cardText3: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  teamImageContainer: {
+    alignItems: 'center',
+    marginBottom: 20,
+    padding: 10,
+  },
+  teamImage: {
+    width: '90%',
+    height: 200,
+    borderRadius: 10,
+  },
   listContainer: {
     padding: 10,
   },
