@@ -1,14 +1,11 @@
 import {useState, useEffect} from 'react';
 import React from 'react';
+import {View, Text, StyleSheet, ScrollView, Alert, Image} from 'react-native';
 import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  Alert,
-  TouchableOpacity,
-} from 'react-native';
-import {SafeAreaViewComponent, AppBarComponent} from '../MyComponents';
+  SafeAreaViewComponent,
+  AppBarComponent,
+  BASE_URL,
+} from '../MyComponents';
 import {useNavigation} from '@react-navigation/native';
 import Api from '../Api';
 import {getUserData} from '../UsersAccount/UserData';
@@ -34,9 +31,6 @@ export default function CaptionTeams() {
           sport: item.sport,
         }));
         setTeamsdata(TeamsData);
-        // if (fixtureData.length > 0) {
-        //   setsporttitle(fixtureData[0].sportName);
-        // }
       } else {
         Alert.alert('Error', `Unexpected response status: ${response.status}`);
       }
@@ -54,51 +48,38 @@ export default function CaptionTeams() {
       }
     }
   };
-
   useEffect(() => {
-    fetchCaptionTeams();
+    FetchCaptionTeams();
   }, []);
   const handleHome = () => {
     navigation.navigate('UserHome');
   };
-  // Filter fixtures based on search query
-  //   const filteredFixtures = fixtures.filter(
-  //     fixture =>
-  //       fixture.team1name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-  //       fixture.team2name.toLowerCase().includes(searchQuery.toLowerCase()),
-  //   );
-  //   const handleDetails = id => {
-  //     navigation.navigate('SingleCricketDetails', {id});
-  //   };
 
   return (
     <SafeAreaViewComponent>
       <AppBarComponent title={'Caption Teams'} handleBackPress={handleHome} />
-      {/* <Searchbar
-        placeholder="Search by Team name"
-        value={searchQuery}
-        onChangeText={setSearchQuery}
-        style={styles.searchBar}
-      /> */}
       <ScrollView contentContainerStyle={styles.content}>
         {Teamsdata.map((team, index) => (
           <View key={index} style={styles.card}>
-            <Text style={styles.matchTitle2}>{team.Tname}</Text>
-            <View style={styles.teamsContainer}>
-              <Text style={styles.teamBox}>{team.teamStatus}</Text>
-              <Text style={styles.vsText}>VS</Text>
-              <Text style={styles.teamBox}>{team.className}</Text>
+            <View style={styles.cardContent}>
+              {/* Left Section: Team Image */}
+              <View style={styles.teamImageContainer}>
+                <Image
+                  source={{uri: `${BASE_URL}${team.image_path}`}}
+                  style={styles.teamImage}
+                />
+              </View>
+
+              {/* Right Section: Team Details */}
+              <View style={styles.teamDetailsContainer}>
+                <Text style={styles.teamName}>{team.Tname}</Text>
+                <Text style={styles.detailText}>{team.className}</Text>
+                <Text style={styles.detailText}>{team.sport}</Text>
+                <Text style={styles.statusText}>
+                  {team.teamStatus === true ? 'Approved' : 'Unapproved'}
+                </Text>
+              </View>
             </View>
-            <Text style={styles.teamBox2}>{team.sport}</Text>
-            {/* <Text style={styles.matchInfo}>{fix.matchDate}</Text>
-            <Text style={styles.matchStatus}>{fix.venue}</Text> */}
-            {/* {fix.winnerId !== null && (
-              <TouchableOpacity
-                style={styles.detailsButton}
-                onPress={() => handleDetails(fix.fixtureId)}>
-                <Text style={styles.detailsButtonText}>Details</Text>
-              </TouchableOpacity>
-            )} */}
           </View>
         ))}
       </ScrollView>
@@ -107,110 +88,50 @@ export default function CaptionTeams() {
 }
 
 const styles = StyleSheet.create({
-  searchBar: {
-    marginTop: 10,
-    marginBottom: 10,
-    marginHorizontal: 8,
-    backgroundColor: '#EEEFF5',
-  },
   content: {
     padding: 16,
   },
   card: {
     backgroundColor: '#fff',
     borderRadius: 10,
-    padding: 20,
+    padding: 10,
     marginBottom: 15,
+    flexDirection: 'row',
+    alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 2,
   },
-  matchTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 10,
-    textAlign: 'center',
-  },
-  matchTitle2: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 10,
-    textAlign: 'center',
-  },
-  teamsContainer: {
+  cardContent: {
     flexDirection: 'row',
-    justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 10,
   },
-  teamBox: {
-    // borderWidth: 1,
-    // borderColor: '#333',
-    borderRadius: 5,
-    paddingVertical: 5,
-    paddingHorizontal: 15,
-    textAlign: 'center',
-    fontSize: 16,
+  teamImageContainer: {
+    marginRight: 16,
+  },
+  teamImage: {
+    width: 80, // Small rectangle size
+    height: 80,
+    borderRadius: 10,
+  },
+  teamDetailsContainer: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  teamName: {
+    fontSize: 18,
     fontWeight: 'bold',
-    color: 'black',
-    // color: 'black',
-  },
-  teamBox2: {
-    // borderWidth: 1,
-    // borderColor: '#333',
-    borderRadius: 5,
-    paddingVertical: 5,
-    paddingHorizontal: 15,
-    textAlign: 'center',
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: 'black',
-    marginTop: -5,
-    // color: 'black',
-  },
-  vsText: {
-    marginHorizontal: 10,
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: 'black',
-  },
-  matchInfo: {
-    fontSize: 14,
-    color: '#555',
-    textAlign: 'center',
+    color: '#333',
     marginBottom: 5,
   },
-  matchStatus: {
+  detailText: {
     fontSize: 14,
-    color: '#777',
-    textAlign: 'center',
-    marginBottom: 10,
+    color: '#555',
+    marginBottom: 3,
   },
-  detailsButton: {
-    backgroundColor: '#6200ee',
-    borderRadius: 20,
-    paddingVertical: 8,
-    paddingHorizontal: 20,
-    alignSelf: 'center',
-  },
-  detailsButtonText: {
-    color: '#fff',
-    fontSize: 14,
-    fontWeight: 'bold',
-  },
-  detailsButton: {
-    backgroundColor: '#6200ee',
-    borderRadius: 20,
-    paddingVertical: 8,
-    paddingHorizontal: 20,
-    alignSelf: 'center',
-  },
-  detailsButtonText: {
-    color: '#fff',
+  statusText: {
     fontSize: 14,
     fontWeight: 'bold',
   },

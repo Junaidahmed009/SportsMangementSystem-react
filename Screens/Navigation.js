@@ -23,7 +23,7 @@ import CricketMatchDetails from './Home/CricketMatchDetails';
 import Test1 from './EventManagersScreens/Test1';
 import EditFixtures from './EventManagersScreens/EditFixtures';
 import CricketScoring from './ScoringScreens.js/CricketScoring';
-import Football from './ScoringScreens.js/Football';
+import FootballScoring from './ScoringScreens.js/FootballScoring';
 import Badminton from './ScoringScreens.js/Badminton';
 import StartScoring from './EventManagersScreens/StartScoring';
 import ScoringCard from './ScoringScreens.js/ScoringCard';
@@ -68,7 +68,7 @@ export default function Navigation() {
         <Stack.Screen name="Test1" component={Test1} />
         <Stack.Screen name="EditFixtures" component={EditFixtures} />
         <Stack.Screen name="CricketScoring" component={CricketScoring} />
-        <Stack.Screen name="Football" component={Football} />
+        <Stack.Screen name="FootballScoring" component={FootballScoring} />
         <Stack.Screen name="Badminton" component={Badminton} />
         <Stack.Screen name="StartScoring" component={StartScoring} />
         <Stack.Screen name="ScoringCard" component={ScoringCard} />

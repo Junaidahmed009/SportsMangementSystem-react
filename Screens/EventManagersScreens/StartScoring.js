@@ -68,8 +68,12 @@ export default function StartScoring() {
   const handleHome = () => {
     navigation.navigate('CricketManagerhome');
   };
-  const handleCricketScoring = Fixtureid => {
-    navigation.navigate('CricketScoring', {Fixtureid});
+  const handleCricketScoring = (Fixtureid, sportName) => {
+    if (sportName === 'Cricket') {
+      navigation.navigate('CricketScoring', {Fixtureid});
+    } else if (sportName === 'Football') {
+      navigation.navigate('FootballScoring', {Fixtureid});
+    }
   };
   // const printdata = id => {
   //   console.log(id);
@@ -92,7 +96,9 @@ export default function StartScoring() {
             {fix.winnerTeam === 'Match Not Started' && (
               <TouchableOpacity
                 style={styles.detailsButton}
-                onPress={() => handleCricketScoring(fix.fixtureId)}>
+                onPress={() =>
+                  handleCricketScoring(fix.fixtureId, fix.sportName)
+                }>
                 <Text style={styles.detailsButtonText}>Start Match</Text>
               </TouchableOpacity>
             )}
