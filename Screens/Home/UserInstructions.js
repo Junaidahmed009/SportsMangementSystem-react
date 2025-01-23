@@ -33,10 +33,10 @@ export default function UserInstructions() {
             }));
             setItems1(sportOptions);
           } else {
-            console.error('Expected an array but got:', response.data);
+            Alert.alert('Expected an array but got:', response.data);
           }
         } else {
-          console.error('Unexpected response status:', response.status);
+          Alert.alert('Unexpected response status:', response.status);
         }
       } catch (error) {
         if (error.response) {
@@ -112,7 +112,7 @@ export default function UserInstructions() {
         />
 
         <TouchableOpacity style={styles.button} onPress={fetchRules}>
-          <Text style={styles.buttonText}>Get Rules</Text>
+          <Text style={styles.buttonText}>Get Instructions</Text>
         </TouchableOpacity>
 
         <TextInput

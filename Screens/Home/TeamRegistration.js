@@ -181,7 +181,12 @@ export default function TeamRegistration() {
     }
   };
   const handleplayersRegistration = (teamId, userId, sportsid) => {
-    navigation.navigate('PlayersRegistration', {teamId, userId, sportsid});
+    navigation.navigate('PlayersRegistration', {
+      teamId,
+      userId,
+      sportsid,
+      valueSemNo,
+    });
     // console.log(teamId, userId, sportsid);
   };
   const pickImage = () => {

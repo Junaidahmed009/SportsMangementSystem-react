@@ -32,12 +32,14 @@ export default function CricketScoring() {
   const [team1Data, setteam1Data] = useState({
     score: '',
     overs: '',
+    ballNo: '',
     wickets: '',
     comments: '',
   });
   const [team2Data, setteam2Data] = useState({
     score: '',
     overs: '',
+    ballNo: '',
     wickets: '',
     comments: '',
   });
@@ -341,8 +343,16 @@ export default function CricketScoring() {
           style={styles.input}
           placeholder="Overs"
           keyboardType="numeric"
-          value={checked === 'option1' ? team1Data.overs : team2Data.overs}
-          onChangeText={value => handleInputChange('overs', value)}
+          value={checked === 'option1' ? team1Data.score : team2Data.score}
+          onChangeText={value => handleInputChange('score', value)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="BallNO"
+          keyboardType="numeric"
+          value={checked === 'option1' ? team1Data.ballNo : team2Data.ballNo}
+          onChangeText={value => handleInputChange('ballNo', value)}
+          wfes
         />
         <TextInput
           style={styles.input}
@@ -491,8 +501,9 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderRadius: 8,
     padding: 10,
-    width: '30%',
+    width: '23%',
     textAlign: 'center',
+    backgroundColor: 'pink',
   },
   commentsInput: {
     borderWidth: 1,
@@ -503,6 +514,7 @@ const styles = StyleSheet.create({
     height: 100,
     marginVertical: 10,
     textAlignVertical: 'top',
+    backgroundColor: 'pink',
   },
   addImageButton: {
     backgroundColor: '#6200ee',

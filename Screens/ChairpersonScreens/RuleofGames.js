@@ -35,10 +35,10 @@ export default function RuleofGames() {
             }));
             setItems1(sportOptions);
           } else {
-            console.error('Expected an array but got:', response.data);
+            Alert.alert('Expected an array but got:', response.data);
           }
         } else {
-          console.error('Unexpected response status:', response.status);
+          Alert.alert('Network error', 'Failed to connect to server.');
         }
       } catch (error) {
         if (error.response) {
@@ -72,7 +72,7 @@ export default function RuleofGames() {
           setShowSecondButton(true);
           setText(rulesText);
         } else {
-          Alert.alert('No rules found.');
+          Alert.alert('No Instructions found.');
           setText('');
         }
       } else {
@@ -80,13 +80,18 @@ export default function RuleofGames() {
       }
     } catch (error) {
       if (error.response && error.response.status === 404) {
-        Alert.alert('No Rules found for given Sport.');
+        setShowTextBox(true);
+        setShowSecondButton(true);
+        Alert.alert('No Instructions found for given Sport.');
       } else if (error.response) {
-        Alert.alert('Error fetching rules', `Status: ${error.response.status}`);
+        Alert.alert(
+          'Error fetching Instructions',
+          `Status: ${error.response.status}`,
+        );
       } else {
         Alert.alert('Network error', 'Failed to connect to server.');
       }
-      setText('Error fetching rules.');
+      setText('Want To Add Some Instructions.');
     }
   };
 
@@ -123,11 +128,9 @@ export default function RuleofGames() {
       if (error.response) {
         // Handle server error
         Alert.alert('Error saving data', `Status: ${error.response.status}`);
-        console.error('Error response:', error.response);
       } else if (error.request) {
         // Handle network error
         Alert.alert('Network error', 'Failed to connect to server.');
-        console.error('Error request:', error.request);
       }
     }
   };
@@ -157,7 +160,7 @@ export default function RuleofGames() {
         />
 
         <TouchableOpacity style={styles.button} onPress={fetchRules}>
-          <Text style={styles.buttonText}>Get Rules</Text>
+          <Text style={styles.buttonText}>Get Instructions</Text>
         </TouchableOpacity>
 
         {showTextBox && (

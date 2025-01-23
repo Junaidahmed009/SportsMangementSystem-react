@@ -74,7 +74,7 @@ export default function Fixtures() {
       fixture.team2name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
   const handleDetails = id => {
-    navigation.navigate('SingleCricketDetails', {id});
+    navigation.navigate('SingleMatchDetails', {id});
   };
 
   return (

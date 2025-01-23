@@ -27,6 +27,9 @@ function Chairperson() {
   const handleViewManagers = () => {
     navigation.navigate('ViewManagers');
   };
+  const handleAddNewGame = () => {
+    navigation.navigate('AddNewGame');
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -68,14 +71,14 @@ function Chairperson() {
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.buttonlogin}
-            onPress={() => console.log('Pressed')}>
-            <Text style={styles.buttontext}>Sessions</Text>
+            onPress={handleAddNewGame}>
+            <Text style={styles.buttontext}>Add Game</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={styles.buttonlogin}
             onPress={() => console.log('Pressed')}>
-            <Text style={styles.buttontext}>View Games</Text>
+            <Text style={styles.buttontext}>Sessions</Text>
           </TouchableOpacity>
         </View>
 

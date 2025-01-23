@@ -19,14 +19,15 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 export default function CricketRegistration() {
   const navigation = useNavigation();
   const route = useRoute();
-  const {teamId, userId, sportsid} = route.params;
+  const {teamId, userId, sportsid, valueSemNo} = route.params;
 
   const [openCourse, setOpenCourse] = useState(false);
   const [openSection, setOpenSection] = useState(false);
-  const [openSemNo, setOpenSemNo] = useState(false);
+  // const [openSemNo, setOpenSemNo] = useState(false);
   const [valueCourse, setValueCourse] = useState(null);
   const [valueSection, setValueSection] = useState(null);
-  const [valueSemNo, setValueSemNo] = useState(null);
+
+  const [valueSem, setValueSem] = useState(null);
 
   const [open1, setOpen1] = useState(false);
   const [value1, setValue1] = useState(null);
@@ -40,16 +41,16 @@ export default function CricketRegistration() {
     {label: 'BSCS(AI)', value: 'BSCS(AI)'},
     {label: 'BSSE', value: 'BSSE'},
   ];
-  const Semesterno = [
-    {label: '1', value: '1'},
-    {label: '2', value: '2'},
-    {label: '3', value: '3'},
-    {label: '4', value: '4'},
-    {label: '5', value: '5'},
-    {label: '6', value: '6'},
-    {label: '7', value: '7'},
-    {label: '8', value: '8'},
-  ];
+  // const Semesterno = [
+  //   {label: '1', value: '1'},
+  //   {label: '2', value: '2'},
+  //   {label: '3', value: '3'},
+  //   {label: '4', value: '4'},
+  //   {label: '5', value: '5'},
+  //   {label: '6', value: '6'},
+  //   {label: '7', value: '7'},
+  //   {label: '8', value: '8'},
+  // ];
   const Sections = [
     {label: 'A', value: 'A'},
     {label: 'B', value: 'B'},
@@ -77,6 +78,7 @@ export default function CricketRegistration() {
         response.data.forEach(user => {
           userdata.push({name: user.Name, reg_no: user.Reg_no});
           setuserGender(user.Gender);
+          setValueSem(valueSemNo);
         });
         setSelectedPlayers(prevPlayers => [...prevPlayers, ...userdata]);
         setRegNosArray(prevRegNos => [
@@ -100,12 +102,13 @@ export default function CricketRegistration() {
 
     try {
       const Gender = userGender;
+      // const SemNo = valueSemNo;
       const response = await Api.fetchstudents(
         valueCourse,
         valueSection,
-        valueSemNo,
-        Gender,
+        valueSem,
       );
+      //Gender,
       if (response.status === 200 && Array.isArray(response.data)) {
         Alert.alert('Check the list & Select players');
         const Studentdata = response.data.map(student => ({
@@ -290,13 +293,13 @@ export default function CricketRegistration() {
             placeholder="Section"
           />
         </View>
-        <View style={styles.dropdownContainer}>
+        {/* <View style={styles.dropdownContainer}>/
           <DropdownComponent
             CustomStyle={{width: '90%', height: 50}}
             dropDownContainerStyle={{
               width: '90%',
               position: 'absolute',
-              zIndex: 10000,
+              // zIndex: 10000,
             }}
             open={openSemNo}
             value={valueSemNo}
@@ -305,7 +308,7 @@ export default function CricketRegistration() {
             setValue={setValueSemNo}
             placeholder="SemNo"
           />
-        </View>
+        </View> */}
       </View>
       <View style={styles.buttons}>
         <ButtonComponent
