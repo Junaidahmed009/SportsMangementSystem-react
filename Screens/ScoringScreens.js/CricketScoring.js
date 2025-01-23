@@ -8,7 +8,7 @@ import {
   Alert,
 } from 'react-native';
 import {SafeAreaViewComponent, AppBarComponent} from '../MyComponents';
-import {RadioButton} from 'react-native-paper';
+import {RadioButton, Checkbox} from 'react-native-paper';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Api from '../Api';
 import {useNavigation, useRoute} from '@react-navigation/native';
@@ -21,8 +21,12 @@ export default function CricketScoring() {
 
   const [imageUri, setImageUri] = useState(null);
   const [serverImagePath, setServerImagePath] = useState(null);
+  const [numbers, setNumbers] = useState([0, 1, 2, 3, 4, 5, 6]);
+  const [scorechecked, setscorechecked] = useState(null); // Tracks the selected radio button
 
   const [checked, setChecked] = useState('option1');
+  const [box1checked, setbox1checked] = useState(false);
+  const [box2checked, setbox2checked] = useState(false);
   const [team1Id, setTeam1Id] = useState(null);
   const [team1Name, setTeam1Name] = useState('');
   const [team1Players, setTeam1Players] = useState([]);
@@ -31,25 +35,19 @@ export default function CricketScoring() {
   const [team2Players, setTeam2Players] = useState([]);
   const [team1Data, setteam1Data] = useState({
     score: '',
-    overs: '',
-    ballNo: '',
-    wickets: '',
-    comments: '',
+    overs: 0,
+    ballNo: 0,
+    // wickets: '',
+    // comments: '',
   });
   const [team2Data, setteam2Data] = useState({
     score: '',
-    overs: '',
-    ballNo: '',
-    wickets: '',
-    comments: '',
+    overs: 0,
+    ballNo: 0,
+    // wickets: '',
+    // comments: '',
   });
-  const [items1, setItems1] = useState([
-    {label: 'Four', value: 'Four'},
-    {label: 'Six', value: 'Six'},
-    {label: 'Bowled', value: 'Bowled'},
-    {label: 'Catch', value: 'Catch'},
-    {label: 'Run Out', value: 'Run Out'},
-  ]);
+  const [items1, setItems1] = useState([]);
   const [items2, setItems2] = useState([]);
   const [items3, setItems3] = useState([]);
   const [items4, setItems4] = useState([]);
@@ -108,10 +106,12 @@ export default function CricketScoring() {
   const handleTeamSwitch = () => {
     if (team1Players.length > 0 && team2Players.length > 0) {
       if (checked === 'option1') {
+        setItems1(formatPlayersForDropdown(team1Players)); // Batsman
         setItems2(formatPlayersForDropdown(team1Players)); // Batsman
         setItems3(formatPlayersForDropdown(team2Players)); // Bowler
         setItems4(formatPlayersForDropdown(team2Players)); // Fielder
       } else if (checked === 'option2') {
+        setItems1(formatPlayersForDropdown(team2Players)); // Batsman
         setItems2(formatPlayersForDropdown(team2Players)); // Batsman
         setItems3(formatPlayersForDropdown(team1Players)); // Bowler
         setItems4(formatPlayersForDropdown(team1Players)); // Fielder
@@ -131,87 +131,117 @@ export default function CricketScoring() {
       setteam2Data(prevData => ({...prevData, [field]: value}));
     }
   };
+  const incrementBallNo = () => {
+    if (checked === 'option1') {
+      if (team1Data.ballNo >= 6) {
+        setteam1Data(prevData => ({
+          ...prevData,
+          overs: prevData.overs + 1,
+          ballNo: 0,
+        }));
+        Alert.alert('Over Completed');
+        return;
+      }
+      setteam1Data(prevData => ({...prevData, ballNo: prevData.ballNo + 1}));
+    } else if (checked === 'option2') {
+      if (team2Data.ballNo >= 6) {
+        setteam2Data(prevData => ({
+          ...prevData,
+          overs: prevData.overs + 1,
+          ballNo: 0,
+        }));
+        Alert.alert('Over Completed');
+        return;
+      }
+      setteam2Data(prevData => ({...prevData, ballNo: prevData.ballNo + 1}));
+    }
+  };
   const SendBackendData = async () => {
     let payload = {
       Teamid: checked === 'option1' ? team1Id : team2Id,
       Score: checked === 'option1' ? team1Data.score : team2Data.score,
       Over: checked === 'option1' ? team1Data.overs : team2Data.overs,
-      Wickets: checked === 'option1' ? team1Data.wickets : team2Data.wickets,
+      Wickets: checked === 'option1' ? team1Data.ballNo : team2Data.ballNo,
+      Striker: value1,
+      non_striker: value2 || null,
+      Bowler: value3 || null,
+      fielder_id: value4 || null,
       FixtureId: Fixtureid,
     };
+    console.log(payload);
 
     // Validate required fields for sending events
-    const isEventValid = value1 || value2 || value3;
-    const imgpath =
-      serverImagePath && serverImagePath.length > 0
-        ? `"${serverImagePath[0]}"`
-        : null;
+    // const isEventValid = value1 || value2 || value3;
+    // const imgpath =
+    //   serverImagePath && serverImagePath.length > 0
+    //     ? `"${serverImagePath[0]}"`
+    //     : null;
 
-    if (isEventValid && !imgpath) {
-      Alert.alert('Please select an image before submitting events.');
-      return; // Exit if validation fails
-    }
+    // if (isEventValid && !imgpath) {
+    //   Alert.alert('Please select an image before submitting events.');
+    //   return; // Exit if validation fails
+    // }
 
-    if (isEventValid) {
-      await SendEvents(imgpath); // Pass imgpath to SendEvents
-    }
+    // if (isEventValid) {
+    //   await SendEvents(imgpath); // Pass imgpath to SendEvents
+    // }
 
-    try {
-      const response = await Api.PostCricketScore(payload);
-      if (response.status === 200) {
-        Alert.alert('Score Updated');
-      } else {
-        Alert.alert('Issue', 'Some issue in Score updation. Try again.');
-      }
-    } catch (error) {
-      console.error('Score update error:', error);
-      Alert.alert(
-        'Updation Failed',
-        'An error occurred during Score Updation. Please try again.',
-      );
-    }
+    // try {
+    //   const response = await Api.PostCricketScore(payload);
+    //   if (response.status === 200) {
+    //     Alert.alert('Score Updated');
+    //   } else {
+    //     Alert.alert('Issue', 'Some issue in Score updation. Try again.');
+    //   }
+    // } catch (error) {
+    //   console.error('Score update error:', error);
+    //   Alert.alert(
+    //     'Updation Failed',
+    //     'An error occurred during Score Updation. Please try again.',
+    //   );
+    // }
   };
 
   //for sending only score,wicket and runs
-  const SendEvents = async imgpath => {
-    if (!imgpath) {
-      Alert.alert('Please select an image before submitting events.');
-      return; // Exit if no image is selected
-    }
+  // const SendEvents = async imgpath => {
+  //   if (!imgpath) {
+  //     Alert.alert('Please select an image before submitting events.');
+  //     return; // Exit if no image is selected
+  //   }
 
-    // Create payload
-    const payload = {
-      fixture_id: Fixtureid,
-      event_type: value1,
-      event_description: team1Data.comments,
-      player_id: value2 || null,
-      secondary_player_id: value3 || null,
-      fielder_id: value4 || null,
-    };
+  //   // Create payload
+  //   const payload = {
+  //     fixture_id: Fixtureid,
+  //     event_type: value1,
+  //     event_description: team1Data.comments,
+  //     player_id: value2 || null,
+  //     secondary_player_id: value3 || null,
+  //     fielder_id: value4 || null,
+  //   };
 
-    console.log('Sending Events Payload:', payload);
+  //   console.log('Sending Events Payload:', payload);
 
-    try {
-      const response = await Api.PostCricketEvents(payload, imgpath);
-      if (response.status === 200) {
-        Alert.alert('Event Saved Successfully');
-        // Reset state
-        setValue1(null);
-        setValue2(null);
-        setValue3(null);
-        setValue4(null);
-        setServerImagePath(''); // Clear image path
-      } else {
-        Alert.alert('Issue', 'Some issue occurred. Try again.');
-      }
-    } catch (error) {
-      console.error('Event update error:', error);
-      Alert.alert(
-        'Updation Failed',
-        'An error occurred during Event Updation. Please try again.',
-      );
-    }
-  };
+  //   try {
+  //     const response = await Api.PostCricketEvents(payload, imgpath);
+  //     if (response.status === 200) {
+  //       Alert.alert('Event Saved Successfully');
+  //       // Reset state
+  //       setValue1(null);
+  //       setValue2(null);
+  //       setValue3(null);
+  //       setValue4(null);
+  //       setServerImagePath(''); // Clear image path
+  //     } else {
+  //       Alert.alert('Issue', 'Some issue occurred. Try again.');
+  //     }
+  //   } catch (error) {
+  //     console.error('Event update error:', error);
+  //     Alert.alert(
+  //       'Updation Failed',
+  //       'An error occurred during Event Updation. Please try again.',
+  //     );
+  //   }
+  // };
 
   const pickImages = () => {
     if (serverImagePath) {
@@ -281,31 +311,43 @@ export default function CricketScoring() {
       Alert.alert('Error', 'An error occurred while uploading the images.');
     }
   };
-  const handleCardData = () => {
-    navigation.navigate('ScoringCard', {Fixtureid});
-  };
+  // const handleCardData = () => {
+  //   navigation.navigate('ScoringCard', {Fixtureid});
+  // };
 
-  const EndMatch = async () => {
-    try {
-      const response = await Api.EndCricketMatch(Fixtureid);
-      if (response.status === 200) {
-        Alert.alert('Winner Updated.');
-        handleCardData();
-      } else {
-        Alert.alert('Error', `Unexpected response status: ${response.status}`);
-      }
-    } catch (error) {
-      if (error.response && error.response.status === 404) {
-        Alert.alert('Error', 'Scores for one or both teams not found.');
-      } else if (error.response && error.response.status === 409) {
-        Alert.alert('Error', 'Scores Are Level Please Update');
-      } else {
-        Alert.alert('Network error', 'Failed to connect to the server.');
-      }
+  // const EndMatch = async () => {
+  //   try {
+  //     const response = await Api.EndCricketMatch(Fixtureid);
+  //     if (response.status === 200) {
+  //       Alert.alert('Winner Updated.');
+  //       handleCardData();
+  //     } else {
+  //       Alert.alert('Error', `Unexpected response status: ${response.status}`);
+  //     }
+  //   } catch (error) {
+  //     if (error.response && error.response.status === 404) {
+  //       Alert.alert('Error', 'Scores for one or both teams not found.');
+  //     } else if (error.response && error.response.status === 409) {
+  //       Alert.alert('Error', 'Scores Are Level Please Update');
+  //     } else {
+  //       Alert.alert('Network error', 'Failed to connect to the server.');
+  //     }
+  //   }
+  // };
+
+  const handleRadioPress = num => {
+    setscorechecked(num); // Set the selected number
+    if (checked === 'option1') {
+      setteam1Data(prevData => ({...prevData, score: num}));
+    } else {
+      setteam2Data(prevData => ({...prevData, score: num}));
     }
+    // console.log(`Selected Number: ${num}`); // Print the selected number
   };
-
-  // const handleScorecard = () => {};
+  useEffect(() => {
+    // Reset the selected radio button when switching between options
+    setscorechecked(null);
+  }, [checked]);
 
   return (
     <SafeAreaViewComponent>
@@ -336,53 +378,88 @@ export default function CricketScoring() {
           style={styles.input}
           placeholder="Score"
           keyboardType="numeric"
-          value={checked === 'option1' ? team1Data.score : team2Data.score}
-          onChangeText={value => handleInputChange('score', value)}
+          value={
+            checked === 'option1' ? `${team1Data.score}` : `${team2Data.score}`
+          }
+          // onChangeText={value => handleInputChange('score', value)}
+          editable={false} // Make the field read-only
+          placeholderTextColor="black"
         />
         <TextInput
-          style={styles.input}
+          style={styles.input2}
           placeholder="Overs"
           keyboardType="numeric"
-          value={checked === 'option1' ? team1Data.score : team2Data.score}
-          onChangeText={value => handleInputChange('score', value)}
+          value={
+            checked === 'option1' ? `${team1Data.overs}` : `${team2Data.overs}`
+          }
+          onChangeText={value => handleInputChange('overs', value)}
+          placeholderTextColor="black"
         />
+        {/* <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.button} onPress={incrementOverNo}>
+            <Text style={styles.buttonText}>^</Text>
+          </TouchableOpacity>
+        </View> */}
         <TextInput
-          style={styles.input}
+          style={styles.input3}
           placeholder="BallNO"
           keyboardType="numeric"
-          value={checked === 'option1' ? team1Data.ballNo : team2Data.ballNo}
-          onChangeText={value => handleInputChange('ballNo', value)}
-          wfes
+          value={
+            checked === 'option1'
+              ? `${team1Data.ballNo}`
+              : `${team2Data.ballNo}`
+          }
+          onChangeText={value => handleInputChange('Ballno', value)}
+          placeholderTextColor="black"
+          editable={false}
         />
-        <TextInput
-          style={styles.input}
-          placeholder="Wickets"
-          keyboardType="numeric"
-          value={checked === 'option1' ? team1Data.wickets : team2Data.wickets}
-          onChangeText={value => handleInputChange('wickets', value)}
-        />
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.button} onPress={incrementBallNo}>
+            <Text style={styles.buttonText}>^</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-      <TextInput
-        style={styles.commentsInput}
-        placeholder="Add Comments"
-        multiline
-        value={checked === 'option1' ? team1Data.comments : team2Data.comments}
-        onChangeText={value => handleInputChange('comments', value)}
-      />
-      <View style={styles.drop1}>
-        <DropDownPicker
-          open={open1}
-          value={value1}
-          items={items1}
-          setOpen={setOpen1}
-          setValue={setValue1}
-          setItems={setItems1}
-          placeholder="Event"
-          style={styles.dropdown}
-          dropDownContainerStyle={styles.dropdownContainer}
+      <View style={styles.teamsContainer2}>
+        {numbers.map(num => (
+          <View style={styles.radioItem} key={num}>
+            <RadioButton
+              value={`${num}`}
+              status={scorechecked === num ? 'checked' : 'unchecked'}
+              onPress={() => handleRadioPress(num)} // Handle radio button press
+            />
+            <Text style={styles.teamText}>{num}</Text>
+          </View>
+        ))}
+      </View>
+      <View style={styles.container}>
+        <Checkbox.Item
+          label="Option 1"
+          status={box1checked ? 'checked' : 'unchecked'}
+          onPress={() => setbox1checked(!box1checked)}
+        />
+        <Checkbox.Item
+          label="Option 2"
+          status={box2checked ? 'checked' : 'unchecked'}
+          onPress={() => setbox2checked(!box2checked)}
         />
       </View>
       <View style={styles.row}>
+        <View style={styles.drop2}>
+          <DropDownPicker
+            open={open1}
+            value={value1}
+            items={items1}
+            setOpen={setOpen1}
+            setValue={setValue1}
+            setItems={setItems1}
+            placeholder="Striker"
+            style={styles.dropdown}
+            dropDownContainerStyle={[
+              styles.dropdownContainer,
+              {position: 'absolute', zIndex: 50000},
+            ]}
+          />
+        </View>
         <View style={styles.drop2}>
           <DropDownPicker
             open={open2}
@@ -391,11 +468,16 @@ export default function CricketScoring() {
             setOpen={setOpen2}
             setValue={setValue2}
             setItems={setItems2}
-            placeholder="Batsman"
+            placeholder="non-Striker"
             style={styles.dropdown}
-            dropDownContainerStyle={styles.dropdownContainer}
+            dropDownContainerStyle={[
+              styles.dropdownContainer,
+              {position: 'absolute', zIndex: 50000},
+            ]}
           />
         </View>
+      </View>
+      <View style={styles.row}>
         <View style={styles.drop3}>
           <DropDownPicker
             open={open3}
@@ -423,6 +505,7 @@ export default function CricketScoring() {
           />
         </View>
       </View>
+      {/* </View> */}
       <View style={styles.finalScoreContainer}>
         <TouchableOpacity style={styles.actionButton} onPress={pickImages}>
           <Text style={styles.actionButtonText}>Pick Image</Text>
@@ -436,9 +519,9 @@ export default function CricketScoring() {
           <Text style={styles.actionButtonText}>Save</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.actionButton} onPress={EndMatch}>
+        {/* <TouchableOpacity style={styles.actionButton} onPress={EndMatch}>
           <Text style={styles.actionButtonText}>End Match</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </SafeAreaViewComponent>
   );
@@ -465,6 +548,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     width: '100%',
   },
+  teamsContainer2: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    width: '100%',
+    marginTop: 20,
+  },
   teamButton: {
     backgroundColor: '#6200ee',
     padding: 15,
@@ -476,7 +565,7 @@ const styles = StyleSheet.create({
     color: 'black',
     textAlign: 'center',
     fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: 14,
   },
   radioItem: {
     flexDirection: 'row',
@@ -501,9 +590,30 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderRadius: 8,
     padding: 10,
-    width: '23%',
+    width: '30%',
     textAlign: 'center',
-    backgroundColor: 'pink',
+    // backgroundColor: 'pink',
+    color: 'black',
+  },
+  input2: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    padding: 10,
+    width: '30%',
+    textAlign: 'center',
+    // backgroundColor: 'pink',
+    color: 'black',
+  },
+  input3: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    padding: 10,
+    width: '25%',
+    textAlign: 'center',
+    // backgroundColor: 'pink',
+    color: 'black',
   },
   commentsInput: {
     borderWidth: 1,
@@ -580,6 +690,7 @@ const styles = StyleSheet.create({
   drop2: {
     flex: 1, // Makes the second dropdown take equal space
     marginHorizontal: 5,
+    // zIndex: 10000,
   },
   drop3: {
     flex: 1, // Makes the third dropdown take equal space
@@ -593,6 +704,67 @@ const styles = StyleSheet.create({
   dropdownContainer: {
     backgroundColor: '#fafafa',
     borderColor: '#ddd',
+  },
+  // inputContainer: {
+  //   marginTop: 15,
+  //   flexDirection: 'row',
+  //   justifyContent: 'space-between',
+  //   width: '100%',
+  //   padding: 6,
+  // },
+  fieldContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '45%', // Adjusted for spacing
+  },
+  // input: {
+  //   borderWidth: 1,
+  //   borderColor: '#ccc',
+  //   borderRadius: 8,
+  //   padding: 10,
+  //   width: '60%',
+  //   textAlign: 'center',
+  //   color: 'black',
+  // },
+  button: {
+    width: 30,
+    height: 48,
+    backgroundColor: '#007bff',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 5,
+    marginHorizontal: 5,
+  },
+  // button2: {
+  //   width: 25,
+  //   height: 25,
+  //   backgroundColor: '#007bff',
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  //   borderRadius: 5,
+  //   marginHorizontal: 5,
+  //   marginTop: 5,
+  // },
+  buttonText: {
+    color: 'white',
+    fontSize: 30,
+    fontWeight: 'bold',
+  },
+  fieldWrapper: {
+    flexDirection: 'column', // Stack the label, input, and buttons vertically
+    // alignItems: 'center', // Center align content
+    // marginHorizontal: 10, // Add space between fields
+  },
+  label: {
+    fontSize: 14,
+    color: 'black',
+    // marginBottom: 5, // Space between label and input
+  },
+  container: {
+    // flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    padding: 16,
   },
 });
 
@@ -646,3 +818,11 @@ const styles = StyleSheet.create({
 //     // fielder: '',
 //   },
 // ]);
+
+// <TextInput
+//   style={styles.commentsInput}
+//   placeholder="Add Comments"
+//   multiline
+//   value={checked === 'option1' ? team1Data.comments : team2Data.comments}
+//   onChangeText={value => handleInputChange('comments', value)}
+// />;
