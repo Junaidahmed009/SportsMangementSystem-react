@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   Alert,
+  ScrollView,
 } from 'react-native';
 import {SafeAreaViewComponent, AppBarComponent} from '../MyComponents';
 import {RadioButton, Checkbox} from 'react-native-paper';
@@ -13,6 +14,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import Api from '../Api';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {launchImageLibrary} from 'react-native-image-picker';
+import {black} from 'react-native-paper/lib/typescript/styles/themes/v2/colors';
 
 export default function CricketScoring() {
   const navigation = useNavigation();
@@ -22,9 +24,29 @@ export default function CricketScoring() {
   const [imageUri, setImageUri] = useState(null);
   const [serverImagePath, setServerImagePath] = useState(null);
   const [numbers, setNumbers] = useState([0, 1, 2, 3, 4, 5, 6]);
+
   const [scorechecked, setscorechecked] = useState(null); // Tracks the selected radio button
+  const [selectedWicket, setSelectedWicket] = useState(''); // State to store the selected radio button
+  const [wicket, setwicket] = useState([
+    'Bold',
+    'Stumps',
+    'Caught',
+    'Hit Wicket',
+  ]);
+  const [items5, setItems5] = useState([
+    {label: 'Wide', value: 'Wide'},
+    {label: 'No Ball', value: 'No Ball'},
+    {label: 'Bye', value: 'Bye'},
+    {label: 'Leg Bye', value: 'Leg Bye'},
+    {label: 'Pelanty Runs', value: 'Pelanty Runs'},
+  ]);
+  const [open5, setOpen5] = useState(false);
+  const [value5, setValue5] = useState(null);
+  const [extraruns, setextraruns] = useState('');
+  // const [text, setText] = useState('');
 
   const [checked, setChecked] = useState('option1');
+  const [runoutchecked, setrunoutchecked] = useState('option3');
   const [box1checked, setbox1checked] = useState(false);
   const [box2checked, setbox2checked] = useState(false);
   const [team1Id, setTeam1Id] = useState(null);
@@ -37,16 +59,17 @@ export default function CricketScoring() {
     score: '',
     overs: 0,
     ballNo: 0,
-    // wickets: '',
+    wicket: '',
     // comments: '',
   });
   const [team2Data, setteam2Data] = useState({
     score: '',
     overs: 0,
     ballNo: 0,
-    // wickets: '',
+    wickets: '',
     // comments: '',
   });
+
   const [items1, setItems1] = useState([]);
   const [items2, setItems2] = useState([]);
   const [items3, setItems3] = useState([]);
@@ -94,7 +117,9 @@ export default function CricketScoring() {
   useEffect(() => {
     FetchTeamsandPlayers();
   }, []);
+  // const ShowExtraDropdown = () => {
 
+  // };
   // Format Players for Dropdown
   const formatPlayersForDropdown = players =>
     players.map(player => ({
@@ -156,18 +181,58 @@ export default function CricketScoring() {
       setteam2Data(prevData => ({...prevData, ballNo: prevData.ballNo + 1}));
     }
   };
+  const handleWicketPress = num => {
+    setSelectedWicket(num);
+    if (checked === 'option1') {
+      // // wickettype(num);
+      // setwicket(num);
+      // // Update team1Data with the selected wicket
+      setteam1Data(prevData => ({
+        ...prevData,
+        wicket: num,
+      }));
+    }
+  };
   const SendBackendData = async () => {
+    let outplyerid;
+    let wickettype;
+    // let outplayerid;
+    if (runoutchecked === 'option3') {
+      outplyerid = value1;
+      wickettype = 'runout';
+    } else if (runoutchecked === 'option4') {
+      outplyerid = value2;
+      wickettype = 'runout';
+    } else if (selectedWicket != null) {
+      outplyerid = value1;
+      wickettype = team1Data.wicket;
+    }
+    let extra1;
+    if (value5 === 'Wide' || value5 === 'No Ball') {
+      extra1 = 1;
+    }
+    // }else if()
+
     let payload = {
       Teamid: checked === 'option1' ? team1Id : team2Id,
       Score: checked === 'option1' ? team1Data.score : team2Data.score,
       Over: checked === 'option1' ? team1Data.overs : team2Data.overs,
-      Wickets: checked === 'option1' ? team1Data.ballNo : team2Data.ballNo,
-      Striker: value1,
+      ballNo: checked === 'option1' ? team1Data.ballNo : team2Data.ballNo,
+      // wicket_type: checked === 'option1' ? team1Data.wicket : team2Data.wicket,
+      wicket_type: wickettype || null,
+      dismissed_player_id: outplyerid || null,
+      Striker: value1 || null,
       non_striker: value2 || null,
       Bowler: value3 || null,
       fielder_id: value4 || null,
       FixtureId: Fixtureid,
+      wicket: selectedWicket || null,
+      extras: value5 || null,
+      extra_runs: extraruns || null,
     };
+    // if (box1checked) {
+    //   Alert.alert('hello');
+    // }
     console.log(payload);
 
     // Validate required fields for sending events
@@ -352,9 +417,6 @@ export default function CricketScoring() {
   return (
     <SafeAreaViewComponent>
       <AppBarComponent title="Scoring Cricket" />
-      <View style={styles.matchtext}>
-        <Text style={styles.matchTitle}>League Match</Text>
-      </View>
       <View style={styles.teamsContainer}>
         <View style={styles.radioItem}>
           <RadioButton
@@ -395,11 +457,6 @@ export default function CricketScoring() {
           onChangeText={value => handleInputChange('overs', value)}
           placeholderTextColor="black"
         />
-        {/* <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={incrementOverNo}>
-            <Text style={styles.buttonText}>^</Text>
-          </TouchableOpacity>
-        </View> */}
         <TextInput
           style={styles.input3}
           placeholder="BallNO"
@@ -431,18 +488,87 @@ export default function CricketScoring() {
           </View>
         ))}
       </View>
+      <View style={styles.teamsContainer2}>
+        {wicket.map(num => (
+          <View style={styles.radioItem} key={num}>
+            <RadioButton
+              value={`${num}`}
+              status={selectedWicket === num ? 'checked' : 'unchecked'}
+              onPress={() => handleWicketPress(num)} // Handle radio button press
+            />
+            <Text style={styles.teamText}>{num}</Text>
+          </View>
+        ))}
+      </View>
       <View style={styles.container}>
         <Checkbox.Item
-          label="Option 1"
+          label="Run Out"
+          color="black"
+          labelStyle={{color: 'black'}} // Color of the label text
           status={box1checked ? 'checked' : 'unchecked'}
           onPress={() => setbox1checked(!box1checked)}
         />
+        {box1checked && (
+          <View style={styles.teamsContainer2}>
+            <View style={styles.radioItem}>
+              <RadioButton
+                value="option3"
+                status={runoutchecked === 'option3' ? 'checked' : 'unchecked'}
+                onPress={() => setrunoutchecked('option3')}
+              />
+              <Text style={styles.teamText}>Striker</Text>
+            </View>
+            <View style={styles.radioItem}>
+              <RadioButton
+                value="option4"
+                status={runoutchecked === 'option4' ? 'checked' : 'unchecked'}
+                onPress={() => setrunoutchecked('option4')}
+              />
+              <Text style={styles.teamText}>non-Striker</Text>
+            </View>
+          </View>
+        )}
         <Checkbox.Item
-          label="Option 2"
+          label="Extra"
+          color="black"
+          labelStyle={{color: 'black'}} // Color of the label text
           status={box2checked ? 'checked' : 'unchecked'}
           onPress={() => setbox2checked(!box2checked)}
         />
+        {box2checked && (
+          <View style={styles.dropextra}>
+            <DropDownPicker
+              open={open5}
+              value={value5}
+              items={items5}
+              setOpen={setOpen5}
+              setValue={setValue5}
+              setItems={setItems5}
+              placeholder="Extra Runs"
+              style={styles.dropdown}
+              dropDownContainerStyle={[
+                styles.dropdownContainer,
+                {position: 'absolute', zIndex: 50000},
+              ]}
+            />
+          </View>
+        )}
+        {(value5 === 'Bye' ||
+          value5 === 'Leg Bye' ||
+          value5 === 'Pelanty Runs') && (
+          <View style={styles.inputContainer2}>
+            <TextInput
+              style={styles.textInput2}
+              placeholder="Extra Runs"
+              placeholderTextColor={'black'}
+              value={extraruns} // Bind text state
+              onChangeText={setextraruns} // Update text state on change
+              keyboardType="numeric"
+            />
+          </View>
+        )}
       </View>
+
       <View style={styles.row}>
         <View style={styles.drop2}>
           <DropDownPicker
@@ -506,53 +632,64 @@ export default function CricketScoring() {
         </View>
       </View>
       {/* </View> */}
-      <View style={styles.finalScoreContainer}>
+      {/* <View style={styles.finalScoreContainer}>
         <TouchableOpacity style={styles.actionButton} onPress={pickImages}>
           <Text style={styles.actionButtonText}>Pick Image</Text>
+        </TouchableOpacity>
+      </View> */}
+      <View style={styles.finalScoreContainer}>
+        <TouchableOpacity style={styles.imageButton} onPress={pickImages}>
+          <Text style={styles.imageButtonText}>Pick Image</Text>
         </TouchableOpacity>
       </View>
       <Text style={styles.warningText}>
         Press final score when both innings are ended
       </Text>
-      <View style={styles.actionButtonsContainer}>
+      {/* <View style={styles.actionButtonsContainer}>
         <TouchableOpacity style={styles.actionButton} onPress={SendBackendData}>
           <Text style={styles.actionButtonText}>Save</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
-        {/* <TouchableOpacity style={styles.actionButton} onPress={EndMatch}>
+      {/* <TouchableOpacity style={styles.actionButton} onPress={EndMatch}>
           <Text style={styles.actionButtonText}>End Match</Text>
         </TouchableOpacity> */}
+      {/* </View> */}
+      <View style={styles.actionButtonsContainer}>
+        <TouchableOpacity style={styles.saveButton} onPress={SendBackendData}>
+          <Text style={styles.saveButtonText}>Save</Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaViewComponent>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    // alignItems: 'center',
-    padding: 20,
-  },
-  matchTitle: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginVertical: 10,
-    color: 'black',
-  },
-  matchtext: {
-    alignItems: 'center',
-    margin: 10,
-  },
+  // container: {
+  //   // flex: 1,
+  //   // alignItems: 'center',
+  //   // padding: 20,
+  // },
+  // matchTitle: {
+  //   fontSize: 22,
+  //   fontWeight: 'bold',
+  //   marginVertical: 10,
+  //   color: 'black',
+  // },
+  // matchtext: {
+  //   alignItems: 'center',
+  //   margin: 10,
+  // },
   teamsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     width: '100%',
+    marginTop: 20,
   },
   teamsContainer2: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     width: '100%',
-    marginTop: 20,
+    marginTop: 15,
   },
   teamButton: {
     backgroundColor: '#6200ee',
@@ -579,7 +716,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   inputContainer: {
-    marginTop: 15,
+    marginTop: 12,
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
@@ -656,20 +793,62 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     fontSize: 12,
   },
-  actionButtonsContainer: {
+  // actionButtonsContainer: {
+  //   // flexDirection: 'row',
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  //   width: '50%',
+  //   height: '6%',
+  //   marginTop: 10,
+  // },
+  // actionButton: {
+  //   backgroundColor: '#6200ee',
+  //   padding: 15,
+  //   borderRadius: 8,
+  //   // flex: 1,
+  //   marginHorizontal: 5,
+  // },
+  // actionButtonText: {
+  //   color: 'white',
+  //   textAlign: 'center',
+  //   fontWeight: 'bold',
+  //   fontSize: 16,
+  // },
+  finalScoreContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%',
-    marginTop: 10,
+    justifyContent: 'flex-start', // Align to the right
+    alignItems: 'center',
+    marginVertical: 20,
+    marginHorizontal: 10,
   },
-  actionButton: {
+
+  imageButton: {
     backgroundColor: '#6200ee',
-    padding: 15,
+    paddingVertical: 8, // Smaller padding for a compact look
+    paddingHorizontal: 15,
     borderRadius: 8,
-    flex: 1,
-    marginHorizontal: 5,
   },
-  actionButtonText: {
+
+  imageButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 14,
+  },
+
+  actionButtonsContainer: {
+    justifyContent: 'center', // Center the Save button
+    alignItems: 'center',
+    marginVertical: 10,
+  },
+
+  saveButton: {
+    backgroundColor: '#6200ee',
+    paddingVertical: 15,
+    borderRadius: 8,
+    width: '50%', // 50% width
+  },
+
+  saveButtonText: {
     color: 'white',
     textAlign: 'center',
     fontWeight: 'bold',
@@ -691,6 +870,13 @@ const styles = StyleSheet.create({
     flex: 1, // Makes the second dropdown take equal space
     marginHorizontal: 5,
     // zIndex: 10000,
+  },
+  dropextra: {
+    // flex: 1, // Makes the second dropdown take equal space
+    marginHorizontal: 5,
+    width: '50%',
+    // zIndex: 10000,
+    marginBottom: 20,
   },
   drop3: {
     flex: 1, // Makes the third dropdown take equal space
@@ -764,8 +950,50 @@ const styles = StyleSheet.create({
     // flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
-    padding: 16,
+    padding: 5,
   },
+
+  //--------
+  // container2: {
+  //   flex: 1,
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  //   backgroundColor: '#f0f0f0',
+  // },
+  inputContainer2: {
+    width: '80%',
+    padding: 20,
+    // backgroundColor: 'white',
+    borderRadius: 8,
+    // shadowColor: '#000',
+    // shadowOffset: {width: 0, height: 2},
+    // shadowOpacity: 0.1,
+    // shadowRadius: 3.84,
+    // elevation: 5,
+    alignItems: 'center',
+    // textShadowColor: 'black',
+  },
+  // label: {
+  //   fontSize: 18,
+  //   fontWeight: 'bold',
+  //   color: '#333',
+  //   marginBottom: 10,
+  // },
+  textInput2: {
+    width: '100%',
+    height: 40,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingLeft: 10,
+    fontSize: 16,
+    marginBottom: 10,
+    color: 'black',
+  },
+  // displayText: {
+  //   fontSize: 16,
+  //   color: '#333',
+  // },
 });
 
 // // // const [score, setScore] = useState('');
