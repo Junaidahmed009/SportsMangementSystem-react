@@ -22,11 +22,11 @@ import Fixtures from './Home/Fixtures';
 import CricketMatchDetails from './Home/CricketMatchDetails';
 import Test1 from './EventManagersScreens/Test1';
 import EditFixtures from './EventManagersScreens/EditFixtures';
-import CricketScoring from './ScoringScreens.js/CricketScoring';
-import FootballScoring from './ScoringScreens.js/FootballScoring';
-import PointBaseScoring from './ScoringScreens.js/PointBaseScoring';
+import CricketScoring from './ScoringScreens/CricketScoring';
+import FootballScoring from './ScoringScreens/FootballScoring';
+import PointBaseScoring from './ScoringScreens/PointBaseScoring';
 import StartScoring from './EventManagersScreens/StartScoring';
-import ScoringCard from './ScoringScreens.js/ScoringCard';
+import ManOfTheMatch from './ScoringScreens/ManOfTheMatch';
 import SingleMatchDetails from './Home/SingleMatchDetails';
 import CaptionTeams from './Home/CaptionTeams';
 import UserInstructions from './Home/UserInstructions';
@@ -72,7 +72,7 @@ export default function Navigation() {
         <Stack.Screen name="FootballScoring" component={FootballScoring} />
         <Stack.Screen name="PointBaseScoring" component={PointBaseScoring} />
         <Stack.Screen name="StartScoring" component={StartScoring} />
-        <Stack.Screen name="ScoringCard" component={ScoringCard} />
+        <Stack.Screen name="ManOfTheMatch" component={ManOfTheMatch} />
         <Stack.Screen
           name="SingleMatchDetails"
           component={SingleMatchDetails}
