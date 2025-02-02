@@ -82,7 +82,11 @@ export default function UserHome() {
     </View>
   );
   const handleFixtures = Sportid => {
-    navigation.navigate('Fixtures', {Sportid});
+    if (!value1) {
+      Alert.alert('Select an Event');
+      return;
+    }
+    navigation.navigate('Fixtures', {Sportid, value1});
   };
   const handleInstructions = () => {
     navigation.navigate('UserInstructions');

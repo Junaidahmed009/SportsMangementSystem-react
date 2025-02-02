@@ -27,8 +27,8 @@ export default function CricketScoring() {
   const [scorechecked, setscorechecked] = useState(null); // Tracks the selected radio button
   const [selectedWicket, setSelectedWicket] = useState(''); // State to store the selected radio button
   const [wicket, setwicket] = useState([
-    'Bold',
-    'Stumps',
+    'Bowled',
+    'Stumped',
     'Caught',
     'Hit Wicket',
   ]);
@@ -168,8 +168,13 @@ export default function CricketScoring() {
           ballNo: 1, // Reset ball number for new over
         }));
         setValue3(null);
-        setValue1(null);
-        setValue2(null);
+        // Swap values if scorechecked is not 1, 3, or 5
+        if (!(scorechecked === 1 || scorechecked === 3 || scorechecked === 5)) {
+          setValue1(value2);
+          setValue2(value1);
+        }
+        // setValue1(null);
+        // setValue2(null);
         // Alert.alert('Over Completed');
       } else {
         setteam1Data(prevData => ({
@@ -185,8 +190,11 @@ export default function CricketScoring() {
           ballNo: 1,
         }));
         setValue3(null);
-        setValue1(null);
-        setValue2(null);
+        // Swap values if scorechecked is not 1, 3, or 5
+        if (!(scorechecked === 1 || scorechecked === 3 || scorechecked === 5)) {
+          setValue1(value2);
+          setValue2(value1);
+        }
         // Alert.alert('Over Completed');
       } else {
         setteam2Data(prevData => ({
@@ -226,9 +234,7 @@ export default function CricketScoring() {
       Alert.alert('please Select a Score.');
       return;
     }
-    if (scorechecked === 1 || scorechecked === 3 || scorechecked === 5) {
-      setValue1(null), setValue2(null);
-    }
+
     let outplyerid = null;
     let wickettype = null;
     if (runoutchecked === 'option3') {
@@ -277,8 +283,21 @@ export default function CricketScoring() {
       ? serverImagePath[0]
       : serverImagePath || '';
 
-    // if (checked === 'option1') {
-    // }
+    if (
+      (scorechecked === 1 || scorechecked === 3 || scorechecked === 5) &&
+      value1 &&
+      value2 &&
+      team1Data.ballNo !== 6 &&
+      team2Data.ballNo !== 6
+    ) {
+      // Swap values if scorechecked is 1, 3, or 5 and it's not the last ball of the over
+      setValue1(value2);
+      setValue2(value1);
+    } else if (!value1 || !value2 || !value3) {
+      // Alert if both players are not selected
+      Alert.alert('Please Select Both Players in Dropdown.');
+      return;
+    }
 
     try {
       const response = await Api.PostCricketScore(payload, imagepath);
@@ -286,9 +305,9 @@ export default function CricketScoring() {
         // checked;
         setScoreCount(checked === 'option1' ? response.data : ScoreCount);
         setScoreCount2(checked === 'option2' ? response.data : ScoreCount2);
-        console.log(ScoreCount);
+        // console.log(ScoreCount);
         incrementBallNo();
-        Alert.alert('Sucess', 'Updated');
+        // Alert.alert('Sucess', 'Updated');
         setscorechecked(null);
         setSelectedWicket('');
         setrunoutchecked('');
@@ -305,11 +324,17 @@ export default function CricketScoring() {
         Alert.alert('Issue', 'Some issue in Score updation. Try again.');
       }
     } catch (error) {
-      console.error('Score update error:', error);
-      Alert.alert(
-        'Updation Failed',
-        'An error occurred during Score Updation. Please try again.',
-      );
+      const status = error.response?.status; // Get status safely
+      // console.error('Score update error:', error);
+
+      if (status === 409) {
+        Alert.alert('Error', 'Change Striker. Already out.');
+      } else {
+        Alert.alert(
+          'Updation Failed',
+          'An error occurred during Score Updation. Please try again.',
+        );
+      }
     }
   };
 

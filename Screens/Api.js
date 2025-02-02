@@ -12,7 +12,7 @@ class Api {
   // }
   constructor() {
     this.apiClient = axios.create({
-      baseURL: 'http://192.168.212.77/SportsManagementSystemBE/api/',
+      baseURL: 'http://192.168.212.12/SportsManagementSystemBE/api/',
       timeout: 5000,
       headers: {
         'Content-type': 'application/json',
@@ -127,8 +127,10 @@ class Api {
   updatefixtures(AllData) {
     return this.apiClient.put('Fixture/UpdateFixtures', AllData);
   }
-  fetchUsersfixtures(id) {
-    return this.apiClient.get(`Fixture/GetUsersFixtures?sportsId=${id}`);
+  fetchUsersfixtures(id, value) {
+    return this.apiClient.get(
+      `Fixture/GetUsersFixtures?sportsId=${id}&sessionid=${value}`,
+    );
   }
   fetchManagerfixtures(id) {
     return this.apiClient.get(`Fixture/GetManagerFixtures?userid=${id}`);
@@ -138,7 +140,7 @@ class Api {
   }
   PostCricketScore(payload, imagepath) {
     return this.apiClient.post(
-      `Scoring/AddCricketScore?image_path=${imagepath}`,
+      `CricketScore/AddCricketScore?image_path=${imagepath}`,
       payload,
     );
   }
@@ -156,14 +158,16 @@ class Api {
   }
   EndCricketMatch(Fixtureid) {
     return this.apiClient.put(
-      `Scoring/UpdateCricketWinner?fixtureId=${Fixtureid}`,
+      `CricketScore/UpdateCricketWinner?fixtureId=${Fixtureid}`,
     );
   }
   fetchFixturesAndScores(fixtureid) {
     return this.apiClient.get(`Scoring/MatchScores?matchId=${fixtureid}`);
   }
   fetchBatsmanAndBowlerData(Fixtureid) {
-    return this.apiClient.get(`Scoring/GetMatchScorers?fixtureid=${Fixtureid}`);
+    return this.apiClient.get(
+      `CricketScore/GetCricketScores?fixtureid=${Fixtureid}`,
+    );
   }
   EndFootballMatch(Fixtureid) {
     return this.apiClient.put(
@@ -171,7 +175,7 @@ class Api {
     );
   }
   PosthighScore(data) {
-    return this.apiClient.post('Scoring/PostHighScorer', data);
+    return this.apiClient.post('CricketScore/PostManOfMatch', data);
   }
   postimage(formData, config) {
     return this.apiClient.post(`Team/UploadImage`, formData, config);

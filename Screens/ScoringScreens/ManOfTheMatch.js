@@ -83,6 +83,8 @@ export default function ManOfTheMatch() {
       }
     }
   };
+  // ------------------------this function is used to get Scorrer and wickets of match and when data comes
+  //it goes in 4 flat lists
 
   // Fetch Batsman and Bowler data
   const FetchBatsmanAndBowlerData = async () => {
@@ -114,8 +116,23 @@ export default function ManOfTheMatch() {
 
   useEffect(() => {
     FetchTeamsandPlayers();
+  }, []);
+  useEffect(() => {
+    // Call the function immediately when the screen opens
     FetchBatsmanAndBowlerData();
-  }, [team1Id, team2Id]); // Re-fetch data when team IDs are set
+
+    // Set interval to refresh data every 2 seconds
+    const interval = setInterval(() => {
+      FetchBatsmanAndBowlerData();
+    }, 2000); // 2000 ms = 2 seconds
+
+    // Cleanup interval when component unmounts or dependencies change
+    return () => clearInterval(interval);
+  }, [team1Id, team2Id]);
+  // Re-fetch data when team IDs are set
+  // const printdata = () => {
+  //   console.log(team1Batsman, team1Bowlers, team2Batsman, team2Batsman);
+  // };
 
   const pickImages = () => {
     if (serverImagePath) {
@@ -185,7 +202,6 @@ export default function ManOfTheMatch() {
       Alert.alert('Error', 'An error occurred while uploading the images.');
     }
   };
-
   // Handle save button click
   const UserData = async () => {
     // if (!value1 || !value2) {
@@ -279,7 +295,7 @@ export default function ManOfTheMatch() {
         </View>
       </View>
 
-      {/* Main Content */}
+      {/* these are 4 Flat lits which display Batsman and Bowler */}
       <View style={{flex: 1}}>
         {/* Team 1 Data */}
         <View style={{flex: 1}}>
@@ -320,7 +336,6 @@ export default function ManOfTheMatch() {
         </View>
       </View>
 
-      {/* Buttons at the bottom */}
       <View style={styles.buttonRow}>
         <TouchableOpacity style={styles.saveButton} onPress={UserData}>
           <Text style={styles.saveButtonText}>Save</Text>

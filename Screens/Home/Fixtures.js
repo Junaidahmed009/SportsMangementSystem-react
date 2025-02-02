@@ -16,17 +16,21 @@ import {Searchbar} from 'react-native-paper';
 export default function Fixtures() {
   const navigation = useNavigation();
   const route = useRoute();
-  const {Sportid} = route.params;
+  const {Sportid, value1} = route.params;
   const [fixtures, setfixtures] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [Sporttitle, setsporttitle] = useState('Fixtures');
 
   const FetchFixtures = async () => {
-    const id = Sportid; // Ensure Sportid is defined and valid
+    const id = Sportid;
+    const value = value1;
     try {
-      const response = await Api.fetchUsersfixtures(id);
+      console.log(id, value);
+      const response = await Api.fetchUsersfixtures(id, value);
       if (response.status === 200) {
-        const results = response.data.results || response.data; // Handle cases where results key might not exist
+        const results = response.data.results || response.data;
+        console.log(results);
+        // Handle cases where results key might not exist
         const fixtureData = results.map(item => ({
           fixtureId: item.fixture_id,
           team1name: item.team1_name,
@@ -47,8 +51,11 @@ export default function Fixtures() {
         Alert.alert('Error', `Unexpected response status: ${response.status}`);
       }
     } catch (error) {
+      console.log(error);
       if (error.response && error.response.status === 404) {
-        Alert.alert('No Fixtures Found.');
+        Alert.alert('Not Found', 'No Matches Found.');
+      } else if (error.response && error.response.status === 409) {
+        Alert.alert('Not Avalibele', 'Not played in this season.');
       } else if (error.response) {
         Alert.alert(
           'Error fetching dropdown data',
@@ -63,6 +70,7 @@ export default function Fixtures() {
 
   useEffect(() => {
     FetchFixtures();
+    console.log(fixtures);
   }, [Sportid]);
   const handleHome = () => {
     navigation.navigate('UserHome');
@@ -82,8 +90,11 @@ export default function Fixtures() {
       <AppBarComponent title={Sporttitle} handleBackPress={handleHome} />
       <Searchbar
         placeholder="Search by Team name"
+        placeholderTextColor="black" // Makes placeholder text black
         value={searchQuery}
         onChangeText={setSearchQuery}
+        iconColor="black" // Makes the search icon black
+        inputStyle={{color: 'black'}} // Makes the typed text black
         style={styles.searchBar}
       />
       <ScrollView contentContainerStyle={styles.content}>
