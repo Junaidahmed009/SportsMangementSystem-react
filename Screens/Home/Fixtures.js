@@ -25,11 +25,11 @@ export default function Fixtures() {
     const id = Sportid;
     const value = value1;
     try {
-      console.log(id, value);
+      // console.log(id, value);
       const response = await Api.fetchUsersfixtures(id, value);
       if (response.status === 200) {
         const results = response.data.results || response.data;
-        console.log(results);
+        // console.log(results);
         // Handle cases where results key might not exist
         const fixtureData = results.map(item => ({
           fixtureId: item.fixture_id,
@@ -51,7 +51,7 @@ export default function Fixtures() {
         Alert.alert('Error', `Unexpected response status: ${response.status}`);
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       if (error.response && error.response.status === 404) {
         Alert.alert('Not Found', 'No Matches Found.');
       } else if (error.response && error.response.status === 409) {
@@ -70,7 +70,7 @@ export default function Fixtures() {
 
   useEffect(() => {
     FetchFixtures();
-    console.log(fixtures);
+    // console.log(fixtures);
   }, [Sportid]);
   const handleHome = () => {
     navigation.navigate('UserHome');
@@ -81,8 +81,12 @@ export default function Fixtures() {
       fixture.team1name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       fixture.team2name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
-  const handleDetails = id => {
-    navigation.navigate('SingleMatchDetails', {id});
+  const handleDetails = (id, sport_name) => {
+    if (sport_name === 'Cricket') {
+      navigation.navigate('CricketMatchDetails', {id});
+    } else {
+      Alert.alert('hello');
+    }
   };
 
   return (
@@ -112,7 +116,7 @@ export default function Fixtures() {
             {fix.winnerId !== null && (
               <TouchableOpacity
                 style={styles.detailsButton}
-                onPress={() => handleDetails(fix.fixtureId)}>
+                onPress={() => handleDetails(fix.fixtureId, fix.sportName)}>
                 <Text style={styles.detailsButtonText}>Details</Text>
               </TouchableOpacity>
             )}
