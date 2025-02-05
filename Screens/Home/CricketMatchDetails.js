@@ -55,14 +55,6 @@ export default function CricketMatchDetails() {
   useEffect(() => {
     FetchMatchDetails();
   }, []);
-  // const printdata = () => {
-  //   // console.log('1', Team1batsmanscore);
-  //   // console.log('2', Team2batsmanscore);
-  //   console.log('3', Team1Totalscore);
-  //   console.log('4', Team2Totalscore);
-  //   // console.log('5', Team1bowlerstats);
-  //   // console.log('6', Team2bowlerstats);
-  // };
   // so team1score and team2score are arrays so we fetch data in objects from array to use in textboxes easily
   const team1scoreobj =
     Team1Totalscore && Team1Totalscore.length > 0 ? Team1Totalscore[0] : {};
@@ -113,9 +105,23 @@ export default function CricketMatchDetails() {
     </View>
   );
 
+  const Balldetails = () => {
+    const fixtureid = team1scoreobj.id;
+    navigation.navigate('CricketBallsDetails', {fixtureid});
+  };
+  const Gallery = () => {
+    const fixtureid = team1scoreobj.id;
+    navigation.navigate('MatchGallery', {fixtureid});
+  };
+  const handleBackPress = () => {
+    navigation.navigate('UserHome');
+  };
   return (
     <SafeAreaViewComponent>
-      <AppBarComponent title={'Cricket Details'} />
+      <AppBarComponent
+        title={'Cricket Details'}
+        handleBackPress={handleBackPress}
+      />
       {/* <Button onPress={printdata} title="hello"></Button> */}
 
       {/* Score Card */}
@@ -179,10 +185,14 @@ export default function CricketMatchDetails() {
         </View>
       </View>
       <View style={styles.container}>
-        <TouchableOpacity style={styles.button}>
-          {/* //onPress={onPress} */}
-          <Text style={styles.buttonText}>Balls Details</Text>
-        </TouchableOpacity>
+        <View style={styles.buttonRow}>
+          <TouchableOpacity style={styles.button} onPress={Balldetails}>
+            <Text style={styles.buttonText}>Balls Details</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={Gallery}>
+            <Text style={styles.buttonText}>Match Gallery</Text>
+          </TouchableOpacity>
+        </View>
       </View>
       {/* </View> */}
     </SafeAreaViewComponent>
@@ -227,26 +237,29 @@ const styles = StyleSheet.create({
     color: '#888',
   },
   container: {
-    // flex: 1, // Fill the screen (or parent container)
     marginTop: 20,
-    justifyContent: 'center', // Center vertically
-    alignItems: 'center', // Center horizontally
+    alignItems: 'center', // Center the row horizontally
+  },
+  buttonRow: {
+    flexDirection: 'row', // Align buttons in a row
+    justifyContent: 'center', // Center the buttons horizontally
+    alignItems: 'center', // Align buttons vertically in the center
+    width: '100%', // Take full width of parent
   },
   button: {
-    backgroundColor: '#6200ee', // Blue background color
+    backgroundColor: '#6200ee',
     paddingVertical: 15,
     paddingHorizontal: 30,
     borderRadius: 25,
-    // Shadow for iOS
+    marginHorizontal: 10, // Space between buttons
     shadowColor: '#000',
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.3,
     shadowRadius: 3,
-    // Shadow for Android
     elevation: 3,
   },
   buttonText: {
-    color: '#fff', // White text
+    color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
     textAlign: 'center',

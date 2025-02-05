@@ -31,6 +31,8 @@ import SingleMatchDetails from './Home/SingleMatchDetails';
 import CaptionTeams from './Home/CaptionTeams';
 import UserInstructions from './Home/UserInstructions';
 import AddNewGame from './ChairpersonScreens/AddNewGame';
+import CricketBallsDetails from './Home/CricketBallsDetails';
+import MatchGallery from './Home/MatchGallery';
 const Stack = createNativeStackNavigator();
 export default function Navigation() {
   return (
@@ -80,6 +82,11 @@ export default function Navigation() {
         <Stack.Screen name="CaptionTeams" component={CaptionTeams} />
         <Stack.Screen name="UserInstructions" component={UserInstructions} />
         <Stack.Screen name="AddNewGame" component={AddNewGame} />
+        <Stack.Screen
+          name="CricketBallsDetails"
+          component={CricketBallsDetails}
+        />
+        <Stack.Screen name="MatchGallery" component={MatchGallery} />
       </Stack.Navigator>
     </NavigationContainer>
   );

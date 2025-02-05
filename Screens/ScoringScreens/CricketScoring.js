@@ -293,9 +293,10 @@ export default function CricketScoring() {
       // Swap values if scorechecked is 1, 3, or 5 and it's not the last ball of the over
       setValue1(value2);
       setValue2(value1);
-    } else if (!value1 || !value2 || !value3) {
+    }
+    if (!value1 || !value2 || !value3) {
       // Alert if both players are not selected
-      Alert.alert('Please Select Both Players in Dropdown.');
+      Alert.alert('Please Select Both Batsman in Dropdown and Bowler');
       return;
     }
 

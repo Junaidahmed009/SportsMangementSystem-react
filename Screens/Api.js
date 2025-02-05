@@ -12,7 +12,7 @@ class Api {
   // }
   constructor() {
     this.apiClient = axios.create({
-      baseURL: 'http://192.168.212.166/SportsManagementSystemBE/api/',
+      baseURL: 'http://192.168.136.107/SportsManagementSystemBE/api/',
       timeout: 5000,
       headers: {
         'Content-type': 'application/json',
@@ -176,6 +176,19 @@ class Api {
   }
   fetchcricketDetails(fixtureid) {
     return this.apiClient.get(`CricketScore/GetMatchScore?Fixid=${fixtureid}`);
+  }
+  Fetchdeliveriesdetails(fixtureid) {
+    return this.apiClient.get(
+      `CricketScore/ballByballData?specificFixtureId=${fixtureid}`,
+    );
+  }
+  Fetchimagepath(fixtureid) {
+    return this.apiClient.get(
+      `CricketScore/ballByballData?specificFixtureId=${fixtureid}`,
+    );
+  }
+  fetchmotmdetails(fixtureid) {
+    return this.apiClient.get(`CricketScore/GetImagePath?fixid=${fixtureid}`);
   }
   PosthighScore(data) {
     return this.apiClient.post('CricketScore/PostManOfMatch', data);
