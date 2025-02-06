@@ -669,7 +669,7 @@ export default function ManOfTheMatch() {
 
   return (
     <SafeAreaViewComponent style={{flex: 1}}>
-      <AppBarComponent title="Top Scorers" />
+      <AppBarComponent title="Man of the Match" />
       <View style={styles.dropdownRow}>
         <View style={styles.dropdownWrapper}>
           <DropDownPicker

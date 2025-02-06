@@ -1,7 +1,7 @@
-import {View, Text, StyleSheet, Alert} from 'react-native';
+import {View, Text, StyleSheet, Alert, TextInput} from 'react-native';
 import {SafeAreaView} from 'react-native';
 import * as React from 'react';
-import {TextInput, Button, Appbar, ActivityIndicator} from 'react-native-paper';
+import {Button, Appbar, ActivityIndicator} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import Api from '../Api';
 import {storeUserData} from './UserData';
@@ -101,7 +101,6 @@ export default function Login() {
   const handleSignup = () => {
     navigation.navigate('Signup');
   };
-
   return (
     <SafeAreaView style={styles.container}>
       <Appbar.Header style={styles.appbarsetting}>
@@ -109,22 +108,25 @@ export default function Login() {
       </Appbar.Header>
       <View style={styles.content}>
         <TextInput
-          style={styles.textbox1}
-          label="Regno(2021-Arid-0123)"
+          style={styles.textbox}
           value={regno}
           onChangeText={regno => setRegno(regno)}
+          placeholder="Regno (2021-Arid-0123)"
+          placeholderTextColor="#666666"
         />
         <TextInput
-          style={styles.textbox2}
-          label="Password"
+          style={styles.textbox}
+          // label="Password"
           value={pass}
           onChangeText={pass => setPass(pass)}
+          placeholder="Password"
+          placeholderTextColor="#666666"
           secureTextEntry
         />
 
         <View style={styles.buttonContainer}>
           {loading ? (
-            <ActivityIndicator size="large" color="#6200ee" /> // Show loading indicator
+            <ActivityIndicator size="large" color="#6200ee" />
           ) : (
             <Button
               style={styles.buttonlogin}
@@ -136,21 +138,23 @@ export default function Login() {
           )}
         </View>
 
-        <Button
-          onPress={handleForget}
-          labelStyle={{fontSize: 14, color: '#6200ee'}}>
-          Forget Password?
-        </Button>
-        <Button
-          onPress={handleSignup}
-          labelStyle={{fontSize: 14, color: '#6200ee'}}>
-          Create New Account
-        </Button>
-        <Button
-          onPress={handleGuest}
-          labelStyle={{fontSize: 14, color: '#6200ee'}}>
-          Guest
-        </Button>
+        <View style={styles.footerButtons}>
+          <Button
+            onPress={handleForget}
+            labelStyle={{fontSize: 14, color: '#6200ee'}}>
+            Forget Password?
+          </Button>
+          <Button
+            onPress={handleSignup}
+            labelStyle={{fontSize: 14, color: '#6200ee'}}>
+            Create New Account
+          </Button>
+          <Button
+            onPress={handleGuest}
+            labelStyle={{fontSize: 14, color: '#6200ee'}}>
+            Guest
+          </Button>
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -159,36 +163,142 @@ export default function Login() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'aliceblue',
+    backgroundColor: '#f5f5f5',
   },
   appbarsetting: {
     backgroundColor: '#6200ee',
+    elevation: 0,
   },
   appbarTitle: {
     fontSize: 26,
     color: '#ffffff',
+    fontWeight: 'bold',
   },
   content: {
     flex: 1,
     justifyContent: 'center',
-    paddingHorizontal: 20,
+    paddingHorizontal: 24,
   },
-  textbox1: {
+  textbox: {
+    height: 50,
+    borderWidth: 1,
+    borderColor: '#cccccc',
     backgroundColor: '#ffffff',
-    marginBottom: 15,
-  },
-  textbox2: {
-    backgroundColor: '#ffffff',
-    marginBottom: 8,
+    color: '#000000',
+    marginBottom: 16,
+    borderRadius: 8,
+    paddingHorizontal: 12,
   },
   buttonContainer: {
     alignItems: 'center',
-    marginTop: 40,
-    marginBottom: 7,
+    marginTop: 32,
+    marginBottom: 16,
   },
   buttonlogin: {
     backgroundColor: '#6200ee',
-    width: 200,
-    height: 40,
+    width: '100%',
+    height: 48,
+    borderRadius: 8,
+    justifyContent: 'center',
+  },
+  footerButtons: {
+    alignItems: 'center',
+    marginTop: 16,
   },
 });
+
+//   return (
+//     <SafeAreaView style={styles.container}>
+//       <Appbar.Header style={styles.appbarsetting}>
+//         <Appbar.Content title="Login" titleStyle={styles.appbarTitle} />
+//       </Appbar.Header>
+//       <View style={styles.content}>
+//         <TextInput
+//           style={styles.textbox1}
+//           label="Regno(2021-Arid-0123)"
+//           value={regno}
+//           onChangeText={regno => setRegno(regno)}
+//           theme={{
+//             colors: {primary: 'black', text: 'black', placeholder: '#666666'},
+//           }} // primary affects label color
+//           selectionColor="black"
+//         />
+//         <TextInput
+//           style={styles.textbox2}
+//           label="Password"
+//           value={pass}
+//           onChangeText={pass => setPass(pass)}
+//           secureTextEntry
+//         />
+
+//         <View style={styles.buttonContainer}>
+//           {loading ? (
+//             <ActivityIndicator size="large" color="#6200ee" /> // Show loading indicator
+//           ) : (
+//             <Button
+//               style={styles.buttonlogin}
+//               mode="contained"
+//               onPress={handleLogin}
+//               labelStyle={{fontSize: 17, color: '#ffffff'}}>
+//               LOGIN
+//             </Button>
+//           )}
+//         </View>
+
+//         <Button
+//           onPress={handleForget}
+//           labelStyle={{fontSize: 14, color: '#6200ee'}}>
+//           Forget Password?
+//         </Button>
+//         <Button
+//           onPress={handleSignup}
+//           labelStyle={{fontSize: 14, color: '#6200ee'}}>
+//           Create New Account
+//         </Button>
+//         <Button
+//           onPress={handleGuest}
+//           labelStyle={{fontSize: 14, color: '#6200ee'}}>
+//           Guest
+//         </Button>
+//       </View>
+//     </SafeAreaView>
+//   );
+// }
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     backgroundColor: 'aliceblue',
+//   },
+//   appbarsetting: {
+//     backgroundColor: '#6200ee',
+//   },
+//   appbarTitle: {
+//     fontSize: 26,
+//     color: '#ffffff',
+//   },
+//   content: {
+//     flex: 1,
+//     justifyContent: 'center',
+//     paddingHorizontal: 20,
+//   },
+//   textbox1: {
+//     backgroundColor: '#ffffff',
+//     marginBottom: 15,
+//     color: 'black',
+//   },
+//   textbox2: {
+//     backgroundColor: '#ffffff',
+//     marginBottom: 8,
+//   },
+//   buttonContainer: {
+//     alignItems: 'center',
+//     marginTop: 40,
+//     marginBottom: 7,
+//   },
+//   buttonlogin: {
+//     backgroundColor: '#6200ee',
+//     width: 200,
+//     height: 40,
+//   },
+// });
