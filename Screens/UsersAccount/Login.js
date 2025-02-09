@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet, Alert, TextInput} from 'react-native';
+import {View, Text, StyleSheet, Alert, TextInput, Image} from 'react-native';
 import {SafeAreaView} from 'react-native';
 import * as React from 'react';
 import {Button, Appbar, ActivityIndicator} from 'react-native-paper';
@@ -59,9 +59,10 @@ export default function Login() {
           navChairperson();
         } else if (
           receivedUser.role === 'EventManager' &&
-          [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13].includes(
-            receivedUser.SportId,
-          )
+          [
+            1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+            20, 21, 22, 23, 24, 25, 26, 27, 28,
+          ].includes(receivedUser.SportId)
         ) {
           setRegno('');
           setPass('');
@@ -107,6 +108,12 @@ export default function Login() {
         <Appbar.Content title="Login" titleStyle={styles.appbarTitle} />
       </Appbar.Header>
       <View style={styles.content}>
+        {/* <View style={styles.logoContainer}>
+          <Image
+            source={require('../UsersAccount/logo.jpg')}
+            style={styles.logo}
+          />
+        </View> */}
         <TextInput
           style={styles.textbox}
           value={regno}
@@ -165,6 +172,16 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f5f5f5',
   },
+  // logoContainer: {
+  //   alignItems: 'center',
+  //   marginBottom: 20,
+  // },
+  // logo: {
+  //   width: 200, // Increased size
+  //   height: 200, // Increased size
+  //   borderRadius: 90, // Keeps it perfectly circular
+  //   resizeMode: 'contain', // Ensures proper image scaling
+  // },
   appbarsetting: {
     backgroundColor: '#6200ee',
     elevation: 0,

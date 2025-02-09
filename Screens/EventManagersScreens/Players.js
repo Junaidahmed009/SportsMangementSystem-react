@@ -46,11 +46,11 @@ export default function Players() {
   const renderItem = ({item}) => (
     <View style={styles.itemContainer}>
       <Text style={styles.itemText}>
-        {item.names}({item.reg_no})
+        {item.names} ({item.reg_no})
       </Text>
     </View>
   );
-  // const baseUrl = 'http://192.168.1.35/SportsManagementSystemBE/Resources';
+
   return (
     <SafeAreaViewComponent>
       <AppBarComponent
@@ -64,7 +64,7 @@ export default function Players() {
           style={styles.teamImage}
         />
       </View>
-      <View style={styles.cardText3}>
+      <View style={styles.cardTextContainer}>
         <Text style={styles.cardText2}>Team Members</Text>
       </View>
       <FlatList
@@ -78,52 +78,70 @@ export default function Players() {
 }
 const styles = StyleSheet.create({
   cardText: {
-    marginTop: 6,
-    marginBottom: 6,
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#222',
+    textAlign: 'center',
+    marginBottom: 10,
   },
   cardText2: {
-    marginTop: 6,
-    marginBottom: 6,
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#444',
+    textAlign: 'center',
   },
-  cardText3: {
+  cardTextContainer: {
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: '#eef5ff',
+    padding: 10,
+    borderRadius: 10,
+    marginBottom: 15,
   },
   teamImageContainer: {
     alignItems: 'center',
+    backgroundColor: '#f9f9f9',
+    padding: 15,
+    borderRadius: 10,
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    shadowOffset: {width: 0, height: 2},
     marginBottom: 20,
-    padding: 10,
   },
   teamImage: {
-    width: '90%',
-    height: 200,
-    borderRadius: 10,
+    width: '85%',
+    height: 220,
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: '#ddd',
   },
   listContainer: {
-    padding: 10,
+    padding: 12,
   },
   itemContainer: {
     padding: 15,
-    backgroundColor: '#f0faff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#ddd',
-    borderRadius: 5,
-    marginVertical: 5,
+    backgroundColor: '#ffffff',
+    borderRadius: 8,
+    marginVertical: 6,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    shadowOffset: {width: 0, height: 2},
+    borderWidth: 1,
+    borderColor: '#ddd',
   },
   itemText: {
-    fontSize: 16,
-    color: 'black',
+    fontSize: 18,
+    fontWeight: '500',
+    color: '#333',
   },
   teamName: {
-    fontSize: 25,
+    fontSize: 26,
     fontWeight: 'bold',
-    marginBottom: 5,
-    color: 'black',
+    marginBottom: 6,
+    color: '#111',
   },
 });

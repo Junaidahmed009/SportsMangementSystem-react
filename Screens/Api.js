@@ -12,7 +12,7 @@ class Api {
   // }
   constructor() {
     this.apiClient = axios.create({
-      baseURL: 'http://192.168.54.208/SportsManagementSystemBE/api/',
+      baseURL: 'http://192.168.189.64/SportsManagementSystemBE/api/',
       timeout: 5000,
       headers: {
         'Content-type': 'application/json',
@@ -156,6 +156,11 @@ class Api {
       payload,
     );
   }
+  EndFootballMatch(Fixtureid) {
+    return this.apiClient.put(
+      `Scoring/UpdateGoalBasedWinner?fixtureId=${Fixtureid}`,
+    );
+  }
   EndCricketMatch(Fixtureid) {
     return this.apiClient.put(
       `CricketScore/UpdateCricketWinner?fixtureId=${Fixtureid}`,
@@ -169,11 +174,12 @@ class Api {
       `CricketScore/GetCricketScores?fixtureid=${Fixtureid}`,
     );
   }
-  fetchBatsmanAndBowlerData(Fixtureid) {
-    return this.apiClient.get(
-      `CricketScore/GetCricketScores?fixtureid=${Fixtureid}`,
-    );
-  }
+  // fetchBatsmanAndBowlerData(Fixtureid) {
+  //   return this.apiClient.get(
+  //     `CricketScore/GetCricketScores?fixtureid=${Fixtureid}`,
+  //   );
+  // }
+
   fetchcricketDetails(fixtureid) {
     return this.apiClient.get(`CricketScore/GetMatchScore?Fixid=${fixtureid}`);
   }
@@ -198,6 +204,14 @@ class Api {
   }
   postCricketimages(formData, config) {
     return this.apiClient.post(`Scoring/UploadImage`, formData, config);
+  }
+  fetchgoals(Fixtureid) {
+    return this.apiClient.get(`Scoring/MatchScores?fixtureid=${Fixtureid}`);
+  }
+  fetchEvents(fixtureid) {
+    return this.apiClient.get(
+      `MatchEvents/getMatchEvents?matchId=${fixtureid}`,
+    );
   }
 }
 

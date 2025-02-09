@@ -114,7 +114,14 @@ export default function TeamRegistration() {
       sportsvalue === 9 ||
       sportsvalue === 11 ||
       sportsvalue === 13 ||
-      sportsvalue === 14
+      sportsvalue === 14 ||
+      sportsvalue === 17 ||
+      sportsvalue === 19 ||
+      sportsvalue === 22 ||
+      sportsvalue === 23 ||
+      sportsvalue === 25 ||
+      sportsvalue === 27 ||
+      sportsvalue === 28
     ) {
       teamdata = {
         Name: tname,

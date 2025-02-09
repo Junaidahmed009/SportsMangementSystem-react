@@ -84,8 +84,10 @@ export default function Fixtures() {
   const handleDetails = (id, sport_name) => {
     if (sport_name === 'Cricket') {
       navigation.navigate('CricketMatchDetails', {id});
-    } else {
-      Alert.alert('hello');
+    } else if (sport_name === 'Football') {
+      navigation.navigate('GoalBaseDetails', {id});
+    } else if (sport_name === 'Badminton-Single') {
+      navigation.navigate('GoalBaseDetails', {id});
     }
   };
 
@@ -111,7 +113,9 @@ export default function Fixtures() {
               <Text style={styles.teamBox}>{fix.team2name}</Text>
             </View>
             <Text style={styles.teamBox2}>{fix.winnerTeam}</Text>
-            <Text style={styles.matchInfo}>{fix.matchDate}</Text>
+            <Text style={styles.matchInfo}>
+              Date: {new Date(fix.matchDate).toLocaleString()}
+            </Text>
             <Text style={styles.matchStatus}>{fix.venue}</Text>
             {fix.winnerId !== null && (
               <TouchableOpacity

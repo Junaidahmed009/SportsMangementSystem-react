@@ -34,8 +34,8 @@ function CricketManagerhome() {
   const handleCricketDetails = () => {
     navigation.navigate('CricketDetails');
   };
-  const handleTest1 = () => {
-    navigation.navigate('Test1');
+  const handleAppCreadits = () => {
+    navigation.navigate('AppCredits');
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -70,9 +70,7 @@ function CricketManagerhome() {
           <TouchableOpacity style={styles.button} onPress={handleplayers}>
             <Text style={styles.buttonText}>View Teams</Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => console.log('Pressed')}>
+          <TouchableOpacity style={styles.button} onPress={handleAppCreadits}>
             <Text style={styles.buttonText}>App Credits</Text>
           </TouchableOpacity>
         </View>

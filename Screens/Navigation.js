@@ -19,8 +19,8 @@ import Players from './EventManagersScreens/Players';
 import TeamRequests from './EventManagersScreens/TeamRequests';
 import ViewManagers from './ChairpersonScreens/ViewManagers';
 import Fixtures from './Home/Fixtures';
-import CricketMatchDetails from './Home/CricketMatchDetails';
-import Test1 from './EventManagersScreens/Test1';
+import CricketMatchDetails from './ScoringDetails/CricketMatchDetails';
+import AppCredits from './EventManagersScreens/AppCreadits';
 import EditFixtures from './EventManagersScreens/EditFixtures';
 import CricketScoring from './ScoringScreens/CricketScoring';
 import FootballScoring from './ScoringScreens/FootballScoring';
@@ -31,8 +31,9 @@ import SingleMatchDetails from './Home/SingleMatchDetails';
 import CaptionTeams from './Home/CaptionTeams';
 import UserInstructions from './Home/UserInstructions';
 import AddNewGame from './ChairpersonScreens/AddNewGame';
-import CricketBallsDetails from './Home/CricketBallsDetails';
-import MatchGallery from './Home/MatchGallery';
+import CricketBallsDetails from './ScoringDetails/CricketBallsDetails';
+import MatchGallery from './ScoringDetails/MatchGallery';
+import GoalBaseDetails from './ScoringDetails/GoalBaseDetails';
 const Stack = createNativeStackNavigator();
 export default function Navigation() {
   return (
@@ -68,7 +69,7 @@ export default function Navigation() {
           name="CricketMatchDetails"
           component={CricketMatchDetails}
         />
-        <Stack.Screen name="Test1" component={Test1} />
+        <Stack.Screen name="AppCredits" component={AppCredits} />
         <Stack.Screen name="EditFixtures" component={EditFixtures} />
         <Stack.Screen name="CricketScoring" component={CricketScoring} />
         <Stack.Screen name="FootballScoring" component={FootballScoring} />
@@ -87,6 +88,7 @@ export default function Navigation() {
           component={CricketBallsDetails}
         />
         <Stack.Screen name="MatchGallery" component={MatchGallery} />
+        <Stack.Screen name="GoalBaseDetails" component={GoalBaseDetails} />
       </Stack.Navigator>
     </NavigationContainer>
   );

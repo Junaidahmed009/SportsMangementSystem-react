@@ -56,6 +56,7 @@ export default function TeamRequests() {
 
       if (response.status === 200) {
         Alert.alert('Success', 'Team status updated successfully');
+        FetchTeams();
       } else {
         Alert.alert(
           'Error',
@@ -117,20 +118,22 @@ export default function TeamRequests() {
       <View style={styles.teamContainer}>
         <Text style={styles.teamName}>{item.name}</Text>
         <Text style={styles.captainText}>
-          Captain: {item.username}({item.regno})
+          Captain: {item.username} ({item.regno})
         </Text>
         <View style={styles.buttonsContainer}>
           <TouchableOpacity
-            style={styles.viewButton}
+            style={[
+              styles.viewButton,
+              item.teamStatus && styles.disabledButton,
+            ]}
             onPress={handleStatusApprove}
             disabled={item.teamStatus}>
             <Text style={styles.buttonText}>
               {item.teamStatus ? 'Approved' : 'Approve'}
             </Text>
           </TouchableOpacity>
-
           <TouchableOpacity
-            style={styles.viewButton}
+            style={styles.detailsButton}
             onPress={handleTeamDetails}>
             <Text style={styles.buttonText}>Team Details</Text>
           </TouchableOpacity>
@@ -138,7 +141,6 @@ export default function TeamRequests() {
       </View>
     );
   };
-
   return (
     <SafeAreaViewComponent>
       <AppBarComponent title={'Team Requests'} handleBackPress={handleHome} />
@@ -151,52 +153,153 @@ export default function TeamRequests() {
     </SafeAreaViewComponent>
   );
 }
-
 const styles = StyleSheet.create({
   listContainer: {
-    padding: 10,
+    padding: 15,
   },
   teamContainer: {
     backgroundColor: '#fff',
-    padding: 15,
-    borderRadius: 8,
-    marginBottom: 10,
+    padding: 20,
+    borderRadius: 10,
+    marginBottom: 12,
     shadowColor: '#000',
     shadowOpacity: 0.1,
     shadowRadius: 5,
     shadowOffset: {width: 0, height: 2},
-    elevation: 2,
+    elevation: 3,
+    borderWidth: 1,
+    borderColor: '#ddd',
   },
   teamName: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: 'bold',
-    marginBottom: 5,
-    color: 'black',
+    marginBottom: 8,
+    color: '#333',
   },
   captainText: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: '#555',
-    marginBottom: 10,
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#666',
+    marginBottom: 12,
   },
   buttonsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 10,
+    alignItems: 'center',
+    marginTop: 12,
   },
   viewButton: {
-    backgroundColor: '#6200ee',
-    paddingVertical: 8,
-    paddingHorizontal: 15,
-    borderRadius: 5,
+    backgroundColor: '#4CAF50',
+    paddingVertical: 10,
+    paddingHorizontal: 18,
+    borderRadius: 6,
     alignItems: 'center',
     flex: 1,
-    marginRight: 5,
+    marginRight: 8,
+  },
+  disabledButton: {
+    backgroundColor: '#A5D6A7',
+  },
+  detailsButton: {
+    backgroundColor: '#FF9800',
+    paddingVertical: 10,
+    paddingHorizontal: 18,
+    borderRadius: 6,
+    alignItems: 'center',
+    flex: 1,
   },
   buttonText: {
     color: '#fff',
-    fontSize: 14,
+    fontSize: 15,
     fontWeight: 'bold',
     textAlign: 'center',
   },
 });
+
+//     return (
+//       <View style={styles.teamContainer}>
+//         <Text style={styles.teamName}>{item.name}</Text>
+//         <Text style={styles.captainText}>
+//           Captain: {item.username}({item.regno})
+//         </Text>
+//         <View style={styles.buttonsContainer}>
+//           <TouchableOpacity
+//             style={styles.viewButton}
+//             onPress={handleStatusApprove}
+//             disabled={item.teamStatus}>
+//             <Text style={styles.buttonText}>
+//               {item.teamStatus ? 'Approved' : 'Approve'}
+//             </Text>
+//           </TouchableOpacity>
+
+//           <TouchableOpacity
+//             style={styles.viewButton}
+//             onPress={handleTeamDetails}>
+//             <Text style={styles.buttonText}>Team Details</Text>
+//           </TouchableOpacity>
+//         </View>
+//       </View>
+//     );
+//   };
+
+//   return (
+//     <SafeAreaViewComponent>
+//       <AppBarComponent title={'Team Requests'} handleBackPress={handleHome} />
+//       <FlatList
+//         data={Teams}
+//         keyExtractor={item => item.id}
+//         renderItem={renderItem}
+//         contentContainerStyle={styles.listContainer}
+//       />
+//     </SafeAreaViewComponent>
+//   );
+// }
+
+// const styles = StyleSheet.create({
+//   listContainer: {
+//     padding: 10,
+//   },
+//   teamContainer: {
+//     backgroundColor: '#fff',
+//     padding: 15,
+//     borderRadius: 8,
+//     marginBottom: 10,
+//     shadowColor: '#000',
+//     shadowOpacity: 0.1,
+//     shadowRadius: 5,
+//     shadowOffset: {width: 0, height: 2},
+//     elevation: 2,
+//   },
+//   teamName: {
+//     fontSize: 20,
+//     fontWeight: 'bold',
+//     marginBottom: 5,
+//     color: 'black',
+//   },
+//   captainText: {
+//     fontSize: 14,
+//     fontWeight: 'bold',
+//     color: '#555',
+//     marginBottom: 10,
+//   },
+//   buttonsContainer: {
+//     flexDirection: 'row',
+//     justifyContent: 'space-between',
+//     marginTop: 10,
+//   },
+//   viewButton: {
+//     backgroundColor: '#6200ee',
+//     paddingVertical: 8,
+//     paddingHorizontal: 15,
+//     borderRadius: 5,
+//     alignItems: 'center',
+//     flex: 1,
+//     marginRight: 5,
+//   },
+//   buttonText: {
+//     color: '#fff',
+//     fontSize: 14,
+//     fontWeight: 'bold',
+//     textAlign: 'center',
+//   },
+// });

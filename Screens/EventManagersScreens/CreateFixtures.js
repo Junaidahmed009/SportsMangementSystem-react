@@ -69,12 +69,20 @@ export default function CreateFixtures() {
           setSport([16, 8, 4, 2, 1]);
         } else if (
           Sport.game === 'Football' ||
-          Sport.game === 'Badminton(Dual)' ||
+          Sport.game === 'Badminton-Dual' ||
           Sport.game === 'Race' ||
-          Sport.game === 'Badminton(Single)'
+          Sport.game === 'Badminton-Single'
         ) {
           setSport([0, 8, 4, 2, 1]);
-        } else if (Sport.game === 'Tug of War' || Sport.game === 'Race') {
+        } else if (
+          Sport.game === 'Tug of War' ||
+          Sport.game === 'Race' ||
+          Sport.game === 'Volleyball' ||
+          Sport.game === 'Badminton - Single(w)' ||
+          Sport.game === 'Ludo - Dual' ||
+          Sport.game === 'Arm Wrestling(w)' ||
+          Sport.game === 'Badminton-Dual(w)'
+        ) {
           setSport([0, 0, 4, 2, 1]);
         } else if (Sport.game === 'Chess') {
           setSport([0, 0, 0, 2, 1]);

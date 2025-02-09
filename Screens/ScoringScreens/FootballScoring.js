@@ -358,6 +358,37 @@ export default function FootballScoring() {
     navigation.navigate('StartScoring');
   };
   // Fetch Teams and Players
+  // const FetchGoals = async () => {
+  //   try {
+  //     const response = await Api.fetchgoals(Fixtureid);
+  //     if (response.status === 200) {
+  //       const data = response.data;
+  //       console.log(data);
+  //       const team1Goals =
+  //         data.find(item => item.team_id === team1Id)?.goals || 0;
+  //       const team2Goals =
+  //         data.find(item => item.team_id === team2Id)?.goals || 0;
+
+  //       if (checked === 'option1') {
+  //         setteam1Data(prevData => ({...prevData, Goals: team1Goals}));
+  //       } else if (checked === 'option2') {
+  //         setteam2Data(prevData => ({...prevData, Goals: team2Goals}));
+  //       }
+  //     } else {
+  //       Alert.alert('Error', `Unexpected response status: ${response.status}`);
+  //     }
+  //   } catch (error) {
+  //     if (error.response && error.response.status === 404) {
+  //       setteam1Data(prevData => ({...prevData, Goals: 0}));
+  //       setteam2Data(prevData => ({...prevData, Goals: 0}));
+  //     } else if (error.response) {
+  //       Alert.alert('Error fetching data', `Status: ${error.response.status}`);
+  //     } else {
+  //       Alert.alert('Error', 'No Teams Selected.');
+  //     }
+  //   }
+  // };
+  // Fetch Teams and Players
   const FetchTeamsandPlayers = async () => {
     try {
       const response = await Api.fetchteamsandplayers(Fixtureid);
@@ -388,6 +419,7 @@ export default function FootballScoring() {
   };
   useEffect(() => {
     FetchTeamsandPlayers();
+    // FetchGoals();
   }, []);
 
   // Format Players for Dropdown
@@ -401,13 +433,11 @@ export default function FootballScoring() {
   const handleTeamSwitch = () => {
     if (team1Players.length > 0 && team2Players.length > 0) {
       if (checked === 'option1') {
-        setItems2(formatPlayersForDropdown(team1Players)); // Batsman
-        setItems3(formatPlayersForDropdown(team2Players)); // Bowler
-        // setItems4(formatPlayersForDropdown(team2Players)); // Fielder
+        setItems2(formatPlayersForDropdown(team1Players)); // Striker
+        setItems3(formatPlayersForDropdown(team2Players)); // Assist
       } else if (checked === 'option2') {
-        setItems2(formatPlayersForDropdown(team2Players)); // Batsman
-        setItems3(formatPlayersForDropdown(team1Players)); // Bowler
-        // setItems4(formatPlayersForDropdown(team1Players)); // Fielder
+        setItems2(formatPlayersForDropdown(team2Players)); // Striker
+        setItems3(formatPlayersForDropdown(team1Players)); // Assist
       }
     }
   };
@@ -431,9 +461,9 @@ export default function FootballScoring() {
       Fixture_id: Fixtureid,
     };
     // console.log(payload);
-
     // Validate required fields for sending events
     const isEventValid = value1 || value2 || value3;
+
     const imgpath =
       serverImagePath && serverImagePath.length > 0
         ? `"${serverImagePath[0]}"`
@@ -443,7 +473,6 @@ export default function FootballScoring() {
       Alert.alert('Please select an image before submitting events.');
       return; // Exit if validation fails
     }
-
     if (isEventValid) {
       await SendEvents(imgpath); // Pass imgpath to SendEvents
     }
@@ -456,7 +485,7 @@ export default function FootballScoring() {
         Alert.alert('Issue', 'Some issue in Score updation. Try again.');
       }
     } catch (error) {
-      console.error('Score update error:', error);
+      // console.error('Score update error:', error);
       Alert.alert(
         'Updation Failed',
         'An error occurred during Score Updation. Please try again.',
@@ -480,12 +509,12 @@ export default function FootballScoring() {
       secondary_player_id: value3 || null,
     };
 
-    console.log('Sending Events Payload:', payload);
+    // console.log(payload);
 
     try {
       const response = await Api.PostCricketEvents(payload, imgpath);
       if (response.status === 200) {
-        Alert.alert('Event Saved Successfully');
+        // Alert.alert('Event Saved Successfully');
         // Reset state
         setValue1(null);
         setValue2(null);
@@ -496,7 +525,7 @@ export default function FootballScoring() {
         Alert.alert('Issue', 'Some issue occurred. Try again.');
       }
     } catch (error) {
-      console.error('Event update error:', error);
+      // console.error('Event update error:', error);
       Alert.alert(
         'Updation Failed',
         'An error occurred during Event Updation. Please try again.',
@@ -563,7 +592,7 @@ export default function FootballScoring() {
       if (response.status === 200) {
         const serverPaths = response.data; // Assuming the backend returns an array of paths
         setServerImagePath(serverPaths); // Store all server image paths
-        console.log(serverPaths);
+        // console.log(serverPaths);
         Alert.alert('Success', 'Images uploaded successfully!');
       } else {
         Alert.alert('Error', 'Failed to upload images to the server.');
@@ -572,9 +601,6 @@ export default function FootballScoring() {
       Alert.alert('Error', 'An error occurred while uploading the images.');
     }
   };
-  // const handleCardData = () => {
-  //   navigation.navigate('ScoringCard', {Fixtureid});
-  // };
 
   const EndMatch = async () => {
     try {
@@ -595,8 +621,6 @@ export default function FootballScoring() {
       }
     }
   };
-
-  // const handleScorecard = () => {};
 
   return (
     <SafeAreaViewComponent>
@@ -626,6 +650,7 @@ export default function FootballScoring() {
         <TextInput
           style={styles.input}
           placeholder="Goals"
+          placeholderTextColor="#666666"
           keyboardType="numeric"
           value={checked === 'option1' ? team1Data.Goals : team2Data.Goals}
           onChangeText={value => handleInputChange('Goals', value)}
@@ -649,6 +674,7 @@ export default function FootballScoring() {
         style={styles.commentsInput}
         placeholder="Add Comments"
         multiline
+        placeholderTextColor="#666666"
         value={checked === 'option1' ? team1Data.comments : team2Data.comments}
         onChangeText={value => handleInputChange('comments', value)}
       />
@@ -773,6 +799,7 @@ const styles = StyleSheet.create({
     padding: 10,
     width: '50%',
     textAlign: 'center',
+    color: 'black',
   },
   commentsInput: {
     borderWidth: 1,
@@ -783,6 +810,7 @@ const styles = StyleSheet.create({
     height: 100,
     marginVertical: 10,
     textAlignVertical: 'top',
+    color: 'black',
   },
   addImageButton: {
     backgroundColor: '#6200ee',
