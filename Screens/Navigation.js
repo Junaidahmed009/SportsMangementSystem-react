@@ -34,6 +34,7 @@ import AddNewGame from './ChairpersonScreens/AddNewGame';
 import CricketBallsDetails from './ScoringDetails/CricketBallsDetails';
 import MatchGallery from './ScoringDetails/MatchGallery';
 import GoalBaseDetails from './ScoringDetails/GoalBaseDetails';
+import SearchUser from './Home/SearchUser';
 const Stack = createNativeStackNavigator();
 export default function Navigation() {
   return (
@@ -89,6 +90,7 @@ export default function Navigation() {
         />
         <Stack.Screen name="MatchGallery" component={MatchGallery} />
         <Stack.Screen name="GoalBaseDetails" component={GoalBaseDetails} />
+        <Stack.Screen name="SearchUser" component={SearchUser} />
       </Stack.Navigator>
     </NavigationContainer>
   );

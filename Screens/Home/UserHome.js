@@ -58,6 +58,9 @@ export default function UserHome() {
   const handlelogin = () => {
     navigation.navigate('Login');
   };
+  const handleusersearch = () => {
+    navigation.navigate('SearchUser');
+  };
 
   const route = useRoute();
   const message = route.params?.message || ''; // Set fallback if undefined
@@ -141,6 +144,20 @@ export default function UserHome() {
               customTextstyle={styles.buttonText2}
             />
           </View>
+          {/* <View style={styles.buttonContainer3}>
+            <ButtonComponent
+              buttonTitle="Search User"
+              onPress={handleusersearch}
+              CustomStyle={styles.button2}
+              customTextstyle={styles.buttonText2}
+            />
+            <ButtonComponent
+              buttonTitle="User Data"
+              onPress={handleInstructions}
+              CustomStyle={styles.button2}
+              customTextstyle={styles.buttonText2}
+            />
+          </View> */}
         </View>
       </View>
       {/* <View style={styles.flatListview}> */}
@@ -226,6 +243,11 @@ const styles = StyleSheet.create({
   buttonContainer2: {
     flexDirection: 'row',
     justifyContent: 'space-between', // Adds space between buttons
+  },
+  buttonContainer3: {
+    flexDirection: 'row',
+    justifyContent: 'space-between', // Adds space between buttons
+    marginTop: 10,
   },
   button2: {
     flex: 1,
