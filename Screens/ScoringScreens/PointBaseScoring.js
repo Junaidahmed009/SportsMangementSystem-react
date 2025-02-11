@@ -1,505 +1,3 @@
-// import React from 'react';
-// import {
-//   View,
-//   Text,
-//   StyleSheet,
-//   // Image,
-//   ScrollView,
-//   SafeAreaView,
-// } from 'react-native';
-// import {SafeAreaViewComponent, AppBarComponent} from '../MyComponents';
-
-// const Badminton = () => {
-//   // Image paths
-//   // const images = [
-//   //   require('../images/5946c08f45a42.jpg'),
-//   //   require('../images/59362-pakistanteamcoverjpg-1511858515.jpg'),
-//   //   require('../images/images.jpeg'),
-//   // ];
-
-//   return (
-//     <SafeAreaViewComponent>
-//       <AppBarComponent title={'Match Details'} />
-//       {/* Header */}
-//       {/* <Text style={styles.header}>Score Review</Text> */}
-//       {/* Match Title */}
-//       <Text style={styles.matchTitle}>Match 17</Text>
-//       {/* Teams */}
-//       <View style={styles.teamsContainer}>
-//         <View style={styles.teamBox}>
-//           <Text style={styles.teamText}>Knights</Text>
-//         </View>
-//         <Text style={styles.vsText}>vs</Text>
-//         <View style={styles.teamBox}>
-//           <Text style={styles.teamText}>Fighters</Text>
-//         </View>
-//       </View>
-//       {/* Comments */}
-//       <View style={styles.commentsContainer}>
-//         <Text style={styles.commentsHeader}>Comments</Text>
-//         <Text style={styles.commentText}>
-//           Great match! Both teams played well.
-//         </Text>
-//       </View>
-//       <View style={styles.commentsContainer}>
-//         <Text style={styles.commentsHeader}>Match Events</Text>
-//         <Text style={styles.commentText}>
-//           Amir riaz 6 to hassan ahmed,Qasim take wicket of hassan,Zahid 6 to
-//           hassan ahmed
-//         </Text>
-//       </View>
-//       {/* Moments Section */}
-//       <Text style={styles.momentsHeader}>Moments</Text>
-//       {/* <ScrollView horizontal contentContainerStyle={styles.momentsContainer}>
-//         {images.map((image, index) => (
-//           <View key={index} style={styles.imageWrapper}>
-//             <Text style={styles.timeText}>
-//               {index === 0 ? '10:45 AM' : index === 1 ? '11:00 AM' : '11:15 AM'}
-//             </Text>
-//             <Image source={image} style={styles.image} />
-//           </View>
-//         ))}
-//       </ScrollView> */}
-//       {/* Scores */}
-//       <View style={styles.scoresContainer}>
-//         <View style={styles.scoreBox}>
-//           <Text style={styles.teamName}>Knights</Text>
-//           <Text style={styles.scoreText}>220-5 (10)</Text>
-//         </View>
-//         <View style={styles.scoreBox}>
-//           <Text style={styles.teamName}>Fighters</Text>
-//           <Text style={styles.scoreText}>222-5 (10)</Text>
-//         </View>
-//       </View>
-//     </SafeAreaViewComponent>
-//   );
-// };
-
-// export default Badminton;
-
-// // Styles
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: '#F9F9F9',
-//     padding: 10,
-//   },
-//   header: {
-//     fontSize: 24,
-//     fontWeight: 'bold',
-//     textAlign: 'center',
-//     color: 'white',
-//     backgroundColor: '#6A42F4',
-//     paddingVertical: 10,
-//     borderRadius: 5,
-//     marginBottom: 10,
-//   },
-//   matchTitle: {
-//     margin: 20,
-//     fontSize: 18,
-//     fontWeight: 'bold',
-//     textAlign: 'center',
-//     color: 'black',
-//   },
-//   teamsContainer: {
-//     flexDirection: 'row',
-//     justifyContent: 'space-evenly',
-//     marginVertical: 10,
-//   },
-//   // teamBox: {
-//   //   borderWidth: 1,
-//   //   borderColor: '#C1C1C1',
-//   //   borderRadius: 5,
-//   //   padding: 10,
-//   // },
-//   teamText: {
-//     fontSize: 18,
-//     fontWeight: 'bold',
-//     color: '#555',
-//   },
-//   vsText: {
-//     fontSize: 16,
-//     alignSelf: 'center',
-//     color: '#000',
-//   },
-//   commentsContainer: {
-//     margin: 15,
-//     backgroundColor: 'white',
-//     borderRadius: 5,
-//     padding: 15,
-//     // marginVertical: 10,
-//     shadowColor: '#000',
-//     shadowOffset: {width: 0, height: 1},
-//     shadowOpacity: 0.2,
-//     shadowRadius: 1,
-//     elevation: 2,
-//   },
-//   commentsHeader: {
-//     fontSize: 16,
-//     fontWeight: 'bold',
-//     marginBottom: 5,
-//     color: '#555',
-//   },
-//   commentText: {
-//     fontSize: 14,
-//     color: '#333',
-//   },
-//   momentsHeader: {
-//     fontSize: 16,
-//     fontWeight: 'bold',
-//     marginTop: 10,
-//     marginBottom: 5,
-//     color: '#555',
-//     textAlign: 'center',
-//   },
-//   momentsContainer: {
-//     flexDirection: 'row',
-//     justifyContent: 'space-around',
-//   },
-//   imageWrapper: {
-//     marginHorizontal: 20,
-//     alignItems: 'center',
-//   },
-//   timeText: {
-//     fontSize: 12,
-//     color: '#777',
-//     marginBottom: 5,
-//   },
-//   image: {
-//     width: 100,
-//     height: 60,
-//     borderRadius: 5,
-//   },
-//   scoresContainer: {
-//     marginBottom: 250,
-//     flexDirection: 'row',
-//     justifyContent: 'space-evenly',
-//     marginVertical: 10,
-//   },
-//   // scoreBox: {
-//   //   alignItems: 'center',
-//   //   borderWidth: 1,
-//   //   borderColor: '#C1C1C1',
-//   //   borderRadius: 5,
-//   //   paddingVertical: 10,
-//   //   paddingHorizontal: 20,
-//   // },
-//   teamName: {
-//     fontSize: 14,
-//     fontWeight: 'bold',
-//     color: '#333',
-//   },
-//   scoreText: {
-//     fontSize: 14,
-//     color: '#555',
-//     marginTop: 5,
-//   },
-// });
-// import React, {useState} from 'react';
-// import {
-//   View,
-//   Text,
-//   TextInput,
-//   TouchableOpacity,
-//   StyleSheet,
-//   ScrollView,
-// } from 'react-native';
-// import {SafeAreaViewComponent, AppBarComponent} from '../MyComponents';
-// import {Checkbox, RadioButton} from 'react-native-paper';
-// import DropDownPicker from 'react-native-dropdown-picker';
-
-// export default function Football() {
-//   const [score, setScore] = useState('');
-//   const [overs, setOvers] = useState('');
-//   const [wickets, setWickets] = useState('');
-//   const [comments, setComments] = useState('');
-//   const [finalScore, setFinalScore] = useState(false);
-//   const [value, setValue] = useState('first');
-
-//   const [open1, setOpen1] = useState(false);
-//   const [value1, setValue1] = useState(null);
-//   const [items1, setItems1] = useState([
-//     {label: 'Option 1', value: '1'},
-//     {label: 'Option 2', value: '2'},
-//     {label: 'Option 3', value: '3'},
-//   ]);
-
-//   const [open2, setOpen2] = useState(false);
-//   const [value2, setValue2] = useState(null);
-//   const [items2, setItems2] = useState([
-//     {label: 'Option A', value: 'A'},
-//     {label: 'Option B', value: 'B'},
-//     {label: 'Option C', value: 'C'},
-//   ]);
-
-//   const [open3, setOpen3] = useState(false);
-//   const [value3, setValue3] = useState(null);
-//   const [items3, setItems3] = useState([
-//     {label: 'Red', value: 'red'},
-//     {label: 'Green', value: 'green'},
-//     {label: 'Blue', value: 'blue'},
-//   ]);
-
-//   return (
-//     <SafeAreaViewComponent>
-//       <AppBarComponent title={'Scoring Football'} />
-//       <ScrollView contentContainerStyle={styles.container}>
-//         <View style={styles.matchtext}>
-//           <Text style={styles.matchTitle}>Semi Final</Text>
-//         </View>
-
-//         {/* Teams */}
-//         <View style={styles.teamsContainer}>
-//           <TouchableOpacity style={styles.teamButton}>
-//             <Text style={styles.teamText}>Test1</Text>
-//           </TouchableOpacity>
-//           <TouchableOpacity style={styles.teamButton}>
-//             <Text style={styles.teamText}>Test2</Text>
-//           </TouchableOpacity>
-//         </View>
-
-//         <Text style={styles.battingTitle}>40 Minute Match</Text>
-
-//         {/* <View style={styles.inputContainer}>
-//           <TextInput
-//             style={styles.input}
-//             placeholder="Score"
-//             keyboardType="numeric"
-//             value={score}
-//             onChangeText={setScore}
-//           />
-//           <TextInput
-//             style={styles.input}
-//             placeholder="Overs"
-//             keyboardType="numeric"
-//             value={overs}
-//             onChangeText={setOvers}
-//           />
-//           <TextInput
-//             style={styles.input}
-//             placeholder="Wickets"
-//             keyboardType="numeric"
-//             value={wickets}
-//             onChangeText={setWickets}
-//           />
-//         </View> */}
-
-//         {/* Comments */}
-//         <TextInput
-//           style={styles.commentsInput}
-//           placeholder="Add Comments"
-//           multiline
-//           value={comments}
-//           onChangeText={setComments}
-//         />
-//         {/* Dropdown Row */}
-//         <View style={styles.row}>
-//           <View style={styles.drop1}>
-//             <DropDownPicker
-//               open={open1}
-//               value={value1}
-//               items={items1}
-//               setOpen={setOpen1}
-//               setValue={setValue1}
-//               setItems={setItems1}
-//               placeholder="Event"
-//               style={styles.dropdown}
-//               dropDownContainerStyle={styles.dropdownContainer}
-//             />
-//           </View>
-//           <View style={styles.drop2}>
-//             <DropDownPicker
-//               open={open2}
-//               value={value2}
-//               items={items2}
-//               setOpen={setOpen2}
-//               setValue={setValue2}
-//               setItems={setItems2}
-//               placeholder="Hit By"
-//               style={styles.dropdown}
-//               dropDownContainerStyle={styles.dropdownContainer}
-//             />
-//           </View>
-//           <View style={styles.drop3}>
-//             <DropDownPicker
-//               open={open3}
-//               value={value3}
-//               items={items3}
-//               setOpen={setOpen3}
-//               setValue={setValue3}
-//               setItems={setItems3}
-//               placeholder="Defended"
-//               style={styles.dropdown}
-//               dropDownContainerStyle={styles.dropdownContainer}
-//             />
-//           </View>
-//         </View>
-//         {/* Final Score Checkbox */}
-//         <View style={styles.finalScoreContainer}>
-//           <Checkbox
-//             status={finalScore ? 'checked' : 'unchecked'}
-//             onPress={() => setFinalScore(!finalScore)}
-//           />
-//           <Text style={styles.finalScoreText}>Final Score</Text>
-//         </View>
-
-//         <Text style={styles.warningText}>
-//           Press final score when both innings are ended
-//         </Text>
-
-//         {/* Action Buttons */}
-//         <View style={styles.actionButtonsContainer}>
-//           <TouchableOpacity style={styles.actionButton}>
-//             <Text style={styles.actionButtonText}>Save</Text>
-//           </TouchableOpacity>
-//           <TouchableOpacity style={styles.actionButton}>
-//             <Text style={styles.actionButtonText}>End Match</Text>
-//           </TouchableOpacity>
-//         </View>
-//       </ScrollView>
-//     </SafeAreaViewComponent>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     // alignItems: 'center',
-//     padding: 20,
-//   },
-//   matchTitle: {
-//     fontSize: 22,
-//     fontWeight: 'bold',
-//     marginVertical: 10,
-//     color: 'black',
-//   },
-//   matchtext: {
-//     alignItems: 'center',
-//     margin: 10,
-//   },
-//   teamsContainer: {
-//     flexDirection: 'row',
-//     justifyContent: 'space-around',
-//     width: '100%',
-//   },
-//   teamButton: {
-//     backgroundColor: '#6200ee',
-//     padding: 15,
-//     borderRadius: 8,
-//     flex: 1,
-//     margin: 5,
-//   },
-//   teamText: {
-//     color: 'white',
-//     textAlign: 'center',
-//     fontWeight: 'bold',
-//     fontSize: 16,
-//   },
-//   battingTitle: {
-//     fontSize: 18,
-//     color: 'black',
-//     fontWeight: '600',
-//     marginVertical: 10,
-//   },
-//   inputContainer: {
-//     flexDirection: 'row',
-//     justifyContent: 'space-between',
-//     width: '100%',
-//   },
-//   input: {
-//     borderWidth: 1,
-//     borderColor: '#ccc',
-//     borderRadius: 8,
-//     padding: 10,
-//     width: '30%',
-//     textAlign: 'center',
-//   },
-//   commentsInput: {
-//     borderWidth: 1,
-//     borderColor: '#ccc',
-//     borderRadius: 8,
-//     padding: 10,
-//     width: '100%',
-//     height: 100,
-//     marginVertical: 10,
-//     textAlignVertical: 'top',
-//   },
-//   addImageButton: {
-//     backgroundColor: '#6200ee',
-//     padding: 10,
-//     borderRadius: 8,
-//     marginVertical: 10,
-//   },
-//   imageButton: {
-//     alignItems: 'center',
-//     marginTop: 30,
-//   },
-//   addImageText: {
-//     color: 'white',
-//     fontWeight: 'bold',
-//   },
-//   finalScoreContainer: {
-//     flexDirection: 'row',
-//     alignItems: 'center',
-//     marginVertical: 10,
-//   },
-//   finalScoreText: {
-//     marginLeft: 8,
-//     fontSize: 16,
-//     color: 'black',
-//   },
-//   warningText: {
-//     color: 'red',
-//     marginVertical: 5,
-//     fontSize: 12,
-//   },
-//   actionButtonsContainer: {
-//     flexDirection: 'row',
-//     justifyContent: 'space-between',
-//     width: '100%',
-//     marginTop: 10,
-//   },
-//   actionButton: {
-//     backgroundColor: '#6200ee',
-//     padding: 15,
-//     borderRadius: 8,
-//     flex: 1,
-//     marginHorizontal: 5,
-//   },
-//   actionButtonText: {
-//     color: 'white',
-//     textAlign: 'center',
-//     fontWeight: 'bold',
-//     fontSize: 16,
-//   },
-//   row: {
-//     flexDirection: 'row',
-//     justifyContent: 'space-between', // Ensures equal spacing between the dropdowns
-//     alignItems: 'center', // Vertically centers the dropdowns
-//     marginVertical: 10, // Adds some spacing above and below the row
-//   },
-//   drop1: {
-//     flex: 1, // Makes the first dropdown take equal space
-//     marginHorizontal: 5, // Adds horizontal spacing between dropdowns
-//   },
-//   drop2: {
-//     flex: 1, // Makes the second dropdown take equal space
-//     marginHorizontal: 5,
-//   },
-//   drop3: {
-//     flex: 1, // Makes the third dropdown take equal space
-//     marginHorizontal: 5,
-//   },
-//   dropdown: {
-//     backgroundColor: '#fafafa',
-//     borderColor: '#ddd',
-//     height: 40, // Adjust height as needed
-//   },
-//   dropdownContainer: {
-//     backgroundColor: '#fafafa',
-//     borderColor: '#ddd',
-//   },
-// });
 import React, {useState, useEffect} from 'react';
 import {
   View,
@@ -516,10 +14,10 @@ import Api from '../Api';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {launchImageLibrary} from 'react-native-image-picker';
 
-export default function FootballScoring() {
+export default function PointBaseScoring() {
   const navigation = useNavigation();
   const route = useRoute();
-  const {Fixtureid} = route.params;
+  const {Fixtureid, sportName} = route.params;
 
   const [imageUri, setImageUri] = useState(null);
   const [serverImagePath, setServerImagePath] = useState(null);
@@ -532,17 +30,12 @@ export default function FootballScoring() {
   const [team2Name, setTeam2Name] = useState('');
   const [team2Players, setTeam2Players] = useState([]);
   const [team1Data, setteam1Data] = useState({
-    Goals: '',
+    Sets: '',
   });
   const [team2Data, setteam2Data] = useState({
-    Goals: '',
+    Sets: '',
   });
-  const [items1, setItems1] = useState([
-    {label: 'Goal', value: 'Goal'},
-    {label: 'Foul', value: 'Foul'},
-    {label: 'Save', value: 'Save'},
-    {label: 'Plenty', value: 'Plenty'},
-  ]);
+  const [items1, setItems1] = useState([]);
   const [items2, setItems2] = useState([]);
   const [items3, setItems3] = useState([]);
   const [open1, setOpen1] = useState(false);
@@ -554,6 +47,42 @@ export default function FootballScoring() {
   const handlehome = () => {
     navigation.navigate('StartScoring');
   };
+
+  useEffect(() => {
+    if (
+      [
+        'Badminton-Single',
+        'Badminton-Dual',
+        'Badminton-Single(w)',
+        'Badminton-Dual(w)',
+      ].includes(sportName)
+    ) {
+      setItems1([
+        {label: 'Point Scored', value: 'bad-PointScored'},
+        {label: 'Ace Serve', value: 'bad-AceServe'},
+        {label: 'Smash', value: 'bad-Smash'},
+        {label: 'Defensive Save', value: 'bad-DefensiveSave'},
+        {label: 'Foul', value: 'bad-Foul'},
+      ]);
+    } else if (['Table Tennis'].includes(sportName)) {
+      setItems1([
+        {label: 'Point Scored', value: 'tt-PointScored'},
+        {label: 'Ace Serve', value: 'tt-AceServe'},
+        {label: 'Topspin Winner', value: 'tt-TopspinWinner'},
+        {label: 'Edge Ball', value: 'tt-EdgeBall'},
+        {label: 'Net Fault', value: 'tt-NetFault'},
+      ]);
+    } else if (['Volleyball'].includes(sportName)) {
+      setItems1([
+        {label: 'Point Scored', value: 'vb-PointScored'},
+        {label: 'Ace Serve', value: 'vb-AceServe'},
+        {label: 'Spike Winner', value: 'vb-SpikeWinner'},
+        {label: 'Block Winner', value: 'vb-BlockWinner'},
+        {label: 'Rotation Fault', value: 'vb-RotationFault'},
+      ]);
+    }
+  }, [sportName]);
+  // ✅ Runs only when sportName changes
   // Fetch Teams and Players
   const FetchTeamsandPlayers = async () => {
     try {
@@ -600,11 +129,9 @@ export default function FootballScoring() {
       if (checked === 'option1') {
         setItems2(formatPlayersForDropdown(team1Players)); // Batsman
         setItems3(formatPlayersForDropdown(team2Players)); // Bowler
-        // setItems4(formatPlayersForDropdown(team2Players)); // Fielder
       } else if (checked === 'option2') {
         setItems2(formatPlayersForDropdown(team2Players)); // Batsman
         setItems3(formatPlayersForDropdown(team1Players)); // Bowler
-        // setItems4(formatPlayersForDropdown(team1Players)); // Fielder
       }
     }
   };
@@ -623,13 +150,12 @@ export default function FootballScoring() {
   };
   const SendBackendData = async () => {
     let payload = {
-      Teamid: checked === 'option1' ? team1Id : team2Id,
-      Goals: checked === 'option1' ? team1Data.Goals : team2Data.Goals,
-      Fixture_id: Fixtureid,
+      team_id: checked === 'option1' ? team1Id : team2Id,
+      setsWon: checked === 'option1' ? team1Data.Sets : team2Data.Sets,
+      fixture_id: Fixtureid,
     };
-    // console.log(payload);
 
-    // Validate required fields for sending events
+    // // Validate required fields for sending events
     const isEventValid = value1 || value2 || value3;
     const imgpath =
       serverImagePath && serverImagePath.length > 0
@@ -646,7 +172,7 @@ export default function FootballScoring() {
     }
 
     try {
-      const response = await Api.PostFootballScore(payload);
+      const response = await Api.PostpointBaseScore(payload);
       if (response.status === 200) {
         Alert.alert('Score Updated');
       } else {
@@ -682,7 +208,7 @@ export default function FootballScoring() {
     try {
       const response = await Api.PostCricketEvents(payload, imgpath);
       if (response.status === 200) {
-        Alert.alert('Event Saved Successfully');
+        // Alert.alert('Event Saved Successfully');
         // Reset state
         setValue1(null);
         setValue2(null);
@@ -693,7 +219,7 @@ export default function FootballScoring() {
         Alert.alert('Issue', 'Some issue occurred. Try again.');
       }
     } catch (error) {
-      console.error('Event update error:', error);
+      // console.error('Event update error:', error);
       Alert.alert(
         'Updation Failed',
         'An error occurred during Event Updation. Please try again.',
@@ -775,7 +301,7 @@ export default function FootballScoring() {
 
   const EndMatch = async () => {
     try {
-      const response = await Api.EndFootballMatch(Fixtureid);
+      const response = await Api.Endpointbasematch(Fixtureid);
       if (response.status === 200) {
         Alert.alert('Winner Updated.');
         handlehome();
@@ -798,9 +324,7 @@ export default function FootballScoring() {
   return (
     <SafeAreaViewComponent>
       <AppBarComponent title="Scoring Cricket" />
-      <View style={styles.matchtext}>
-        <Text style={styles.matchTitle}>League Match</Text>
-      </View>
+      <View style={styles.matchtext}></View>
       <View style={styles.teamsContainer}>
         <View style={styles.radioItem}>
           <RadioButton
@@ -822,29 +346,17 @@ export default function FootballScoring() {
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
-          placeholder="Goals"
+          placeholder="Sets Won"
+          placeholderTextColor={'black'}
           keyboardType="numeric"
-          value={checked === 'option1' ? team1Data.Goals : team2Data.Goals}
-          onChangeText={value => handleInputChange('Goals', value)}
+          value={checked === 'option1' ? team1Data.Sets : team2Data.Sets}
+          onChangeText={value => handleInputChange('Sets', value)}
         />
-        {/* <TextInput
-          style={styles.input}
-          placeholder="Overs"
-          keyboardType="numeric"
-          value={checked === 'option1' ? team1Data.overs : team2Data.overs}
-          onChangeText={value => handleInputChange('overs', value)}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Wickets"
-          keyboardType="numeric"
-          value={checked === 'option1' ? team1Data.wickets : team2Data.wickets}
-          onChangeText={value => handleInputChange('wickets', value)}
-        /> */}
       </View>
       <TextInput
         style={styles.commentsInput}
-        placeholder="Add Comments"
+        placeholder="...Description"
+        placeholderTextColor={'black'}
         multiline
         value={checked === 'option1' ? team1Data.comments : team2Data.comments}
         onChangeText={value => handleInputChange('comments', value)}
@@ -970,6 +482,7 @@ const styles = StyleSheet.create({
     padding: 10,
     width: '50%',
     textAlign: 'center',
+    color: 'black',
   },
   commentsInput: {
     borderWidth: 1,
@@ -980,6 +493,7 @@ const styles = StyleSheet.create({
     height: 100,
     marginVertical: 10,
     textAlignVertical: 'top',
+    color: 'black',
   },
   addImageButton: {
     backgroundColor: '#6200ee',

@@ -24,7 +24,6 @@ import AppCredits from './EventManagersScreens/AppCreadits';
 import EditFixtures from './EventManagersScreens/EditFixtures';
 import CricketScoring from './ScoringScreens/CricketScoring';
 import FootballScoring from './ScoringScreens/FootballScoring';
-import PointBaseScoring from './ScoringScreens/PointBaseScoring';
 import StartScoring from './EventManagersScreens/StartScoring';
 import ManOfTheMatch from './ScoringScreens/ManOfTheMatch';
 import SingleMatchDetails from './Home/SingleMatchDetails';
@@ -35,6 +34,8 @@ import CricketBallsDetails from './ScoringDetails/CricketBallsDetails';
 import MatchGallery from './ScoringDetails/MatchGallery';
 import GoalBaseDetails from './ScoringDetails/GoalBaseDetails';
 import SearchUser from './Home/SearchUser';
+import PointBaseScoring from './ScoringScreens/PointBaseScoring';
+import TurnBaseScoring from './ScoringScreens/TurnBaseScoring';
 const Stack = createNativeStackNavigator();
 export default function Navigation() {
   return (
@@ -74,7 +75,6 @@ export default function Navigation() {
         <Stack.Screen name="EditFixtures" component={EditFixtures} />
         <Stack.Screen name="CricketScoring" component={CricketScoring} />
         <Stack.Screen name="FootballScoring" component={FootballScoring} />
-        <Stack.Screen name="PointBaseScoring" component={PointBaseScoring} />
         <Stack.Screen name="StartScoring" component={StartScoring} />
         <Stack.Screen name="ManOfTheMatch" component={ManOfTheMatch} />
         <Stack.Screen
@@ -91,6 +91,8 @@ export default function Navigation() {
         <Stack.Screen name="MatchGallery" component={MatchGallery} />
         <Stack.Screen name="GoalBaseDetails" component={GoalBaseDetails} />
         <Stack.Screen name="SearchUser" component={SearchUser} />
+        <Stack.Screen name="PointBaseScoring" component={PointBaseScoring} />
+        <Stack.Screen name="TurnBaseScoring" component={TurnBaseScoring} />
       </Stack.Navigator>
     </NavigationContainer>
   );

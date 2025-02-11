@@ -73,6 +73,35 @@ export default function StartScoring() {
       navigation.navigate('CricketScoring', {Fixtureid});
     } else if (sportName === 'Football') {
       navigation.navigate('FootballScoring', {Fixtureid});
+    } else if (
+      sportName === 'Badminton-Single' ||
+      sportName === 'Badminton-Dual' ||
+      sportName === 'Table Tennis' ||
+      sportName === 'Volleyball' ||
+      sportName === 'Badminton-Single(w)' ||
+      sportName === 'Badminton-Dual(w)' ||
+      sportName === 'Table Tennis(w)' ||
+      sportName === 'Volleyball(w)'
+    ) {
+      navigation.navigate('PointBaseScoring', {Fixtureid, sportName});
+    } else if (
+      sportName === 'Ludo-Single' ||
+      sportName === 'Ludo-Dual' ||
+      sportName === 'Tug of War' ||
+      // sportName === 'Race' ||
+      sportName === 'Snooker-Single' ||
+      sportName === 'Snooker-Dual' ||
+      sportName === 'Arm Wrestling' ||
+      sportName === 'Chess' ||
+      sportName === 'Ludo-Single(w)' ||
+      sportName === 'Ludo-Dual(w)' ||
+      sportName === 'Tug of War(w)' ||
+      // sportName === 'Race(w)' ||
+      sportName === 'Snooker-Single(w)' ||
+      sportName === 'Snooker-Dual(w)' ||
+      sportName === 'Arm Wrestling(w)'
+    ) {
+      navigation.navigate('TurnBaseScoring', {Fixtureid, sportName});
     }
   };
   // const printdata = id => {
