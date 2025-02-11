@@ -36,6 +36,8 @@ import GoalBaseDetails from './ScoringDetails/GoalBaseDetails';
 import SearchUser from './Home/SearchUser';
 import PointBaseScoring from './ScoringScreens/PointBaseScoring';
 import TurnBaseScoring from './ScoringScreens/TurnBaseScoring';
+import UserScoreSearch from './Home/UserScoreSearch';
+import AdminGist from './ChairpersonScreens/AdminGist';
 const Stack = createNativeStackNavigator();
 export default function Navigation() {
   return (
@@ -93,6 +95,8 @@ export default function Navigation() {
         <Stack.Screen name="SearchUser" component={SearchUser} />
         <Stack.Screen name="PointBaseScoring" component={PointBaseScoring} />
         <Stack.Screen name="TurnBaseScoring" component={TurnBaseScoring} />
+        <Stack.Screen name="UserScoreSearch" component={UserScoreSearch} />
+        <Stack.Screen name="AdminGist" component={AdminGist} />
       </Stack.Navigator>
     </NavigationContainer>
   );

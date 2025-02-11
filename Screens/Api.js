@@ -12,7 +12,7 @@ class Api {
   // }
   constructor() {
     this.apiClient = axios.create({
-      baseURL: 'http://192.168.189.252/SportsManagementSystemBE/api/',
+      baseURL: 'http://192.168.189.31/SportsManagementSystemBE/api/',
       timeout: 5000,
       headers: {
         'Content-type': 'application/json',
@@ -219,10 +219,23 @@ class Api {
   fetchuserdata(regno) {
     return this.apiClient.get(`Players/GetUserTeams?regno=${regno}`);
   }
+  fetchuserScore(regno, value1) {
+    return this.apiClient.get(
+      `TopPerformer/Getplayerrunsbymatches?regNo=${regno}&sessionId=${value1}`,
+    );
+  }
+  fetchGistAdmin(value1) {
+    return this.apiClient.get(
+      `TopPerformer/sessionGistforAdmin?sessionId=${value1}`,
+    );
+  }
   fetchEvents(fixtureid) {
     return this.apiClient.get(
       `MatchEvents/getMatchEvents?matchId=${fixtureid}`,
     );
+  }
+  Endturnbasematch(payload) {
+    return this.apiClient.put('Scoring/AddTurnBaseWinner', payload);
   }
 }
 

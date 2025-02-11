@@ -130,7 +130,7 @@ export const SafeAreaViewComponent = ({children, CustomStyle}) => (
   <SafeAreaView style={[styles.safeArea, CustomStyle]}>{children}</SafeAreaView>
 );
 export const BASE_URL =
-  'http://192.168.189.60/SportsManagementSystemBE/Resources';
+  'http://192.168.189.100/SportsManagementSystemBE/Resources';
 
 //
 export const Card = ({children, customStyle}) => {

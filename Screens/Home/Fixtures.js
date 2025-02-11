@@ -86,8 +86,17 @@ export default function Fixtures() {
       navigation.navigate('CricketMatchDetails', {id});
     } else if (sport_name === 'Football') {
       navigation.navigate('GoalBaseDetails', {id});
-    } else if (sport_name === 'Badminton-Single') {
-      navigation.navigate('GoalBaseDetails', {id});
+    } else if (
+      sport_name === 'Badminton-Single' ||
+      sport_name === 'Badminton-Dual' ||
+      sport_name === 'Table Tennis' ||
+      sport_name === 'Volleyball' ||
+      sport_name === 'Badminton-Single(w)' ||
+      sport_name === 'Badminton-Dual(w)' ||
+      sport_name === 'Table Tennis(w)' ||
+      sport_name === 'Volleyball(w)'
+    ) {
+      navigation.navigate('', {id});
     }
   };
 

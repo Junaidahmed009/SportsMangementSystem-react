@@ -24,8 +24,8 @@ function Chairperson() {
   const handleRules = () => {
     navigation.navigate('Ruleofgames');
   };
-  const handleViewManagers = () => {
-    navigation.navigate('ViewManagers');
+  const handleAdminGist = () => {
+    navigation.navigate('AdminGist');
   };
   const handleAddNewGame = () => {
     navigation.navigate('AddNewGame');
@@ -60,8 +60,11 @@ function Chairperson() {
       </View>
 
       <View style={styles.buttonWrapper}>
-        <CustomButton onPress={handleViewManagers} text="View Managers" />
+        <CustomButton onPress={handleAdminGist} text="Admin Gist" />
       </View>
+      {/* <View style={styles.buttonWrapper}>
+        <CustomButton onPress={handleAdminGist} text="Admin Gist" />
+      </View> */}
       {/* </LinearGradient> */}
     </SafeAreaView>
   );

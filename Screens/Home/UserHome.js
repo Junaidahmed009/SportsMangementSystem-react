@@ -94,6 +94,14 @@ export default function UserHome() {
   const handleInstructions = () => {
     navigation.navigate('UserInstructions');
   };
+  const handleuserScores = () => {
+    if (!value1) {
+      // console.log(message);
+      Alert.alert('Select an Event');
+    } else {
+      navigation.navigate('UserScoreSearch', {value1});
+    }
+  };
 
   const handleCaption = () => {
     if (message === 'Guest') {
@@ -144,7 +152,7 @@ export default function UserHome() {
               customTextstyle={styles.buttonText2}
             />
           </View>
-          {/* <View style={styles.buttonContainer3}>
+          <View style={styles.buttonContainer3}>
             <ButtonComponent
               buttonTitle="Search User"
               onPress={handleusersearch}
@@ -152,12 +160,12 @@ export default function UserHome() {
               customTextstyle={styles.buttonText2}
             />
             <ButtonComponent
-              buttonTitle="User Data"
-              onPress={handleInstructions}
+              buttonTitle="User Score"
+              onPress={handleuserScores}
               CustomStyle={styles.button2}
               customTextstyle={styles.buttonText2}
             />
-          </View> */}
+          </View>
         </View>
       </View>
       {/* <View style={styles.flatListview}> */}

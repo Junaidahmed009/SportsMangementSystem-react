@@ -54,9 +54,9 @@ export default function StartScoring() {
     }
   };
 
-  useEffect(() => {
-    FetchFixtures();
-  }, []);
+  // useEffect(() => {
+  //   FetchFixtures();
+  // }, []);
 
   // const handleStartbutton = () => {
   //   if(fixtures.winnerTeam==='Match Not Started'){
@@ -104,9 +104,16 @@ export default function StartScoring() {
       navigation.navigate('TurnBaseScoring', {Fixtureid, sportName});
     }
   };
-  // const printdata = id => {
-  //   console.log(id);
-  // };
+  useEffect(() => {
+    FetchFixtures(); // Fetch data when the screen opens
+
+    const interval = setInterval(() => {
+      FetchFixtures(); // Fetch new data every 5 seconds
+    }, 2000); // 5000ms = 5 seconds
+
+    return () => clearInterval(interval); // Cleanup: Stop interval when leaving
+  }, []); // Dependency array: Runs only once when the component mounts
+
   return (
     <SafeAreaViewComponent>
       <AppBarComponent title={'Fixtures'} handleBackPress={handleHome} />

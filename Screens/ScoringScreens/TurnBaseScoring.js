@@ -29,12 +29,8 @@ export default function TurnBaseScoring() {
   const [team2Id, setTeam2Id] = useState(null);
   const [team2Name, setTeam2Name] = useState('');
   const [team2Players, setTeam2Players] = useState([]);
-  const [team1Data, setteam1Data] = useState({
-    Sets: '',
-  });
-  const [team2Data, setteam2Data] = useState({
-    Sets: '',
-  });
+  const [team1Data, setteam1Data] = useState({});
+  const [team2Data, setteam2Data] = useState({});
   const [items1, setItems1] = useState([]);
   const [items2, setItems2] = useState([]);
   const [items3, setItems3] = useState([]);
@@ -54,13 +50,7 @@ export default function TurnBaseScoring() {
         sportName,
       )
     ) {
-      setItems1([
-        {label: 'Point Scored', value: 'bad-PointScored'},
-        {label: 'Ace Serve', value: 'bad-AceServe'},
-        {label: 'Smash', value: 'bad-Smash'},
-        {label: 'Defensive Save', value: 'bad-DefensiveSave'},
-        {label: 'Foul', value: 'bad-Foul'},
-      ]);
+      setItems1([{label: 'Point Scored', value: 'ludo-PointScored'}]);
     } else if (
       [
         'Tug of War',
@@ -69,13 +59,7 @@ export default function TurnBaseScoring() {
         'Arm Wrestling(w)',
       ].includes(sportName)
     ) {
-      setItems1([
-        {label: 'Point Scored', value: 'tt-PointScored'},
-        {label: 'Ace Serve', value: 'tt-AceServe'},
-        {label: 'Topspin Winner', value: 'tt-TopspinWinner'},
-        {label: 'Edge Ball', value: 'tt-EdgeBall'},
-        {label: 'Net Fault', value: 'tt-NetFault'},
-      ]);
+      setItems1([{label: 'Power Full Strike', value: 'Power Strike'}]);
     }
   }, [sportName]);
   // ✅ Runs only when sportName changes
@@ -144,52 +128,17 @@ export default function TurnBaseScoring() {
       setteam2Data(prevData => ({...prevData, [field]: value}));
     }
   };
-  const SendBackendData = async () => {
-    let payload = {
-      team_id: checked === 'option1' ? team1Id : team2Id,
-      setsWon: checked === 'option1' ? team1Data.Sets : team2Data.Sets,
-      fixture_id: Fixtureid,
-    };
 
-    // // Validate required fields for sending events
-    const isEventValid = value1 || value2 || value3;
+  //for sending only score,wicket and runs
+  const SendEvents = async () => {
     const imgpath =
       serverImagePath && serverImagePath.length > 0
         ? `"${serverImagePath[0]}"`
         : null;
-
-    if (isEventValid && !imgpath) {
-      Alert.alert('Please select an image before submitting events.');
-      return; // Exit if validation fails
-    }
-
-    if (isEventValid) {
-      await SendEvents(imgpath); // Pass imgpath to SendEvents
-    }
-
-    try {
-      const response = await Api.PostpointBaseScore(payload);
-      if (response.status === 200) {
-        Alert.alert('Score Updated');
-      } else {
-        Alert.alert('Issue', 'Some issue in Score updation. Try again.');
-      }
-    } catch (error) {
-      console.error('Score update error:', error);
-      Alert.alert(
-        'Updation Failed',
-        'An error occurred during Score Updation. Please try again.',
-      );
-    }
-  };
-
-  //for sending only score,wicket and runs
-  const SendEvents = async imgpath => {
     if (!imgpath) {
       Alert.alert('Please select an image before submitting events.');
       return; // Exit if no image is selected
     }
-
     // Create payload
     const payload = {
       fixture_id: Fixtureid,
@@ -204,7 +153,7 @@ export default function TurnBaseScoring() {
     try {
       const response = await Api.PostCricketEvents(payload, imgpath);
       if (response.status === 200) {
-        // Alert.alert('Event Saved Successfully');
+        Alert.alert('Event Saved Successfully');
         // Reset state
         setValue1(null);
         setValue2(null);
@@ -296,8 +245,16 @@ export default function TurnBaseScoring() {
   // };
 
   const EndMatch = async () => {
+    if (!Fixtureid || !team1Id || !team2Id) {
+      Alert.alert('please select value');
+    }
     try {
-      const response = await Api.Endpointbasematch(Fixtureid);
+      let payload = {
+        winnner_id: checked === 'option1' ? team1Id : team2Id,
+        loser_id: checked === 'option1' ? team2Id : team1Id,
+        fixture_id: Fixtureid,
+      };
+      const response = await Api.Endturnbasematch(payload);
       if (response.status === 200) {
         Alert.alert('Winner Updated.');
         handlehome();
@@ -305,22 +262,17 @@ export default function TurnBaseScoring() {
         Alert.alert('Error', `Unexpected response status: ${response.status}`);
       }
     } catch (error) {
-      if (error.response && error.response.status === 404) {
-        Alert.alert('Error', 'Scores for one or both teams not found.');
-      } else if (error.response && error.response.status === 409) {
-        Alert.alert('Error', 'Scores Are Level Please Update');
+      if (error.response && error.response.status === 409) {
+        Alert.alert('Error', 'No Fixture Found');
       } else {
         Alert.alert('Network error', 'Failed to connect to the server.');
       }
     }
   };
 
-  // const handleScorecard = () => {};
-
   return (
     <SafeAreaViewComponent>
-      <AppBarComponent title="Scoring Cricket" />
-      <View style={styles.matchtext}></View>
+      <AppBarComponent title="Turn Base Scoring" />
       <View style={styles.teamsContainer}>
         <View style={styles.radioItem}>
           <RadioButton
@@ -404,10 +356,12 @@ export default function TurnBaseScoring() {
         </TouchableOpacity>
       </View>
       <Text style={styles.warningText}>
-        Press final score when both inninsdfwewerwegs are ended
+        Press End Match buttons and select a winner team.
       </Text>
+      <Text style={styles.warningText}>Save button is only for Events.</Text>
+
       <View style={styles.actionButtonsContainer}>
-        <TouchableOpacity style={styles.actionButton} onPress={SendBackendData}>
+        <TouchableOpacity style={styles.actionButton} onPress={SendEvents}>
           <Text style={styles.actionButtonText}>Save</Text>
         </TouchableOpacity>
 
@@ -457,6 +411,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 8,
+    marginTop: 10,
   },
   battingTitle: {
     fontSize: 18,

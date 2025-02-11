@@ -52,9 +52,6 @@ export default function SearchUser() {
       setLoading(false);
     }
   };
-  const userTeams = () => {
-    console.log(userTeam);
-  };
 
   return (
     <View style={styles.container}>

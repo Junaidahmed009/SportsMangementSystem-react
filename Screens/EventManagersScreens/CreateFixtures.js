@@ -79,7 +79,7 @@ export default function CreateFixtures() {
           Sport.game === 'Race' ||
           Sport.game === 'Volleyball' ||
           Sport.game === 'Badminton - Single(w)' ||
-          Sport.game === 'Ludo - Dual' ||
+          Sport.game === 'Ludo-Dual' ||
           Sport.game === 'Arm Wrestling(w)' ||
           Sport.game === 'Badminton-Dual(w)'
         ) {

@@ -323,7 +323,7 @@ export default function PointBaseScoring() {
 
   return (
     <SafeAreaViewComponent>
-      <AppBarComponent title="Scoring Cricket" />
+      <AppBarComponent title="Point Scoring" />
       <View style={styles.matchtext}></View>
       <View style={styles.teamsContainer}>
         <View style={styles.radioItem}>
