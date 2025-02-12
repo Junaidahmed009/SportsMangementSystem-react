@@ -47,6 +47,12 @@ export default function UserScoreSearch() {
         Alert.alert('Error', 'Reg-no not found in student table');
       } else if (error.response?.status === 404) {
         Alert.alert('Info', 'User is not part of any team');
+        setFixtures([]);
+        setCricketRuns(0);
+        setCricketWickets(0);
+        setTotalCricketMatches(0);
+        setFootballMatches(0);
+        setFootballGoals(0);
       } else {
         Alert.alert('Network error', 'Failed to connect to server.');
       }

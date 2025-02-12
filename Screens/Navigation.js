@@ -38,6 +38,7 @@ import PointBaseScoring from './ScoringScreens/PointBaseScoring';
 import TurnBaseScoring from './ScoringScreens/TurnBaseScoring';
 import UserScoreSearch from './Home/UserScoreSearch';
 import AdminGist from './ChairpersonScreens/AdminGist';
+import PointBaseDetails from './ScoringDetails/PointBaseDetails';
 const Stack = createNativeStackNavigator();
 export default function Navigation() {
   return (
@@ -97,6 +98,7 @@ export default function Navigation() {
         <Stack.Screen name="TurnBaseScoring" component={TurnBaseScoring} />
         <Stack.Screen name="UserScoreSearch" component={UserScoreSearch} />
         <Stack.Screen name="AdminGist" component={AdminGist} />
+        <Stack.Screen name="PointBaseDetails" component={PointBaseDetails} />
       </Stack.Navigator>
     </NavigationContainer>
   );

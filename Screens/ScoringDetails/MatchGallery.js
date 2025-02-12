@@ -262,8 +262,13 @@ export default function MatchGallery() {
           style={styles.deliveryImage}
         />
         <View style={styles.overlay}>
-          {item.socre ? (
-            <Text style={styles.overlayText}>Score: {item.socre}</Text>
+          <Text style={styles.overlayText}>
+            Over {item.OverNumber}.{item.BallNumber}
+          </Text>
+          <Text style={styles.overlayText}>Batsman: {item.StrikerName}</Text>
+          <Text style={styles.overlayText}>Bowler: {item.BowlerName}</Text>
+          {item.score ? (
+            <Text style={styles.overlayText}>Score: {item.score}</Text>
           ) : null}
           {item.wicket ? (
             <Text style={styles.overlayText}>Wicket: {item.wicket}</Text>
@@ -272,6 +277,7 @@ export default function MatchGallery() {
       </TouchableOpacity>
     );
   };
+
   // const printdata = () => {
   //   console.log(momImagePath);
   //   console.log(deliveryImages);

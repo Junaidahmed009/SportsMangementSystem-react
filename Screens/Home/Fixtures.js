@@ -96,7 +96,7 @@ export default function Fixtures() {
       sport_name === 'Table Tennis(w)' ||
       sport_name === 'Volleyball(w)'
     ) {
-      navigation.navigate('', {id});
+      navigation.navigate('PointBaseDetails', {id});
     }
   };
 
