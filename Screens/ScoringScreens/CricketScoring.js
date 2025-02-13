@@ -499,24 +499,7 @@ export default function CricketScoring() {
   return (
     <SafeAreaViewComponent>
       <AppBarComponent title="Scoring Cricket" />
-      <View style={styles.teamsContainer}>
-        <View style={styles.radioItem}>
-          <RadioButton
-            value="option1"
-            status={checked === 'option1' ? 'checked' : 'unchecked'}
-            onPress={() => setChecked('option1')}
-          />
-          <Text style={styles.teamText}>{team1Name}</Text>
-        </View>
-        <View style={styles.radioItem}>
-          <RadioButton
-            value="option2"
-            status={checked === 'option2' ? 'checked' : 'unchecked'}
-            onPress={() => setChecked('option2')}
-          />
-          <Text style={styles.teamText}>{team2Name}</Text>
-        </View>
-      </View>
+      <View style={styles.teamsContainer}></View>
       <View style={styles.scoreContainer}>
         <Text style={styles.teamText}>
           {team1Name}: {ScoreCount ?? 0}

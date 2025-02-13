@@ -91,8 +91,8 @@ export default function UserHome() {
     }
     navigation.navigate('Fixtures', {Sportid, value1});
   };
-  const handleInstructions = () => {
-    navigation.navigate('UserInstructions');
+  const handleTaskScreen = () => {
+    navigation.navigate('TaskScreen');
   };
   const handleuserScores = () => {
     if (!value1) {
@@ -146,8 +146,8 @@ export default function UserHome() {
               customTextstyle={styles.buttonText2}
             />
             <ButtonComponent
-              buttonTitle="Instructions"
-              onPress={handleInstructions}
+              buttonTitle="task"
+              onPress={handleTaskScreen}
               CustomStyle={styles.button2}
               customTextstyle={styles.buttonText2}
             />
